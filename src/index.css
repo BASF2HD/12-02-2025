@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  display: block !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Table styles */
+.table-container {
+  position: relative;
+  overflow: auto;
+}
+
+/* Ensure horizontal scrollbar is always visible */
+.table-container::-webkit-scrollbar {
+  display: block !important;
+  height: 8px;
+}
+
+/* Sticky header styles */
+.table-container thead {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: #f9fafb; /* bg-gray-50 */
+}
+
+.table-container th {
+  position: sticky;
+  top: 0;
+  background-color: #f9fafb; /* bg-gray-50 */
+  z-index: 20;
+}
+
+/* Add shadow to sticky header */
+.table-container thead::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: #e5e7eb; /* border-gray-200 */
+}
+
+/* Ensure horizontal scrolling works smoothly */
+.table-container table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
