@@ -1,5 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip } from 'lucide-react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DraggableTableHeader } from './components/DraggableTableHeader';
+import { useColumns } from './hooks/useColumns';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
@@ -19,6 +23,7 @@ import {
 import type { Sample, Patient, SampleType } from './types';
 
 function App() {
+  const { columns, moveColumn, toggleColumnVisibility, resetToDefault } = useColumns();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
@@ -818,29 +823,25 @@ function App() {
                         />
                       </th>
                       <th scope="col" className="px-2 py-1"></th>
-                      <SortableHeader field="barcode">Barcode</SortableHeader>
-                      <SortableHeader field="patientId">Patient</SortableHeader>
-                      <SortableHeader field="investigationType">Investigation Type</SortableHeader>
-                      <SortableHeader field="timepoint">Timepoint</SortableHeader>
-                      <SortableHeader field="specimen">Specimen</SortableHeader>
-                      <SortableHeader field="specNumber">Spec#</SortableHeader>
-                      <SortableHeader field="material">Material</SortableHeader>
-                      <SortableHeader field="status">Status</SortableHeader>
-                      <SortableHeader field="freezer">Freezer</SortableHeader>
-                      <SortableHeader field="shelf">Shelf</SortableHeader>
-                      <SortableHeader field="box">Box</SortableHeader>
-                      <SortableHeader field="position">Position</SortableHeader>
-                      <SortableHeader field="sampleDate">Sample Date</SortableHeader>
-                      <SortableHeader field="dateSent">Date Sent</SortableHeader>
-                      <SortableHeader field="dateReceived">Date Received</SortableHeader>
-                      <SortableHeader field="site">Site</SortableHeader>
-                      <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
-                      <SortableHeader field="volume">Volume (ml)</SortableHeader>
-                      <SortableHeader field="amount">Amount (mg)</SortableHeader>
-                      <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
-                      <SortableHeader field="mass">Mass (ng)</SortableHeader>
-                      <SortableHeader field="surplus">Surplus</SortableHeader>
-                      <SortableHeader field="comments">Comments</SortableHeader>
+                      {columns
+                        .filter(col => col.visible)
+                        .sort((a, b) => a.order - b.order)
+                        .map((column, index) => (
+                          <DraggableTableHeader
+                            key={column.id}
+                            id={column.id}
+                            index={index}
+                            field={column.id as keyof Sample}
+                            onMove={moveColumn}
+                            onSort={() => handleSort(column.id as keyof Sample)}
+                            onFilter={() => {
+                              const value = prompt(`Filter ${column.label}`);
+                              setFilters(prev => ({ ...prev, [column.id]: value || '' }));
+                            }}
+                          >
+                            {column.label}
+                          </DraggableTableHeader>
+                        ))}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -1287,4 +1288,10 @@ function App() {
 }
 
 
-export default App
+export default function WrappedApp() {
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <App />
+    </DndProvider>
+  );
+}
