@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip, TableProperties, MapPin } from 'lucide-react';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
@@ -436,35 +436,48 @@ function App() {
       <header className="bg-white shadow-sm">
         <div className="max-w-[99%] mx-auto px-2">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center flex-shrink-0">
+            <div className="flex flex-col items-center flex-shrink-0">
               <img 
                 src="/attached_assets/CRUK_TracerX_Logo.png" 
                 alt="TRACERx Logo" 
-                className="h-12 mr-4"
+                className="h-12"
               />
-              <h1 className="text-lg font-bold text-gray-800">Sample Portal</h1>
             </div>
             <div className="flex items-center space-x-3">
               <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
-                <Printer className="h-4 w-4 mr-2" />
-                <span>Printers</span>
+                <TableProperties className="h-5 w-5 mb-1" />
+                <span className="text-xs">CONTENT</span>
               </button>
               <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
-                <Tag className="h-4 w-4 mr-2" />
-                <span>Label Templates</span>
+                <MapPin className="h-5 w-5 mb-1" />
+                <span className="text-xs">LOCATIONS</span>
               </button>
               <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
-                <Paperclip className="h-4 w-4 mr-2" />
-                <span>Attachments</span>
+                <Printer className="h-5 w-5 mb-1" />
+                <span className="text-xs">PRINTERS</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <Tag className="h-5 w-5 mb-1" />
+                <span className="text-xs">LABEL TEMPLATES</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <Paperclip className="h-5 w-5 mb-1" />
+                <span className="text-xs">ATTACHMENTS</span>
               </button>
               <button 
                 className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
