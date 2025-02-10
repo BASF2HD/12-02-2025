@@ -981,9 +981,11 @@ function App() {
                               value={sample.patientId}
                               onChange={(e) => {
                                 let value = e.target.value.toUpperCase();
-                                updateNewSample(index, 'patientId', value);
-                                if (value.length === 9) {
-                                  updateNewSample(index, 'ltxId', value.slice(-7));
+                                if (value.length <= 9) {
+                                  updateNewSample(index, 'patientId', value);
+                                  if (value.length === 9) {
+                                    updateNewSample(index, 'ltxId', value.slice(-7));
+                                  }
                                 }
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
