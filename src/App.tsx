@@ -444,27 +444,51 @@ function App() {
               />
               <h1 className="text-lg font-bold text-gray-800">Sample Portal</h1>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-6">
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex flex-col items-center px-2 py-1 text-xs text-gray-600 hover:text-blue-600"
                 onClick={() => {}}
               >
-                <Printer className="h-3.5 w-3.5 mr-1" />
-                <span>Printers</span>
+                <div className="bg-gray-100 p-2 rounded-lg mb-1">
+                  <FileStack className="h-5 w-5" />
+                </div>
+                <span>CONTENT</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex flex-col items-center px-2 py-1 text-xs text-gray-600 hover:text-blue-600"
                 onClick={() => {}}
               >
-                <Barcode className="h-3.5 w-3.5 mr-1" />
-                <span>Label Templates</span>
+                <div className="bg-gray-100 p-2 rounded-lg mb-1">
+                  <MapPin className="h-5 w-5" />
+                </div>
+                <span>LOCATIONS</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex flex-col items-center px-2 py-1 text-xs text-gray-600 hover:text-blue-600"
                 onClick={() => {}}
               >
-                <Paperclip className="h-3.5 w-3.5 mr-1" />
-                <span>Attachments</span>
+                <div className="bg-gray-100 p-2 rounded-lg mb-1">
+                  <Printer className="h-5 w-5" />
+                </div>
+                <span>PRINTERS</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-2 py-1 text-xs text-gray-600 hover:text-blue-600"
+                onClick={() => {}}
+              >
+                <div className="bg-gray-100 p-2 rounded-lg mb-1">
+                  <Barcode className="h-5 w-5" />
+                </div>
+                <span>LABEL TEMPLATES</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-2 py-1 text-xs text-gray-600 hover:text-blue-600"
+                onClick={() => {}}
+              >
+                <div className="bg-gray-100 p-2 rounded-lg mb-1">
+                  <Paperclip className="h-5 w-5" />
+                </div>
+                <span>ATTACHMENTS</span>
               </button>
               <button 
                 className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
