@@ -2,9 +2,7 @@ import { useTableColumns, type ColumnConfig } from './useTableColumns';
 import type { Sample } from '../types';
 
 const DEFAULT_COLUMNS: ColumnConfig[] = [
-  { id: 'checkbox', label: '', visible: true, order: 0 },
-  { id: 'icon', label: '', visible: true, order: 1 },
-  { id: 'barcode', label: 'Barcode', visible: true, order: 2 },
+  { id: 'barcode', label: 'Barcode', visible: true, order: 0 },
   { id: 'patientId', label: 'Patient', visible: true, order: 3 },
   { id: 'investigationType', label: 'Investigation Type', visible: true, order: 4 },
   { id: 'timepoint', label: 'Timepoint', visible: true, order: 5 },

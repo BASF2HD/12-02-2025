@@ -808,7 +808,7 @@ useEffect(() => {
                 <table className="min-w-full divide-y divide-gray-200 table-fixed">
                   <thead className="bg-gray-50 sticky top-0 z-10">
                     <tr>
-                      <th scope="col" className="px-2 py-1">
+                      <th scope="col" className="px-2 py-1 bg-gray-100">
                         <input
                           type="checkbox"
                           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -822,9 +822,9 @@ useEffect(() => {
                           }}
                         />
                       </th>
-                      <th scope="col" className="px-2 py-1"></th>
+                      <th scope="col" className="px-2 py-1 bg-gray-100">Type</th>
                       {columns
-                        .filter(col => col.visible)
+                        .filter(col => col.visible && col.id !== 'checkbox' && col.id !== 'icon')
                         .sort((a, b) => a.order - b.order)
                         .map((column, index) => (
                           <DraggableTableHeader
