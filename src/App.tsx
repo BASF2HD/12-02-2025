@@ -449,6 +449,27 @@ function App() {
                 className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
+                <img src="/attached_assets/printers.png" alt="Printers" className="h-4 w-4 mr-2" />
+                <span>Printers</span>
+              </button>
+              <button 
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                onClick={() => {}}
+              >
+                <img src="/attached_assets/label templates.png" alt="Label Templates" className="h-4 w-4 mr-2" />
+                <span>Label Templates</span>
+              </button>
+              <button 
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                onClick={() => {}}
+              >
+                <img src="/attached_assets/attachments.png" alt="Attachments" className="h-4 w-4 mr-2" />
+                <span>Attachments</span>
+              </button>
+              <button 
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                onClick={() => {}}
+              >
                 <ArrowUpCircle className="h-4 w-4 mr-2" />
                 <span>New Shipment</span>
               </button>
