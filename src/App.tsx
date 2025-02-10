@@ -990,8 +990,8 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern="[A-Za-z0-9_]{9}"
-                              title="Patient ID must be exactly 9 characters (letters, numbers, and underscores only)"
+                              pattern="[A-Z]_LTX\d{4}"
+                              title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
@@ -1208,8 +1208,8 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern="[A-Za-z0-9_]{9}"
-                              title="Patient ID must be exactly 9 characters (letters, numbers, and underscores only)"
+                              pattern="[A-Z]_LTX\d{4}"
+                              title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
