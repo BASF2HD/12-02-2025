@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip, TableProperties, MapPin } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, MapPin } from 'lucide-react';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
@@ -445,11 +445,18 @@ function App() {
             </div>
             <div className="flex items-center space-x-3">
               <button 
-                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <TableProperties className="h-5 w-5 mb-1" />
-                <span className="text-xs">CONTENT</span>
+                <ArrowUpCircle className="h-4 w-4 mr-2" />
+                <span>New Shipment</span>
+              </button>
+              <button 
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
+                onClick={() => {}}
+              >
+                <ArrowDownCircle className="h-4 w-4 mr-2" />
+                <span>Receive Shipment</span>
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
@@ -469,8 +476,8 @@ function App() {
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
-                <Tag className="h-5 w-5 mb-1" />
-                <span className="text-xs">LABEL TEMPLATES</span>
+                <BarcodeIcon className="h-5 w-5 mb-1" />
+                <span className="text-xs">1D BARCODE</span>
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
@@ -478,20 +485,6 @@ function App() {
               >
                 <Paperclip className="h-5 w-5 mb-1" />
                 <span className="text-xs">ATTACHMENTS</span>
-              </button>
-              <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
-                onClick={() => {}}
-              >
-                <ArrowUpCircle className="h-4 w-4 mr-2" />
-                <span>New Shipment</span>
-              </button>
-              <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
-                onClick={() => {}}
-              >
-                <ArrowDownCircle className="h-4 w-4 mr-2" />
-                <span>Receive Shipment</span>
               </button>
               <div className="flex items-center space-x-2 ml-2 border-l pl-2">
                 <span className="text-sm text-gray-600">John Smith</span>
