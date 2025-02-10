@@ -856,6 +856,7 @@ function App() {
                           <SampleIcon specimen={sample.specimen} />
                         </td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.barcode}</td>
+                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.ltxId}</td>
                         <td 
                           className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
                           onClick={() => setSelectedPatientId(sample.patientId)}
