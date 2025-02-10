@@ -438,7 +438,7 @@ function App() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center flex-shrink-0">
               <img 
-                src="https://www.cancerresearchuk.org/sites/default/files/tracerx_logo.png" 
+                src="/attached_assets/slims header icon.png" 
                 alt="TRACERx EVO Logo" 
                 className="h-7 mr-4"
               />
