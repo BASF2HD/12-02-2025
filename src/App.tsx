@@ -981,20 +981,13 @@ function App() {
                               value={sample.patientId}
                               onChange={(e) => {
                                 let value = e.target.value.toUpperCase();
-                                if (value.length <= 9) {
-                                  if (value.match(/^[A-Z]?_?L?T?X?\d*$/)) {
-                                    updateNewSample(index, 'patientId', value);
-                                    if (value.length === 9) {
-                                      updateNewSample(index, 'ltxId', value.slice(-7));
-                                    }
-                                  }
+                                updateNewSample(index, 'patientId', value);
+                                if (value.length === 9) {
+                                  updateNewSample(index, 'ltxId', value.slice(-7));
                                 }
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
-                              maxLength={9}
-                              pattern="[A-Z]_LTX[0-9]{4}"
-                              title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
