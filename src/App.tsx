@@ -993,6 +993,13 @@ function App() {
                               pattern="[A-Z]_LTX[0-9]{4}"
                               inputMode="text"
                               title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
+                              onChange={(e) => {
+                                const value = e.target.value.toUpperCase();
+                                updateNewSample(index, 'patientId', value);
+                                if (value.length === 9) {
+                                  updateNewSample(index, 'ltxId', value.slice(-7));
+                                }
+                              }}
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
