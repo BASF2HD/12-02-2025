@@ -5,9 +5,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import App from './App.tsx';
 import './index.css';
 
-const rootElement = document.getElementById('root');
-if (!rootElement) throw new Error('Root element not found');
-createRoot(rootElement).render(
+createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <DndProvider backend={HTML5Backend}>
       <App />
