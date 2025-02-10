@@ -501,24 +501,13 @@ function App() {
 
       <main className="max-w-[99%] mx-auto px-2 py-6">
         {selectedPatientId && (
-          <div className="mb-4 flex items-center justify-between bg-blue-50 p-3 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-blue-700">
-                Viewing samples for patient: {selectedPatientId}
-              </span>
-              <span className="text-sm text-blue-600">
-                ({filteredAndSortedSamples.length} samples)
-              </span>
-            </div>
-            <button
-              onClick={() => {
-                setSelectedPatientId(null);
-                setActiveTab('all');
-              }}
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              ← Back to all samples
-            </button>
+          <div className="mb-4 flex items-center space-x-3 bg-blue-50 p-3 rounded-lg">
+            <span className="text-sm font-medium text-blue-700">
+              Viewing samples for patient: {selectedPatientId}
+            </span>
+            <span className="text-sm text-blue-600">
+              ({filteredAndSortedSamples.length} samples)
+            </span>
           </div>
         )}
 
