@@ -438,8 +438,8 @@ function App() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center flex-shrink-0">
               <img 
-                src="/attached_assets/slims header icon.png" 
-                alt="TRACERx EVO Logo" 
+                src="/attached_assets/CRUK_TracerX_Logo.png" 
+                alt="TRACERx Logo" 
                 className="h-7 mr-4"
               />
               <h1 className="text-lg font-bold text-gray-800">Sample Portal</h1>

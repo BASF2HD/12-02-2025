@@ -25,7 +25,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <img 
-            src="https://www.cancerresearchuk.org/sites/default/files/tracerx_logo.png" 
+            src="/attached_assets/CRUK_TracerX_Logo.png" 
             alt="TRACERx Logo" 
             className="h-24"
           />
