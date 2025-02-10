@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode, Paperclip } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode, Paperclip, MapPin } from 'lucide-react';
+import { deriveSamples } from './hooks/useSamples';
+import type { Eligibility } from './types';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
