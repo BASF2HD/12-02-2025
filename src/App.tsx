@@ -27,7 +27,16 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const { samples, loading, error, addSamples } = useSamples();
+  const { samples: initialSamples, loading, error, addSamples } = useSamples();
+const [samples, setSamples] = useState(() => {
+  const savedSamples = localStorage.getItem('samples');
+  return savedSamples ? JSON.parse(savedSamples) : initialSamples;
+});
+
+// Save samples to localStorage whenever they change
+useEffect(() => {
+  localStorage.setItem('samples', JSON.stringify(samples));
+}, [samples]);
   const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -233,6 +242,7 @@ function App() {
       }
 
       await addSamples(newSamples);
+      setSamples(prev => [...prev, ...newSamples]);
       setIsNewSampleModalOpen(false);
       setNewSamples([{
         id: '',
@@ -376,7 +386,8 @@ function App() {
   const handleDeriveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await deriveSamples(parentSamples, derivedSamples);
+      await addSamples(derivedSamples);
+      setSamples(prev => [...prev, ...derivedSamples]);
       setIsDeriveModalOpen(false);
       setDerivedSamples([]);
       setParentSamples([]);
