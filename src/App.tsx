@@ -991,6 +991,7 @@ function App() {
                               required
                               maxLength={9}
                               pattern="[A-Z]_LTX[0-9]{4}"
+                              inputMode="text"
                               title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
