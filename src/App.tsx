@@ -649,7 +649,7 @@ function App() {
         </div>
 
         {showPatients ? (
-          <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
+          <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-16rem)] overflow-y-auto">
             <div className="overflow-x-auto scrollbar-thin">
               <table className="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead className="bg-gray-50 sticky top-0 z-10">

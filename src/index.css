@@ -27,6 +27,7 @@
 .table-container {
   position: relative;
   overflow: auto;
+  margin-bottom: 60px; /* Add space for bottom window */
 }
 
 /* Ensure horizontal scrollbar is always visible */
