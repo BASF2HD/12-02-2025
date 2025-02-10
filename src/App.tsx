@@ -979,9 +979,19 @@ function App() {
                             <input
                               type="text"
                               value={sample.patientId}
-                              onChange={(e) => updateNewSample(index, 'patientId', e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value.slice(0, 9);
+                                updateNewSample(index, 'patientId', value);
+                                // Update LTX ID with last 7 characters if length is 9
+                                if (value.length === 9) {
+                                  updateNewSample(index, 'ltxId', value.slice(-7));
+                                }
+                              }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
+                              maxLength={9}
+                              pattern=".{9,9}"
+                              title="Patient ID must be exactly 9 characters"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
@@ -1184,7 +1194,24 @@ function App() {
                               required
                             />
                           </td>
-                          <td className="w-32 px-2 py-1 text-xs text-gray-500">{sample.patientId}</td>
+                          <td className="w-32 px-2 py-1">
+                            <input
+                              type="text"
+                              value={sample.patientId}
+                              onChange={(e) => {
+                                const value = e.target.value.slice(0, 9);
+                                updateDerivedSample(index, 'patientId', value);
+                                if (value.length === 9) {
+                                  updateDerivedSample(index, 'ltxId', value.slice(-7));
+                                }
+                              }}
+                              className="w-full text-xs border-gray-300 rounded-md"
+                              required
+                              maxLength={9}
+                              pattern=".{9,9}"
+                              title="Patient ID must be exactly 9 characters"
+                            />
+                          </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
                           <td className="w-36 px-2 py-1">
                             <select
