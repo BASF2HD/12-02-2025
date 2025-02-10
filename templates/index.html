@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRACERx Sample Portal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body class="bg-gray-50">
+    <header class="bg-white shadow-sm">
+        <div class="max-w-[99%] mx-auto px-2">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex flex-col items-center flex-shrink-0">
+                    <img src="{{ url_for('static', filename='images/CRUK_TracerX_Logo.png') }}" alt="TRACERx Logo" class="h-12">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-[99%] mx-auto px-2 py-6">
+        <div id="samples-container">
+            <!-- Samples will be loaded here -->
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
