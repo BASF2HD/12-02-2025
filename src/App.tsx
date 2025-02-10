@@ -741,7 +741,7 @@ function App() {
               </div>
               <div className="flex items-center space-x-2">
                 <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bgblue-200 whitespace-nowrap"
                   onClick={() => {}}
                 >
                   <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
@@ -980,9 +980,8 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.toUpperCase();
+                                let value = e.target.value.toUpperCase();
                                 updateNewSample(index, 'patientId', value);
-                                // Update LTX ID with last 7 characters if length is 9
                                 if (value.length === 9) {
                                   updateNewSample(index, 'ltxId', value.slice(-7));
                                 }
@@ -990,16 +989,8 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern="[A-Z]_LTX[0-9]{4}"
-                              inputMode="text"
+                              pattern="[A-Z]_LTX\d{4}"
                               title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
-                              onChange={(e) => {
-                                const value = e.target.value.toUpperCase();
-                                updateNewSample(index, 'patientId', value);
-                                if (value.length === 9) {
-                                  updateNewSample(index, 'ltxId', value.slice(-7));
-                                }
-                              }}
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
