@@ -980,7 +980,7 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '').slice(0, 9);
+                                const value = e.target.value.toUpperCase();
                                 updateNewSample(index, 'patientId', value);
                                 // Update LTX ID with last 7 characters if length is 9
                                 if (value.length === 9) {
@@ -990,7 +990,7 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern="[A-Z]_LTX\d{4}"
+                              pattern="[A-Z]_LTX[0-9]{4}"
                               title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
