@@ -505,15 +505,6 @@ function App() {
                 ({filteredAndSortedSamples.length} samples)
               </span>
             </div>
-            <button
-              onClick={() => {
-                setSelectedPatientId(null);
-                setActiveTab('all');
-              }}
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              ← Back to all samples
-            </button>
           </div>
         )}
 
