@@ -59,7 +59,7 @@ CREATE TABLE samples (
   barcode text UNIQUE NOT NULL,
   patient_id text NOT NULL,
   type sample_type NOT NULL,
-  investigation_type text NOT NULL,
+  investigation_type text NOT NULL DEFAULT 'Sequencing',
   status text NOT NULL DEFAULT 'Collected',
   site text NOT NULL,
   timepoint text NOT NULL,
