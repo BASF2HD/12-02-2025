@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const containerStyle = {
-  minWidth: '320px',
-  maxWidth: '100%',
-  width: 'auto',
-  resize: 'both',
-  overflow: 'auto'
-};
-
 interface LoginPageProps {
   onLogin: (email: string, password: string) => void;
 }
@@ -30,7 +22,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div style={containerStyle} className="sm:mx-auto sm:w-full sm:max-w-md">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
           <img 
             src="/attached_assets/CRUK_TracerX_Logo.png" 

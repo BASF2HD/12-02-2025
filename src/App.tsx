@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode, Paperclip } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip } from 'lucide-react';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
@@ -456,7 +456,7 @@ function App() {
                 className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <Barcode className="h-4 w-4 mr-2" />
+                <Tag className="h-4 w-4 mr-2" />
                 <span>Label Templates</span>
               </button>
               <button 
@@ -649,7 +649,7 @@ function App() {
         </div>
 
         {showPatients ? (
-          <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-16rem)] overflow-y-auto">
+          <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
             <div className="overflow-x-auto scrollbar-thin">
               <table className="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead className="bg-gray-50 sticky top-0 z-10">
