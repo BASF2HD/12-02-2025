@@ -60,6 +60,7 @@ CREATE TABLE samples (
   patient_id text NOT NULL,
   type sample_type NOT NULL,
   investigation_type text NOT NULL DEFAULT 'Sequencing',
+  investigationType text GENERATED ALWAYS AS (investigation_type) STORED,
   status text NOT NULL DEFAULT 'Collected',
   site text NOT NULL,
   timepoint text NOT NULL,
