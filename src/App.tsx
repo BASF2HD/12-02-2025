@@ -980,10 +980,14 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.toUpperCase();
-                                updateNewSample(index, 'patientId', value);
-                                if (value.length === 9) {
-                                  updateNewSample(index, 'ltxId', value.slice(-7));
+                                let value = e.target.value.toUpperCase();
+                                if (value.length <= 9) {
+                                  if (value.match(/^[A-Z]?_?L?T?X?\d*$/)) {
+                                    updateNewSample(index, 'patientId', value);
+                                    if (value.length === 9) {
+                                      updateNewSample(index, 'ltxId', value.slice(-7));
+                                    }
+                                  }
                                 }
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
