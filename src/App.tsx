@@ -1,9 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode, Paperclip } from 'lucide-react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DraggableTableHeader } from './components/DraggableTableHeader';
-import { useColumns } from './hooks/useColumns';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Tag, Paperclip } from 'lucide-react';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
@@ -23,20 +19,10 @@ import {
 import type { Sample, Patient, SampleType } from './types';
 
 function App() {
-  const { columns, moveColumn, toggleColumnVisibility, resetToDefault } = useColumns();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const { samples: initialSamples, loading, error, addSamples } = useSamples();
-const [samples, setSamples] = useState(() => {
-  const savedSamples = localStorage.getItem('samples');
-  return savedSamples ? JSON.parse(savedSamples) : initialSamples;
-});
-
-// Save samples to localStorage whenever they change
-useEffect(() => {
-  localStorage.setItem('samples', JSON.stringify(samples));
-}, [samples]);
+  const { samples, loading, error, addSamples } = useSamples();
   const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -242,7 +228,6 @@ useEffect(() => {
       }
 
       await addSamples(newSamples);
-      setSamples(prev => [...prev, ...newSamples]);
       setIsNewSampleModalOpen(false);
       setNewSamples([{
         id: '',
@@ -386,8 +371,7 @@ useEffect(() => {
   const handleDeriveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await addSamples(derivedSamples);
-      setSamples(prev => [...prev, ...derivedSamples]);
+      await deriveSamples(parentSamples, derivedSamples);
       setIsDeriveModalOpen(false);
       setDerivedSamples([]);
       setParentSamples([]);
@@ -472,7 +456,7 @@ useEffect(() => {
                 className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <Barcode className="h-4 w-4 mr-2" />
+                <Tag className="h-4 w-4 mr-2" />
                 <span>Label Templates</span>
               </button>
               <button 
@@ -512,13 +496,24 @@ useEffect(() => {
 
       <main className="max-w-[99%] mx-auto px-2 py-6">
         {selectedPatientId && (
-          <div className="mb-4 flex items-center space-x-3 bg-blue-50 p-3 rounded-lg">
-            <span className="text-sm font-medium text-blue-700">
-              Viewing samples for patient: {selectedPatientId}
-            </span>
-            <span className="text-sm text-blue-600">
-              ({filteredAndSortedSamples.length} samples)
-            </span>
+          <div className="mb-4 flex items-center justify-between bg-blue-50 p-3 rounded-lg">
+            <div className="flex items-center space-x-3">
+              <span className="text-sm font-medium text-blue-700">
+                Viewing samples for patient: {selectedPatientId}
+              </span>
+              <span className="text-sm text-blue-600">
+                ({filteredAndSortedSamples.length} samples)
+              </span>
+            </div>
+            <button
+              onClick={() => {
+                setSelectedPatientId(null);
+                setActiveTab('all');
+              }}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              ← Back to all samples
+            </button>
           </div>
         )}
 
@@ -808,7 +803,7 @@ useEffect(() => {
                 <table className="min-w-full divide-y divide-gray-200 table-fixed">
                   <thead className="bg-gray-50 sticky top-0 z-10">
                     <tr>
-                      <th scope="col" className="px-2 py-1 bg-gray-100">
+                      <th scope="col" className="px-2 py-1">
                         <input
                           type="checkbox"
                           className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -822,26 +817,30 @@ useEffect(() => {
                           }}
                         />
                       </th>
-                      <th scope="col" className="px-2 py-1 bg-gray-100">Type</th>
-                      {columns
-                        .filter(col => col.visible && col.id !== 'checkbox' && col.id !== 'icon')
-                        .sort((a, b) => a.order - b.order)
-                        .map((column, index) => (
-                          <DraggableTableHeader
-                            key={column.id}
-                            id={column.id}
-                            index={index}
-                            field={column.id as keyof Sample}
-                            onMove={moveColumn}
-                            onSort={() => handleSort(column.id as keyof Sample)}
-                            onFilter={() => {
-                              const value = prompt(`Filter ${column.label}`);
-                              setFilters(prev => ({ ...prev, [column.id]: value || '' }));
-                            }}
-                          >
-                            {column.label}
-                          </DraggableTableHeader>
-                        ))}
+                      <th scope="col" className="px-2 py-1"></th>
+                      <SortableHeader field="barcode">Barcode</SortableHeader>
+                      <SortableHeader field="patientId">Patient</SortableHeader>
+                      <SortableHeader field="investigationType">Investigation Type</SortableHeader>
+                      <SortableHeader field="timepoint">Timepoint</SortableHeader>
+                      <SortableHeader field="specimen">Specimen</SortableHeader>
+                      <SortableHeader field="specNumber">Spec#</SortableHeader>
+                      <SortableHeader field="material">Material</SortableHeader>
+                      <SortableHeader field="status">Status</SortableHeader>
+                      <SortableHeader field="freezer">Freezer</SortableHeader>
+                      <SortableHeader field="shelf">Shelf</SortableHeader>
+                      <SortableHeader field="box">Box</SortableHeader>
+                      <SortableHeader field="position">Position</SortableHeader>
+                      <SortableHeader field="sampleDate">Sample Date</SortableHeader>
+                      <SortableHeader field="dateSent">Date Sent</SortableHeader>
+                      <SortableHeader field="dateReceived">Date Received</SortableHeader>
+                      <SortableHeader field="site">Site</SortableHeader>
+                      <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
+                      <SortableHeader field="volume">Volume (ml)</SortableHeader>
+                      <SortableHeader field="amount">Amount (mg)</SortableHeader>
+                      <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
+                      <SortableHeader field="mass">Mass (ng)</SortableHeader>
+                      <SortableHeader field="surplus">Surplus</SortableHeader>
+                      <SortableHeader field="comments">Comments</SortableHeader>
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -1288,10 +1287,4 @@ useEffect(() => {
 }
 
 
-export default function WrappedApp() {
-  return (
-    <DndProvider backend={HTML5Backend}>
-      <App />
-    </DndProvider>
-  );
-}
+export default App
