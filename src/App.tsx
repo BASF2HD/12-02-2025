@@ -446,38 +446,38 @@ function App() {
             </div>
             <div className="flex items-center space-x-3">
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <Printer className="h-3.5 w-3.5 mr-1" />
+                <Printer className="h-4 w-4 mr-2" />
                 <span>Printers</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <Barcode className="h-3.5 w-3.5 mr-1" />
+                <Barcode className="h-4 w-4 mr-2" />
                 <span>Label Templates</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <Paperclip className="h-3.5 w-3.5 mr-1" />
+                <Paperclip className="h-4 w-4 mr-2" />
                 <span>Attachments</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
+                <ArrowUpCircle className="h-4 w-4 mr-2" />
                 <span>New Shipment</span>
               </button>
               <button 
-                className="flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
                 onClick={() => {}}
               >
-                <ArrowDownCircle className="h-3.5 w-3.5 mr-1" />
+                <ArrowDownCircle className="h-4 w-4 mr-2" />
                 <span>Receive Shipment</span>
               </button>
               <div className="flex items-center space-x-2 ml-2 border-l pl-2">
