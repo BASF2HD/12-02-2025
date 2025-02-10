@@ -488,18 +488,6 @@ function App() {
       </header>
 
       <main className="max-w-[99%] mx-auto px-2 py-6">
-        {selectedPatientId && (
-          <div className="mb-4 flex items-center justify-between bg-blue-50 p-3 rounded-lg">
-            <div className="flex items-center space-x-3">
-              <span className="text-sm font-medium text-blue-700">
-                Viewing samples for patient: {selectedPatientId}
-              </span>
-              <span className="text-sm text-blue-600">
-                ({filteredAndSortedSamples.length} samples)
-              </span>
-            </div>
-          </div>
-        )}
 
         <div className="flex gap-1 mb-4 flex-nowrap overflow-x-auto min-w-max">
           <button
@@ -740,20 +728,6 @@ function App() {
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bgblue-200 whitespace-nowrap"
-                  onClick={() => {}}
-                >
-                  <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
-                  <span>New Shipment</span>
-                </button>
-                <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
-                  onClick={() => {}}
-                >
-                  <ArrowDownCircle className="h-3.5 w-3.5 mr-1" />
-                  <span>Receive Shipment</span>
-                </button>
                 {selectedPatientId && (
                   <button
                     onClick={() => setSelectedPatientId(null)}
@@ -763,6 +737,24 @@ function App() {
                     Clear Patient Filter
                   </button>
                 )}
+                <button 
+                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bgblue-200 whitespace-nowrap"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, dateSent: '' }));
+                  }}
+                >
+                  <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
+                  <span>New Shipment</span>
+                </button>
+                <button 
+                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                  onClick={() => {
+                    setFilters(prev => ({ ...prev, dateReceived: '' }));
+                  }}
+                >
+                  <ArrowDownCircle className="h-3.5 w-3.5 mr-1" />
+                  <span>Receive Shipment</span>
+                </button>
                 <button 
                   className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
                   onClick={() => setIsNewSampleModalOpen(true)}
