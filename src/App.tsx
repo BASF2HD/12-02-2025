@@ -819,6 +819,7 @@ function App() {
                       <SortableHeader field="barcode">Barcode</SortableHeader>
                       <SortableHeader field="ltxId">LTX ID</SortableHeader>
                       <SortableHeader field="patientId">Patient</SortableHeader>
+                      <SortableHeader field="type">Type</SortableHeader>
                       <SortableHeader field="investigationType">Investigation Type</SortableHeader>
                       <SortableHeader field="timepoint">Timepoint</SortableHeader>
                       <SortableHeader field="specimen">Specimen</SortableHeader>
@@ -864,6 +865,7 @@ function App() {
                         >
                           {sample.patientId}
                         </td>
+                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500 capitalize">{sample.type}</td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.investigationType}</td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.timepoint}</td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specimen}</td>
