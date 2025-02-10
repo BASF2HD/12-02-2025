@@ -856,7 +856,6 @@ function App() {
                           <SampleIcon specimen={sample.specimen} />
                         </td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.barcode}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.ltxId}</td>
                         <td 
                           className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
                           onClick={() => setSelectedPatientId(sample.patientId)}
@@ -958,15 +957,6 @@ function App() {
                       {newSamples.map((sample, index) => (
                         <tr key={index}>
                           <td className="min-w-[40px] px-2 py-1 text-xs text-gray-500">{index + 1}</td>
-                          <td className="w-24 px-2 py-1">
-                            <input
-                              type="text"
-                              value={sample.ltxId}
-                              onChange={(e) => updateNewSample(index, 'ltxId', e.target.value)}
-                              className="w-full text-xs border-gray-300 rounded-md"
-                              required
-                            />
-                          </td>
                           <td className="w-24 px-2 py-1">
                             <input
                               type="text"

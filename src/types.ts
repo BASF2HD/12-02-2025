@@ -2,7 +2,6 @@
 export interface Sample {
   id: string;
   barcode: string;
-  ltxId: string;
   patientId: string;
   parentBarcode?: string; // Add this field to track parent sample
   type: SampleType;
