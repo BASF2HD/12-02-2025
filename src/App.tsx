@@ -37,7 +37,7 @@ function App() {
   const [isDeriveModalOpen, setIsDeriveModalOpen] = useState(false);
   const [parentSamples, setParentSamples] = useState<Sample[]>([]);
   const [derivedSamples, setDerivedSamples] = useState<Sample[]>([]);
-  
+
   const getSpecimensByType = (type: SampleType): Specimen[] => {
     switch (type) {
       case 'blood':
@@ -140,7 +140,7 @@ function App() {
 
   const filteredAndSortedSamples = useMemo(() => {
     let filtered = samples;
-    
+
     // Filter by selected patient
     if (selectedPatientId) {
       filtered = filtered.filter(sample => sample.patientId === selectedPatientId);
@@ -184,7 +184,7 @@ function App() {
     return filtered.sort((a, b) => {
       const aValue = a[sortConfig.field];
       const bValue = b[sortConfig.field];
-      
+
       if (sortConfig.order === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
@@ -336,7 +336,7 @@ function App() {
   const handleDeriveAction = () => {
     const selectedSamplesList = filteredAndSortedSamples.filter(s => selectedSamples.has(s.barcode));
     setParentSamples(selectedSamplesList);
-    
+
     const initialDerived = selectedSamplesList.map(parent => ({
       id: '',
       barcode: getNextBarcode([...samples, ...derivedSamples].map(s => s.barcode)),
@@ -757,7 +757,7 @@ function App() {
                 {selectedPatientId && (
                   <button
                     onClick={() => setSelectedPatientId(null)}
-                    className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
+                    className="flex items-center px-3 py-1.5 text-xs bg-orange-100 text-orange-600 rounded-md hover:bg-orange-200"
                   >
                     <X className="h-3.5 w-3.5 mr-1" />
                     Clear Patient Filter
