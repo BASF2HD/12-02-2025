@@ -817,6 +817,7 @@ function App() {
                       </th>
                       <th scope="col" className="px-2 py-1"></th>
                       <SortableHeader field="barcode">Barcode</SortableHeader>
+                      <SortableHeader field="ltxId">LTX ID</SortableHeader>
                       <SortableHeader field="patientId">Patient</SortableHeader>
                       <SortableHeader field="investigationType">Investigation Type</SortableHeader>
                       <SortableHeader field="timepoint">Timepoint</SortableHeader>
