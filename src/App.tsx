@@ -445,20 +445,6 @@ function App() {
             </div>
             <div className="flex items-center space-x-3">
               <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
-                onClick={() => {}}
-              >
-                <ArrowUpCircle className="h-4 w-4 mr-2" />
-                <span>New Shipment</span>
-              </button>
-              <button 
-                className="flex items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap font-medium"
-                onClick={() => {}}
-              >
-                <ArrowDownCircle className="h-4 w-4 mr-2" />
-                <span>Receive Shipment</span>
-              </button>
-              <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
@@ -753,6 +739,20 @@ function App() {
                 />
               </div>
               <div className="flex items-center space-x-2">
+                <button 
+                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                  onClick={() => {}}
+                >
+                  <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
+                  <span>New Shipment</span>
+                </button>
+                <button 
+                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
+                  onClick={() => {}}
+                >
+                  <ArrowDownCircle className="h-3.5 w-3.5 mr-1" />
+                  <span>Receive Shipment</span>
+                </button>
                 {selectedPatientId && (
                   <button
                     onClick={() => setSelectedPatientId(null)}
