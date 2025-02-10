@@ -980,7 +980,7 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.slice(0, 9);
+                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '').slice(0, 9);
                                 updateNewSample(index, 'patientId', value);
                                 // Update LTX ID with last 7 characters if length is 9
                                 if (value.length === 9) {
@@ -990,8 +990,8 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern=".{9,9}"
-                              title="Patient ID must be exactly 9 characters"
+                              pattern="[A-Za-z0-9_]{9}"
+                              title="Patient ID must be exactly 9 characters (letters, numbers, and underscores only)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
@@ -1199,7 +1199,7 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.slice(0, 9);
+                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '').slice(0, 9);
                                 updateDerivedSample(index, 'patientId', value);
                                 if (value.length === 9) {
                                   updateDerivedSample(index, 'ltxId', value.slice(-7));
@@ -1208,8 +1208,8 @@ function App() {
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
                               maxLength={9}
-                              pattern=".{9,9}"
-                              title="Patient ID must be exactly 9 characters"
+                              pattern="[A-Za-z0-9_]{9}"
+                              title="Patient ID must be exactly 9 characters (letters, numbers, and underscores only)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
