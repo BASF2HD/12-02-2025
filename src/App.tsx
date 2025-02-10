@@ -438,7 +438,7 @@ function App() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center flex-shrink-0">
               <img 
-                src="/attached_assets/CRUK_TRACER.png" 
+                src="/attached_assets/CRUK_TracerX_Logo.png" 
                 alt="TRACERx Logo" 
                 className="h-12 mr-4"
               />
