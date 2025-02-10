@@ -448,7 +448,7 @@ function App() {
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
-                <MapPin className="h-5 w-5 mb-1" />
+                <Flask className="h-5 w-5 mb-1" />
                 <span className="text-xs">LOCATIONS</span>
               </button>
               <button 
