@@ -739,9 +739,9 @@ function App() {
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Site</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Cohort</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Study</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font<th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
+                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
                       <select
-                        className="form-select text-xs border-gray-300 rounded-md"
+                        className="formselect text-xs border-gray-300 rounded-md"
                         onChange={(e) => {
                           // Handle eligibility filter
                           const value = e.target.value as Eligibility;
