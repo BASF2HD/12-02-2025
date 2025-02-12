@@ -463,24 +463,6 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {
-                  setFilters(prev => ({ ...prev, dateSent: '' }));
-                }}
-              >
-                <ArrowUpCircle className="h-5 w-5 mb-1" />
-                <span className="text-xs">NEW SHIPMENT</span>
-              </button>
-              <button 
-                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {
-                  setFilters(prev => ({ ...prev, dateReceived: '' }));
-                }}
-              >
-                <ArrowDownCircle className="h-5 w-5 mb-1" />
-                <span className="text-xs">RECEIVE</span>
-              </button>
-              <button 
-                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
                 <Printer className="h-5 w-5 mb-1" />
@@ -499,6 +481,24 @@ function App() {
               >
                 <Paperclip className="h-5 w-5 mb-1" />
                 <span className="text-xs">ATTACHMENTS</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-orange-100 text-orange-600 rounded-md hover:bg-orange-200"
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, dateSent: '' }));
+                }}
+              >
+                <ArrowUpCircle className="h-5 w-5 mb-1" />
+                <span className="text-xs">NEW SHIPMENT</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, dateReceived: '' }));
+                }}
+              >
+                <ArrowDownCircle className="h-5 w-5 mb-1" />
+                <span className="text-xs">RECEIVE</span>
               </button>
               <div className="flex items-center space-x-2 ml-2 border-l pl-2">
                 <span className="text-sm text-gray-600">John Smith</span>
