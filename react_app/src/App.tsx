@@ -736,7 +736,7 @@ function App() {
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.site}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.cohort}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.study}</td>
-                      <td className="px-2 py-1 whitespace-nowrap text-xs">
+                      <td className="px-2py-1 whitespace-nowrap text-xs">
                         <span className={`px-1.5 inline-flex text-xs leading-4 font-semibold rounded-full
                           ${patient.eligibility === 'eligible' ? 'bg-green-100 text-green-800' :
                             patient.eligibility === 'ineligible' ? 'bg-red-100 text-red-800' :
@@ -976,8 +976,6 @@ function App() {
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
-                              maxLength={12}
-                              pattern="[A-Z]_LTX\d{4,}"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
@@ -1193,8 +1191,6 @@ function App() {
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
-                              maxLength={12}
-                              pattern="[A-Z]_LTX\d{4,}"
                             />
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
