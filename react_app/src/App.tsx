@@ -5,7 +5,6 @@ import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
-import { useAuth } from './hooks/useAuth'; // Import useAuth hook
 import { 
   INVESTIGATION_TYPES, 
   SITES, 
@@ -25,8 +24,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
-  const { user, signIn } = useAuth(); // Get user and signIn from useAuth
-
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
@@ -133,13 +131,9 @@ function App() {
     }));
   }, [samples]);
 
-  const handleLogin = async (email: string, password: string) => { //Asynchronous login
-    try {
-      await signIn(email, password);
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Failed to login. Please check your credentials.');
-    }
+  const handleLogin = (email: string, password: string) => {
+    // TODO: Implement actual authentication
+    setIsAuthenticated(true);
   };
 
   const handleSort = (field: keyof Sample) => {
@@ -422,34 +416,34 @@ function App() {
     setDerivedSamples(updatedSamples);
   };
 
-  if (!user) { // Check if user is authenticated using the user object from useAuth
+  if (!isAuthenticated) {
     return <LoginPage onLogin={handleLogin} />;
   }
 
-  const handleMoveColumn = (dragIndex: number, hoverIndex: number) => {
-    const columnFields = Object.keys(filteredAndSortedSamples[0] || {}) as (keyof Sample)[];
-    const newFields = [...columnFields];
-    const [draggedField] = newFields.splice(dragIndex, 1);
-    newFields.splice(hoverIndex, 0, draggedField);
-    // Update column order in localStorage
-    if (user?.id) {
-      localStorage.setItem(`columnOrder_${user.id}`, JSON.stringify(newFields));
-    }
-  };
-
-  const TableHeader = ({ field, index, children }: { field: keyof Sample; index: number; children: React.ReactNode }) => (
-    <DraggableTableHeader
-      field={field}
-      index={index}
-      moveColumn={handleMoveColumn}
-      onSort={() => handleSort(field)}
-      onFilter={() => {
-        const value = prompt(`Filter ${children}`);
-        setFilters(prev => ({ ...prev, [field]: value || '' }));
-      }}
+  const SortableHeader = ({ field, children }: { field: keyof Sample; children: React.ReactNode }) => (
+    <th 
+      scope="col" 
+      className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100"
     >
-      {children}
-    </DraggableTableHeader>
+      <div className="flex items-center space-x-1">
+        <button
+          onClick={() => handleSort(field)}
+          className="flex items-center hover:text-gray-700"
+        >
+          <span>{children}</span>
+          <ArrowUpDown className="h-3 w-3 ml-1" />
+        </button>
+        <button
+          onClick={() => {
+            const value = prompt(`Filter ${children}`);
+            setFilters(prev => ({ ...prev, [field]: value || '' }));
+          }}
+          className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
+        >
+          <Filter className="h-3 w-3" />
+        </button>
+      </div>
+    </th>
   );
 
   return (
@@ -741,7 +735,7 @@ function App() {
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Study</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
                       <select
-                        className="formselect text-xs border-gray-300 rounded-md"
+                        className="form-select text-xs border-gray-300 rounded-md"
                         onChange={(e) => {
                           // Handle eligibility filter
                           const value = e.target.value as Eligibility;
@@ -846,9 +840,9 @@ function App() {
                           />
                         </th>
                         <th scope="col" className="px-2 py-1"></th>
-                        <TableHeader field="barcode" index={0}>Barcode</TableHeader>
-                        <TableHeader field="ltxId" index={1}>LTX ID</TableHeader>
-                        <TableHeader field="patientId" index={2}>Patient</TableHeader>
+                        <SortableHeader field="barcode">Barcode</SortableHeader>
+                        <SortableHeader field="ltxId">LTX ID</SortableHeader>
+                        <SortableHeader field="patientId">Patient</SortableHeader>
                         <SortableHeader field="type">Type</SortableHeader>
                         <SortableHeader field="investigationType">Investigation Type</SortableHeader>
                         <SortableHeader field="timepoint">Timepoint</SortableHeader>
