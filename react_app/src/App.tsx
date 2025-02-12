@@ -655,13 +655,21 @@ function App() {
             <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
           </button>
           <div className="flex-grow flex justify-end space-x-3">
-            <button 
-              className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
-              onClick={() => setIsNewSampleModalOpen(true)}
-            >
-              <Plus className="h-3.5 w-3.5 mr-1" />
-              <span>Add Sample</span>
-            </button>
+            {selectedPatientId && (
+              <button 
+                className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
+                onClick={() => {
+                  setNewSamples([{
+                    ...newSamples[0],
+                    patientId: selectedPatientId
+                  }]);
+                  setIsNewSampleModalOpen(true);
+                }}
+              >
+                <Plus className="h-3.5 w-3.5 mr-1" />
+                <span>Add Sample</span>
+              </button>
+            )}
             <button
               onClick={() => setShowActionMenu(!showActionMenu)}
               className="flex items-center px-3 py-1.5 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 whitespace-nowrap"
