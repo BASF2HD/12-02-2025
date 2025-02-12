@@ -434,9 +434,37 @@ function App() {
           <ArrowUpDown className="h-3 w-3 ml-1" />
         </button>
         <button
-          onClick={() => {
-            const value = prompt(`Filter ${children}`);
-            setFilters(prev => ({ ...prev, [field]: value || '' }));
+          onClick={(e) => {
+            e.stopPropagation();
+            const filterOptions = {
+              type: ['blood', 'tissue', 'ffpe', 'he', 'buffy', 'plasma', 'dna', 'rna'],
+              investigationType: INVESTIGATION_TYPES,
+              site: SITES,
+              timepoint: TIMEPOINTS,
+              specimen: SPECIMENS,
+              specNumber: SPEC_NUMBERS,
+              material: MATERIALS,
+              sampleLevel: SAMPLE_LEVELS,
+              status: ['Collected', 'Shipped', 'Received', 'In Storage', 'In Process', 'Completed']
+            };
+            
+            if (filterOptions[field]) {
+              const select = document.createElement('select');
+              select.className = 'absolute mt-1 w-32 text-xs border rounded-md bg-white z-50';
+              select.style.top = '100%';
+              select.innerHTML = `
+                <option value="">Clear filter</option>
+                ${filterOptions[field].map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+              `;
+              select.onchange = (e) => {
+                setFilters(prev => ({ ...prev, [field]: (e.target as HTMLSelectElement).value }));
+                select.remove();
+              };
+              e.currentTarget.appendChild(select);
+            } else {
+              const value = prompt(`Filter ${children}`);
+              setFilters(prev => ({ ...prev, [field]: value || '' }));
+            }
           }}
           className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
         >
@@ -1208,9 +1236,24 @@ function App() {
           <div className="bg-white rounded-lg shadow-xl w-[98%] max-h-[90vh] flex flex-col">
             <div className="flex justify-between items-center px-3 py-2 border-b">
               <h2 className="text-lg font-medium">Derive Samples</h2>
-              <button onClick={() => setIsDeriveModalOpen(false)}>
-                <X className="h-5 w-5 text-gray-400 hover:text-gray-500" />
-              </button>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => {
+                    const newDerivedSample = {
+                      ...derivedSamples[0],
+                      barcode: getNextBarcode([...samples, ...derivedSamples].map(s => s.barcode))
+                    };
+                    setDerivedSamples([...derivedSamples, newDerivedSample]);
+                  }}
+                  className="flex items-center px-3 py-1 bg-green-100 text-green-600 rounded-md hover:bg-green-200"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  <span>Add Row</span>
+                </button>
+                <button onClick={() => setIsDeriveModalOpen(false)}>
+                  <X className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+                </button>
+              </div>
             </div>
             <form onSubmit={handleDeriveSubmit} className="p-3 overflow-y-auto">
               <div className="space-y-4">
