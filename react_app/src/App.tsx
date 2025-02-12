@@ -420,30 +420,30 @@ function App() {
     return <LoginPage onLogin={handleLogin} />;
   }
 
-  const SortableHeader = ({ field, children }: { field: keyof Sample; children: React.ReactNode }) => (
-    <th 
-      scope="col" 
-      className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100"
+  const handleMoveColumn = (dragIndex: number, hoverIndex: number) => {
+    const columnFields = Object.keys(filteredAndSortedSamples[0] || {}) as (keyof Sample)[];
+    const newFields = [...columnFields];
+    const [draggedField] = newFields.splice(dragIndex, 1);
+    newFields.splice(hoverIndex, 0, draggedField);
+    // Update column order in localStorage
+    if (user?.id) {
+      localStorage.setItem(`columnOrder_${user.id}`, JSON.stringify(newFields));
+    }
+  };
+
+  const TableHeader = ({ field, index, children }: { field: keyof Sample; index: number; children: React.ReactNode }) => (
+    <DraggableTableHeader
+      field={field}
+      index={index}
+      moveColumn={handleMoveColumn}
+      onSort={() => handleSort(field)}
+      onFilter={() => {
+        const value = prompt(`Filter ${children}`);
+        setFilters(prev => ({ ...prev, [field]: value || '' }));
+      }}
     >
-      <div className="flex items-center space-x-1">
-        <button
-          onClick={() => handleSort(field)}
-          className="flex items-center hover:text-gray-700"
-        >
-          <span>{children}</span>
-          <ArrowUpDown className="h-3 w-3 ml-1" />
-        </button>
-        <button
-          onClick={() => {
-            const value = prompt(`Filter ${children}`);
-            setFilters(prev => ({ ...prev, [field]: value || '' }));
-          }}
-          className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
-        >
-          <Filter className="h-3 w-3" />
-        </button>
-      </div>
-    </th>
+      {children}
+    </DraggableTableHeader>
   );
 
   return (
@@ -840,9 +840,9 @@ function App() {
                           />
                         </th>
                         <th scope="col" className="px-2 py-1"></th>
-                        <SortableHeader field="barcode">Barcode</SortableHeader>
-                        <SortableHeader field="ltxId">LTX ID</SortableHeader>
-                        <SortableHeader field="patientId">Patient</SortableHeader>
+                        <TableHeader field="barcode" index={0}>Barcode</TableHeader>
+                        <TableHeader field="ltxId" index={1}>LTX ID</TableHeader>
+                        <TableHeader field="patientId" index={2}>Patient</TableHeader>
                         <SortableHeader field="type">Type</SortableHeader>
                         <SortableHeader field="investigationType">Investigation Type</SortableHeader>
                         <SortableHeader field="timepoint">Timepoint</SortableHeader>
