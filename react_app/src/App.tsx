@@ -740,8 +740,7 @@ function App() {
                   {uniquePatients.map((patient) => (
                     <tr 
                       key={patient.id} 
-                      className="hover:bg-gray-50 cursor-pointer" 
-                      onClick={() => setSelectedPatient(patient)}
+                      className="hover:bg-gray-50 cursor-pointer" `onClick={() => setSelectedPatient(patient)}`
                     >
                       <td 
                         className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
@@ -880,7 +879,7 @@ function App() {
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specNumber}</td>
                         <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.material}</td>
                         <td className="px-2 py-1 whitespace-nowrap">
-                          <span className="px-1.5 inline-flex text-xs leading-4 font-semibold rounded-full bg-green-100 text-green-800">
+                          <span className={`status-text`}>
                             {sample.status}
                           </span>
                         </td>
