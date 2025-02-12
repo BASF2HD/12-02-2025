@@ -305,10 +305,11 @@ function App() {
       };
     } else if (field === 'patientId') {
       // When patientId is entered, automatically set the LTX ID
+      const ltxId = value.length >= 7 ? value.slice(-7) : '';
       updatedSamples[index] = {
         ...updatedSamples[index],
-        [field]: value,
-        ltxId: value.length >= 7 ? value.slice(-7) : ''
+        patientId: value,
+        ltxId: ltxId
       };
     } else {
       updatedSamples[index] = { 
