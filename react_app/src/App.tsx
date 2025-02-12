@@ -262,11 +262,12 @@ function App() {
   const addNewSampleRow = () => {
     const now = new Date();
     const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const lastSample = newSamples[newSamples.length - 1];
 
     setNewSamples([...newSamples, {
       id: '',
       barcode: getNextBarcode([...samples, ...newSamples].map(s => s.barcode)),
-      patientId: '',
+      patientId: lastSample?.patientId || '',
       type: 'blood',
       investigationType: 'Sequencing',
       status: 'Collected',
@@ -703,6 +704,7 @@ function App() {
                 <thead className="bg-gray-50 sticky top-0 z-10">
                   <tr>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">ID</th>
+                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">LTX ID</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Site</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Cohort</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Study</th>
@@ -741,6 +743,7 @@ function App() {
                       >
                         {patient.id}
                       </td>
+                      <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.id.slice(-7)}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.site}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.cohort}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.study}</td>
