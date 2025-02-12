@@ -463,6 +463,24 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, dateSent: '' }));
+                }}
+              >
+                <ArrowUpCircle className="h-5 w-5 mb-1" />
+                <span className="text-xs">NEW SHIPMENT</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, dateReceived: '' }));
+                }}
+              >
+                <ArrowDownCircle className="h-5 w-5 mb-1" />
+                <span className="text-xs">RECEIVE</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
                 onClick={() => {}}
               >
                 <Printer className="h-5 w-5 mb-1" />
@@ -734,24 +752,7 @@ function App() {
                     Clear Patient Filter
                   </button>
                 )}
-                <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bgblue-200 whitespace-nowrap"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, dateSent: '' }));
-                  }}
-                >
-                  <ArrowUpCircle className="h-3.5 w-3.5 mr-1" />
-                  <span>New Shipment</span>
-                </button>
-                <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 whitespace-nowrap"
-                  onClick={() => {
-                    setFilters(prev => ({ ...prev, dateReceived: '' }));
-                  }}
-                >
-                  <ArrowDownCircle className="h-3.5 w-3.5 mr-1" />
-                  <span>Receive Shipment</span>
-                </button>
+                
                 <button 
                   className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
                   onClick={() => setIsNewSampleModalOpen(true)}
