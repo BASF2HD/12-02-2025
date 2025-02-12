@@ -5,6 +5,7 @@ import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
 import { useSamples } from './hooks/useSamples';
+import { useAuth } from './hooks/useAuth'; // Import useAuth hook
 import { 
   INVESTIGATION_TYPES, 
   SITES, 
@@ -24,7 +25,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, signIn } = useAuth(); // Get user and signIn from useAuth
+
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
@@ -131,9 +133,13 @@ function App() {
     }));
   }, [samples]);
 
-  const handleLogin = (email: string, password: string) => {
-    // TODO: Implement actual authentication
-    setIsAuthenticated(true);
+  const handleLogin = async (email: string, password: string) => { //Asynchronous login
+    try {
+      await signIn(email, password);
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Failed to login. Please check your credentials.');
+    }
   };
 
   const handleSort = (field: keyof Sample) => {
@@ -416,7 +422,7 @@ function App() {
     setDerivedSamples(updatedSamples);
   };
 
-  if (!isAuthenticated) {
+  if (!user) { // Check if user is authenticated using the user object from useAuth
     return <LoginPage onLogin={handleLogin} />;
   }
 
@@ -733,7 +739,7 @@ function App() {
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Site</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Cohort</th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Study</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
+                    <th scope="col" className="px-2 py-1 text-left text-xs font<th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
                       <select
                         className="form-select text-xs border-gray-300 rounded-md"
                         onChange={(e) => {
