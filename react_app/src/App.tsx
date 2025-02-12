@@ -752,7 +752,7 @@ function App() {
                     Clear Patient Filter
                   </button>
                 )}
-                
+
                 <button 
                   className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
                   onClick={() => setIsNewSampleModalOpen(true)}
@@ -1185,16 +1185,16 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '').slice(0, 9);
+                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '');
                                 updateDerivedSample(index, 'patientId', value);
-                                if (value.length === 9) {
+                                if (value.length >= 9) {
                                   updateDerivedSample(index, 'ltxId', value.slice(-7));
                                 }
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
-                              maxLength={9}
-                              pattern="[A-Z]_LTX\d{4}"
+                              maxLength={10}
+                              pattern="[A-Z]_LTX\d{4,}"
                               title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
