@@ -740,7 +740,7 @@ function App() {
                   {uniquePatients.map((patient) => (
                     <tr 
                       key={patient.id} 
-                      className="hover:bg-gray-50 cursor-pointer" `onClick={() => setSelectedPatient(patient)}`
+                      className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
                     >
                       <td 
                         className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
