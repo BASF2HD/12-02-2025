@@ -992,11 +992,13 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '');
-                                updateNewSample(index, 'patientId', value);
-                                if (value.length >= 9) {
-                                  updateNewSample(index, 'ltxId', value.slice(-7));
+                                let value = e.target.value.toUpperCase();
+                                if (value.startsWith('U_LTX')) {
+                                  const digits = value.substring(5);
+                                  const validDigits = digits.replace(/[^0-9]/g, '');
+                                  value = `U_LTX${validDigits}`;
                                 }
+                                updateNewSample(index, 'patientId', value);
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
