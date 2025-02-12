@@ -689,7 +689,7 @@ function App() {
               <MoreVertical className="h-3.5 w-3.5" />
             </button>
             {showActionMenu && (
-              <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+              <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
                 <div className="py-1">
                   {SAMPLE_ACTIONS.map((action) => (
                     <button

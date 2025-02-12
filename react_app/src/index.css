@@ -23,6 +23,11 @@
   background: #555;
 }
 
+/* Popup styles */
+.popup-menu {
+  z-index: 50;
+}
+
 /* Table styles */
 .table-container {
   position: relative;
