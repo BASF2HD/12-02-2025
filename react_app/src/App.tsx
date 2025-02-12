@@ -303,6 +303,13 @@ function App() {
         sampleDate: value,
         sampleTime: currentTime
       };
+    } else if (field === 'patientId') {
+      // When patientId is entered, automatically set the LTX ID
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        [field]: value,
+        ltxId: value.length >= 7 ? value.slice(-7) : ''
+      };
     } else {
       updatedSamples[index] = { 
         ...updatedSamples[index], 
