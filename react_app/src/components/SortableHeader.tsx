@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ArrowUpDown, Filter } from 'lucide-react';
 import type { Sample } from '../types';
@@ -12,12 +12,6 @@ interface SortableHeaderProps {
   children: React.ReactNode;
 }
 
-interface DragItem {
-  index: number;
-  field: keyof Sample;
-  type: string;
-}
-
 export function SortableHeader({ 
   field, 
   index, 
@@ -26,46 +20,30 @@ export function SortableHeader({
   onFilter, 
   children 
 }: SortableHeaderProps) {
-  const ref = React.useRef<HTMLTableCellElement>(null);
+  const ref = useRef<HTMLTableCellElement>(null);
 
-  const [{ isDragging }, drag] = useDrag<DragItem, void, { isDragging: boolean }>({
+  const [{ isDragging }, drag] = useDrag({
     type: 'COLUMN',
-    item: { index, field, type: 'COLUMN' },
+    item: { index, field },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
   });
 
-  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: string | symbol | null }>({
+  const [{ handlerId }, drop] = useDrop({
     accept: 'COLUMN',
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
       };
     },
-    hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
+    hover(item: { index: number }, monitor) {
+      if (!ref.current) return;
 
       const dragIndex = item.index;
       const hoverIndex = index;
 
-      if (dragIndex === hoverIndex) {
-        return;
-      }
-
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-      const hoverMiddleX = (hoverBoundingRect.right - hoverBoundingRect.left) / 2;
-      const clientOffset = monitor.getClientOffset();
-      const hoverClientX = (clientOffset?.x || 0) - hoverBoundingRect.left;
-
-      if (dragIndex < hoverIndex && hoverClientX < hoverMiddleX) {
-        return;
-      }
-      if (dragIndex > hoverIndex && hoverClientX > hoverMiddleX) {
-        return;
-      }
+      if (dragIndex === hoverIndex) return;
 
       moveColumn(dragIndex, hoverIndex);
       item.index = hoverIndex;

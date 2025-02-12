@@ -694,15 +694,28 @@ function App() {
             {showActionMenu && (
               <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
                 <div className="py-1">
-                  {SAMPLE_ACTIONS.map((action) => (
-                    <button
-                      key={action}
-                      onClick={() => handleBulkAction(action)}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      {action}
-                    </button>
-                  ))}
+                  {SAMPLE_ACTIONS.map((action) => {
+                    const icon = {
+                      'Derive': <Droplets className="h-4 w-4" />,
+                      'Print Label': <Printer className="h-4 w-4" />,
+                      'Print Barcode': <BarcodeIcon className="h-4 w-4" />,
+                      'View History': <FileStack className="h-4 w-4" />,
+                      'Add Note': <Paperclip className="h-4 w-4" />,
+                      'Process Sample': <Flask className="h-4 w-4" />,
+                      'Run Analysis': <TestTube className="h-4 w-4" />,
+                      'Extract DNA': <Dna className="h-4 w-4" />
+                    }[action];
+                    return (
+                      <button
+                        key={action}
+                        onClick={() => handleBulkAction(action)}
+                        className="block w-full text-left px-2 py-1 text-sm flex items-center gap-2 hover:bg-gray-100"
+                      >
+                        {icon}
+                        <span>{action}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

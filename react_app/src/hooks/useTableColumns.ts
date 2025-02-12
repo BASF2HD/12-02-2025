@@ -10,7 +10,8 @@ export interface ColumnConfig {
 export function useTableColumns(defaultColumns: ColumnConfig[]) {
   const { user } = useAuth();
   const [columns, setColumns] = useState<ColumnConfig[]>(() => {
-    const saved = localStorage.getItem(`tableColumns_${user?.id}`);
+    if (!user?.id) return defaultColumns;
+    const saved = localStorage.getItem(`tableColumns_${user.id}`);
     return saved ? JSON.parse(saved) : defaultColumns;
   });
 
@@ -25,12 +26,12 @@ export function useTableColumns(defaultColumns: ColumnConfig[]) {
     const draggedColumn = newColumns[dragIndex];
     newColumns.splice(dragIndex, 1);
     newColumns.splice(hoverIndex, 0, draggedColumn);
-    
+
     // Update order property
     newColumns.forEach((col, index) => {
       col.order = index;
     });
-    
+
     setColumns(newColumns);
   };
 
