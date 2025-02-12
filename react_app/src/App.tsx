@@ -962,6 +962,37 @@ function App() {
             </div>
             <form onSubmit={handleSubmit} className="p-3 overflow-y-auto">
               <div className="space-y-4">
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Derive from (optional)</label>
+                  <select 
+                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                    onChange={(e) => {
+                      const parentSample = samples.find(s => s.barcode === e.target.value);
+                      if (parentSample) {
+                        setNewSample({
+                          ...newSample,
+                          parentBarcode: parentSample.barcode,
+                          patientId: parentSample.patientId,
+                          type: parentSample.type,
+                          investigationType: parentSample.investigationType,
+                          site: parentSample.site,
+                          timepoint: parentSample.timepoint,
+                          specimen: parentSample.specimen,
+                          specNumber: parentSample.specNumber,
+                          material: parentSample.material,
+                          sampleLevel: parentSample.sampleLevel === 'Original sample' ? 'Derivative' : 'Aliquot',
+                        });
+                      }
+                    }}
+                  >
+                    <option value="">Select a sample to derive from</option>
+                    {samples.map(sample => (
+                      <option key={sample.barcode} value={sample.barcode}>
+                        {sample.barcode} - {sample.patientId}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-white sticky top-0 z-10">
