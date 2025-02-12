@@ -71,7 +71,7 @@ export const SPECIMENS: Specimen[] = [
   'Methylation Streck',
   'Metabolomics LH',
   'TCR/BCR Tempus',
-  
+
   // Tissue specimens
   'Frozen Normal Lung',
   'Frozen Tumour Lung',
@@ -86,17 +86,17 @@ export const SPECIMENS: Specimen[] = [
   'Cell of Origin',
   'Slice',
   'Frozen Biopsy',
-  
+
   // FFPE specimens
   'FFPE Block',
-  
+
   // H&E specimens
   'H&E Slide',
-  
+
   // Blood derivatives
   'Buffy',
   'Plasma',
-  
+
   // Nucleic acids
   'DNA',
   'RNA'
@@ -202,3 +202,5 @@ export const formatTime = (date: string): string => {
     hour12: false
   });
 };
+
+export const PATIENT_ID_PATTERN = /^U_LTX\d{4}$/;

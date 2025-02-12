@@ -19,6 +19,9 @@ import {
   formatTime
 } from './constants';
 import type { Sample, Patient, SampleType } from './types';
+import { TableColumnManager } from './components/TableColumnManager';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -733,7 +736,7 @@ function App() {
                       </select>
                     </th>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Registration Date</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Samples</th>
+                    <th scope="col" className="px-2 py-1 text-left textxs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Samples</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -803,124 +806,126 @@ function App() {
               </div>
             )}
 
-            <div className="bg-white shadow-sm rounded-lg overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200 table-fixed">
-                  <thead className="bg-gray-50 sticky top-0 z-10">
-                    <tr>
-                      <th scope="col" className="px-2 py-1">
-                        <input
-                          type="checkbox"
-                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                          checked={selectedSamples.size === filteredAndSortedSamples.length}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              setSelectedSamples(new Set(filteredAndSortedSamples.map(s => s.barcode)));
-                            } else {
-                              setSelectedSamples(new Set());
-                            }
-                          }}
-                        />
-                      </th>
-                      <th scope="col" className="px-2 py-1"></th>
-                      <SortableHeader field="barcode">Barcode</SortableHeader>
-                      <SortableHeader field="ltxId">LTX ID</SortableHeader>
-                      <SortableHeader field="patientId">Patient</SortableHeader>
-                      <SortableHeader field="type">Type</SortableHeader>
-                      <SortableHeader field="investigationType">Investigation Type</SortableHeader>
-                      <SortableHeader field="timepoint">Timepoint</SortableHeader>
-                      <SortableHeader field="specimen">Specimen</SortableHeader>
-                      <SortableHeader field="specNumber">Spec#</SortableHeader>
-                      <SortableHeader field="material">Material</SortableHeader>
-                      <SortableHeader field="status">Status</SortableHeader>
-                      <SortableHeader field="freezer">Freezer</SortableHeader>
-                      <SortableHeader field="shelf">Shelf</SortableHeader>
-                      <SortableHeader field="box">Box</SortableHeader>
-                      <SortableHeader field="position">Position</SortableHeader>
-                      <SortableHeader field="sampleDate">Sample Date</SortableHeader>
-                      <SortableHeader field="dateSent">Date Sent</SortableHeader>
-                      <SortableHeader field="dateReceived">Date Received</SortableHeader>
-                      <SortableHeader field="site">Site</SortableHeader>
-                      <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
-                      <SortableHeader field="volume">Volume (ml)</SortableHeader>
-                      <SortableHeader field="amount">Amount (mg)</SortableHeader>
-                      <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
-                      <SortableHeader field="mass">Mass (ng)</SortableHeader>
-                      <SortableHeader field="surplus">Surplus</SortableHeader>
-                      <SortableHeader field="comments">Comments</SortableHeader>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredAndSortedSamples.map((sample) => (
-                      <tr key={sample.barcode} className="hover:bg-gray-50">
-                        <td className="px-2 py-1">
+            <DndProvider backend={HTML5Backend}>
+              <div className="bg-white shadow-sm rounded-lg overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200 table-fixed">
+                    <thead className="bg-gray-50 sticky top-0 z-10">
+                      <tr>
+                        <th scope="col" className="px-2 py-1">
                           <input
                             type="checkbox"
                             className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            checked={selectedSamples.has(sample.barcode)}
-                            onChange={() => handleSampleSelection(sample.barcode)}
+                            checked={selectedSamples.size === filteredAndSortedSamples.length}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setSelectedSamples(new Set(filteredAndSortedSamples.map(s => s.barcode)));
+                              } else {
+                                setSelectedSamples(new Set());
+                              }
+                            }}
                           />
-                        </td>
-                        <td className="px-2 py-1">
-                          <SampleIcon specimen={sample.specimen} />
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.barcode}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.ltxId}</td>
-                        <td 
-                          className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
-                          onClick={() => setSelectedPatientId(sample.patientId)}
-                        >
-                          {sample.patientId}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500 capitalize">{sample.type}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.investigationType}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.timepoint}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specimen}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specNumber}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.material}</td>
-                        <td className="px-2 py-1 whitespace-nowrap">
-                          <span className={`status-text`}>
-                            {sample.status}
-                          </span>
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.freezer}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.shelf}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.box}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.position}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
-                          {formatDate(sample.sampleDate)} {sample.sampleTime}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateSent}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateReceived}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.site}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.sampleLevel}</td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
-                          {sample.volume ? `${sample.volume} ml` : ''}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
-                          {sample.amount ? `${sample.amount} mg` : ''}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
-                          {sample.concentration ? `${sample.concentration} ng/µL` : ''}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
-                          {sample.mass ? `${sample.mass} ng` : ''}
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-center">
-                          <input
-                            type="checkbox"
-                            checked={sample.surplus}
-                            disabled
-                            className="rounded border-gray-300 text-blue-600"
-                          />
-                        </td>
-                        <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.comments}</td>
+                        </th>
+                        <th scope="col" className="px-2 py-1"></th>
+                        <SortableHeader field="barcode">Barcode</SortableHeader>
+                        <SortableHeader field="ltxId">LTX ID</SortableHeader>
+                        <SortableHeader field="patientId">Patient</SortableHeader>
+                        <SortableHeader field="type">Type</SortableHeader>
+                        <SortableHeader field="investigationType">Investigation Type</SortableHeader>
+                        <SortableHeader field="timepoint">Timepoint</SortableHeader>
+                        <SortableHeader field="specimen">Specimen</SortableHeader>
+                        <SortableHeader field="specNumber">Spec#</SortableHeader>
+                        <SortableHeader field="material">Material</SortableHeader>
+                        <SortableHeader field="status">Status</SortableHeader>
+                        <SortableHeader field="freezer">Freezer</SortableHeader>
+                        <SortableHeader field="shelf">Shelf</SortableHeader>
+                        <SortableHeader field="box">Box</SortableHeader>
+                        <SortableHeader field="position">Position</SortableHeader>
+                        <SortableHeader field="sampleDate">Sample Date</SortableHeader>
+                        <SortableHeader field="dateSent">Date Sent</SortableHeader>
+                        <SortableHeader field="dateReceived">Date Received</SortableHeader>
+                        <SortableHeader field="site">Site</SortableHeader>
+                        <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
+                        <SortableHeader field="volume">Volume (ml)</SortableHeader>
+                        <SortableHeader field="amount">Amount (mg)</SortableHeader>
+                        <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
+                        <SortableHeader field="mass">Mass (ng)</SortableHeader>
+                        <SortableHeader field="surplus">Surplus</SortableHeader>
+                        <SortableHeader field="comments">Comments</SortableHeader>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {filteredAndSortedSamples.map((sample) => (
+                        <tr key={sample.barcode} className="hover:bg-gray-50">
+                          <td className="px-2 py-1">
+                            <input
+                              type="checkbox"
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              checked={selectedSamples.has(sample.barcode)}
+                              onChange={() => handleSampleSelection(sample.barcode)}
+                            />
+                          </td>
+                          <td className="px-2 py-1">
+                            <SampleIcon specimen={sample.specimen} />
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.barcode}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.ltxId}</td>
+                          <td 
+                            className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
+                            onClick={() => setSelectedPatientId(sample.patientId)}
+                          >
+                            {sample.patientId}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500 capitalize">{sample.type}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.investigationType}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.timepoint}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specimen}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.specNumber}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.material}</td>
+                          <td className="px-2 py-1 whitespace-nowrap">
+                            <span className={`status-text`}>
+                              {sample.status}
+                            </span>
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.freezer}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.shelf}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.box}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.position}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
+                            {formatDate(sample.sampleDate)} {sample.sampleTime}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateSent}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateReceived}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.site}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.sampleLevel}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
+                            {sample.volume ? `${sample.volume} ml` : ''}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
+                            {sample.amount ? `${sample.amount} mg` : ''}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
+                            {sample.concentration ? `${sample.concentration} ng/µL` : ''}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
+                            {sample.mass ? `${sample.mass} ng` : ''}
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-center">
+                            <input
+                              type="checkbox"
+                              checked={sample.surplus}
+                              disabled
+                              className="rounded border-gray-300 text-blue-600"
+                            />
+                          </td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.comments}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
+            </DndProvider>
           </>
         )}
       </main>

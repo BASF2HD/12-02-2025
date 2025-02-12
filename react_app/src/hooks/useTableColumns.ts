@@ -8,14 +8,17 @@ export interface ColumnConfig {
 }
 
 export function useTableColumns(defaultColumns: ColumnConfig[]) {
+  const { user } = useAuth();
   const [columns, setColumns] = useState<ColumnConfig[]>(() => {
-    const saved = localStorage.getItem('tableColumns');
+    const saved = localStorage.getItem(`tableColumns_${user?.id}`);
     return saved ? JSON.parse(saved) : defaultColumns;
   });
 
   useEffect(() => {
-    localStorage.setItem('tableColumns', JSON.stringify(columns));
-  }, [columns]);
+    if (user?.id) {
+      localStorage.setItem(`tableColumns_${user.id}`, JSON.stringify(columns));
+    }
+  }, [columns, user?.id]);
 
   const moveColumn = (dragIndex: number, hoverIndex: number) => {
     const newColumns = [...columns];
