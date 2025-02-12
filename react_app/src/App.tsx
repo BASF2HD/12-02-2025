@@ -1263,7 +1263,22 @@ function App() {
                               required
                             />
                           </td>
-                          <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
+                          <td className="w-28 px-2 py-1">
+                            <select
+                              value={sample.type}
+                              onChange={(e) => updateDerivedSample(index, 'type', e.target.value)}
+                              className="w-full text-xs border-gray-300 rounded-md"
+                            >
+                              <option value="blood">Blood</option>
+                              <option value="tissue">Tissue</option>
+                              <option value="ffpe">FFPE</option>
+                              <option value="he">H&E</option>
+                              <option value="buffy">Buffy</option>
+                              <option value="plasma">Plasma</option>
+                              <option value="dna">DNA</option>
+                              <option value="rna">RNA</option>
+                            </select>
+                          </td>
                           <td className="w-36 px-2 py-1">
                             <select
                               value={sample.investigationType}
