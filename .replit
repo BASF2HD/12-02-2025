@@ -10,7 +10,6 @@ run = ["sh", "-c", "npm run dev"]
 [[ports]]
 localPort = 5173
 externalPort = 5173
-exposeLocalhost = true
 
 [[ports]]
 localPort = 5174
@@ -19,3 +18,14 @@ externalPort = 80
 [[ports]]
 localPort = 5175
 externalPort = 3000
+
+[workflows]
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 39162233
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd react_app && npm run dev"
