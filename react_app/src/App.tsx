@@ -955,7 +955,7 @@ function App() {
                       <tr>
                         <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Barcode</th>
-                        <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Patient ID</th>
+                        <th className="w-40 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Patient ID</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Type</th>
                         <th className="w-36 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Investigation Type</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Site</th>
@@ -987,7 +987,7 @@ function App() {
                               maxLength={6}
                             />
                           </td>
-                          <td className="w-32 px-2 py-1">
+                          <td className="w-40 px-2 py-1">
                             <input
                               type="text"
                               value={sample.patientId}
@@ -1175,7 +1175,7 @@ function App() {
                         <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Parent Barcode</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Barcode</th>
-                        <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Patient ID</th>
+                        <th className="w-40 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Patient ID</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Type</th>
                         <th className="w-36 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Investigation Type</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Site</th>
@@ -1202,7 +1202,7 @@ function App() {
                               required
                             />
                           </td>
-                          <td className="w-32 px-2 py-1">
+                          <td className="w-40 px-2 py-1">
                             <input
                               type="text"
                               value={sample.patientId}
