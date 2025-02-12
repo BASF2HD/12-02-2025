@@ -27,7 +27,7 @@ export function LoginPage({ onLogin }: LoginPageProps) {
           <img 
             src="/attached_assets/CRUK_TracerX_Logo.png" 
             alt="TRACERx Logo" 
-            className="h-16"
+            className="h-24"
           />
         </div>
       </div>
