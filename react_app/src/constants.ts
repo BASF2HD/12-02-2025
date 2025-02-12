@@ -203,4 +203,4 @@ export const formatTime = (date: string): string => {
   });
 };
 
-export const PATIENT_ID_PATTERN = /^U[_]LTX\d{4}$/;
+export const PATIENT_ID_PATTERN = /^U_LTX[0-9]{4}$/;
