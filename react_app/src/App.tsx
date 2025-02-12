@@ -118,6 +118,7 @@ function App() {
     const patientIds = [...new Set(samples.map(sample => sample.patientId))];
     return patientIds.map(id => ({
       id,
+      ltxId: id.slice(-7),
       site: 'UCLH',
       cohort: 'A',
       study: 'TRACERx',
@@ -743,7 +744,7 @@ function App() {
                       >
                         {patient.id}
                       </td>
-                      <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.id.slice(-7)}</td>
+                      <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.ltxId}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.site}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.cohort}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.study}</td>
