@@ -655,13 +655,13 @@ function App() {
             <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
           </button>
           <div className="flex-grow flex justify-end space-x-3">
-            {selectedPatientId && (
+            {(selectedPatientId || showPatients) && (
               <button 
                 className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
                 onClick={() => {
                   setNewSamples([{
                     ...newSamples[0],
-                    patientId: selectedPatientId
+                    patientId: selectedPatient?.id || ''
                   }]);
                   setIsNewSampleModalOpen(true);
                 }}
