@@ -654,6 +654,38 @@ function App() {
             <Dna className="h-4 w-4 mr-1 text-indigo-600" />
             <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
           </button>
+          <div className="flex-grow flex justify-end space-x-3">
+            <button 
+              className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
+              onClick={() => setIsNewSampleModalOpen(true)}
+            >
+              <Plus className="h-3.5 w-3.5 mr-1" />
+              <span>Add Sample</span>
+            </button>
+            <button
+              onClick={() => setShowActionMenu(!showActionMenu)}
+              className="flex items-center px-3 py-1.5 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 whitespace-nowrap"
+              disabled={selectedSamples.size === 0}
+            >
+              <span className="mr-2">Actions</span>
+              <MoreVertical className="h-3.5 w-3.5" />
+            </button>
+            {showActionMenu && (
+              <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div className="py-1">
+                  {SAMPLE_ACTIONS.map((action) => (
+                    <button
+                      key={action}
+                      onClick={() => handleBulkAction(action)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {showPatients ? (
@@ -740,50 +772,17 @@ function App() {
           </div>
         ) : (
           <>
-            <div className="flex justify-end items-center mb-6 space-x-3">
-              <div className="flex items-center space-x-2">
-                {selectedPatientId && (
-                  <button
-                    onClick={() => setSelectedPatientId(null)}
-                    className="flex items-center px-3 py-1.5 text-xs bg-orange-100 text-orange-600 rounded-md hover:bg-orange-200"
-                  >
-                    <X className="h-3.5 w-3.5 mr-1" />
-                    Clear Patient Filter
-                  </button>
-                )}
-
-                <button 
-                  className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
-                  onClick={() => setIsNewSampleModalOpen(true)}
-                >
-                  <Plus className="h-3.5 w-3.5 mr-1" />
-                  <span>Add Sample</span>
-                </button>
+            {selectedPatientId && (
+              <div className="flex justify-start mb-6">
                 <button
-                  onClick={() => setShowActionMenu(!showActionMenu)}
-                  className="flex items-center px-3 py-1.5 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 whitespace-nowrap"
-                  disabled={selectedSamples.size === 0}
+                  onClick={() => setSelectedPatientId(null)}
+                  className="flex items-center px-3 py-1.5 text-xs bg-orange-100 text-orange-600 rounded-md hover:bg-orange-200"
                 >
-                  <span className="mr-2">Actions</span>
-                  <MoreVertical className="h-3.5 w-3.5" />
+                  <X className="h-3.5 w-3.5 mr-1" />
+                  Clear Patient Filter
                 </button>
-                {showActionMenu && (
-                  <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
-                      {SAMPLE_ACTIONS.map((action) => (
-                        <button
-                          key={action}
-                          onClick={() => handleBulkAction(action)}
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                          {action}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            </div>
+            )}
 
             <div className="bg-white shadow-sm rounded-lg overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
               <div className="overflow-x-auto">
