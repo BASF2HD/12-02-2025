@@ -735,8 +735,7 @@ function App() {
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                </tbody>              </table>
             </div>
           </div>
         ) : (
@@ -970,14 +969,16 @@ function App() {
                               type="text"
                               value={sample.patientId}
                               onChange={(e) => {
-                                let value = e.target.value.toUpperCase();
+                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '');
                                 updateNewSample(index, 'patientId', value);
-                                if (value.length === 9) {
+                                if (value.length >= 9) {
                                   updateNewSample(index, 'ltxId', value.slice(-7));
                                 }
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
+                              maxLength={12}
+                              pattern="[A-Z]_LTX\d{4,}"
                             />
                           </td>
                           <td className="w-28 px-2 py-1">
@@ -1193,9 +1194,8 @@ function App() {
                               }}
                               className="w-full text-xs border-gray-300 rounded-md"
                               required
-                              maxLength={10}
+                              maxLength={12}
                               pattern="[A-Z]_LTX\d{4,}"
-                              title="Patient ID must be in format: Letter_LTX0000 (e.g. U_LTX0003)"
                             />
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.type}</td>
