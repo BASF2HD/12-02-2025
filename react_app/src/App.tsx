@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip } from 'lucide-react';
+import { CRUKLogo } from './components/CRUKLogo';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
@@ -438,11 +439,7 @@ function App() {
         <div className="max-w-[99%] mx-auto px-2">
           <div className="flex items-center justify-between h-16">
             <div className="flex flex-col items-center flex-shrink-0">
-              <img 
-                src="/attached_assets/CRUK_TracerX_Logo.png" 
-                alt="TRACERx Logo" 
-                className="h-12"
-              />
+              <CRUKLogo className="h-12" />
             </div>
             <div className="flex items-center space-x-3">
               <button 
