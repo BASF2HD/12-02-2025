@@ -42,14 +42,14 @@
 -- Drop existing sample_type enum and recreate with all types
 DROP TYPE IF EXISTS sample_type CASCADE;
 CREATE TYPE sample_type AS ENUM (
-  'blood',
-  'tissue',
-  'ffpe',
-  'he',
-  'buffy',
-  'plasma',
-  'dna',
-  'rna'
+  'Blood',
+  'Tissue',
+  'FFPE',
+  'H&E',
+  'Buffy',
+  'Plasma',
+  'DNA',
+  'RNA'
 );
 
 -- Drop and recreate samples table with updated schema
