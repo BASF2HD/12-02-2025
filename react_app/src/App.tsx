@@ -356,34 +356,7 @@ function App() {
     setNewSamples(newSamples.filter((_, i) => i !== index));
   };
 
-  const updateNewSample = (index: number, field: keyof Sample, value: string) => {
-    const updatedSamples = [...newSamples];
-    if (field === 'sampleDate') {
-      // When date is selected, automatically set the current time
-      const now = new Date();
-      const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
-      updatedSamples[index] = {
-        ...updatedSamples[index],
-        sampleDate: value,
-        sampleTime: currentTime
-      };
-    } else if (field === 'patientId') {
-      // When patientId is entered, automatically set the LTX ID
-      const ltxId = value.length >= 7 ? value.slice(-7) : '';
-      updatedSamples[index] = {
-        ...updatedSamples[index],
-        patientId: value,
-        ltxId: ltxId
-      };
-    } else {
-      updatedSamples[index] = { 
-        ...updatedSamples[index], 
-        [field]: field === 'barcode' ? value : field === 'surplus' ? Boolean(value) : value,
-        barcode: field === 'barcode' ? value : updatedSamples[index].barcode
-      };
-    }
-    setNewSamples(updatedSamples);
-  };
+  // Function was moved up to line 207
 
   const handleSampleSelection = (barcode: string) => {
     setSelectedSamples(prev => {
