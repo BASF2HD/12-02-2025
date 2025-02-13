@@ -340,23 +340,29 @@ function App() {
   };
 
   const handleBulkAction = async (action: typeof SAMPLE_ACTIONS[number]) => {
-    switch (action) {
-      case 'Derive':
-        handleDeriveAction();
-        break;
-      case 'Delete':
-        if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
-          const samplesToDelete = samples
-            .filter(sample => selectedSamples.has(sample.barcode))
-            .map(sample => sample.id);
-          await deleteSamples(samplesToDelete);
-          setSelectedSamples(new Set());
-        }
-        break;
-      default:
-        console.log(`Performing ${action} on samples:`, selectedSamples);
+    try {
+      switch (action) {
+        case 'Derive':
+          handleDeriveAction();
+          break;
+        case 'Delete':
+          if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
+            const samplesToDelete = samples
+              .filter(sample => selectedSamples.has(sample.barcode))
+              .map(sample => sample.id);
+            await deleteSamples(samplesToDelete);
+            setSelectedSamples(new Set());
+          }
+          break;
+        default:
+          console.log(`Performing ${action} on samples:`, selectedSamples);
+      }
+    } catch (error) {
+      console.error('Error performing bulk action:', error);
+      alert('Failed to perform action. Please try again.');
+    } finally {
+      setShowActionMenu(false);
     }
-    setShowActionMenu(false);
   };
 
   const handleDeriveAction = () => {
