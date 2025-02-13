@@ -34,7 +34,7 @@ export enum SampleType {
   Buffy = 'Buffy',
   Plasma = 'Plasma',
   FFPE = 'FFPE',
-  HE = 'H&E',
+  HAndE = 'H&E',
   DNA = 'DNA',
   RNA = 'RNA'
 }

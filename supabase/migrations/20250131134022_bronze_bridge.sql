@@ -3,9 +3,10 @@ DROP TYPE IF EXISTS sample_type CASCADE;
 DROP TYPE IF EXISTS sample_status CASCADE;
 
 -- Create updated enum types
+DROP TYPE IF EXISTS sample_type CASCADE;
 CREATE TYPE sample_type AS ENUM (
   'Blood',
-  'Tissue', 
+  'Tissue',
   'Buffy',
   'Plasma',
   'FFPE',
