@@ -458,22 +458,40 @@ function App() {
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
               
               dropdown.innerHTML = `
-                <div class="p-2">
-                  <div class="flex justify-between items-center mb-2">
-                    <span class="text-xs font-medium">Select Options</span>
-                    <button class="text-xs text-blue-600 hover:text-blue-800">Clear All</button>
+                <div class="p-1.5">
+                  <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-gray-500">Filter by ${field}</span>
+                    <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
                   </div>
-                  ${filterOptions[field].map(opt => `
-                    <label class="flex items-center space-x-2 py-1">
-                      <input type="checkbox" class="rounded border-gray-300" value="${opt}" ${currentFilters.includes(opt) ? 'checked' : ''}>
-                      <span class="text-xs">${opt}</span>
-                    </label>
-                  `).join('')}
-                  <div class="flex justify-end mt-2 pt-2 border-t">
-                    <button class="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
+                  <div class="max-h-48 overflow-y-auto">
+                    ${filterOptions[field].map(opt => `
+                      <label class="flex items-center py-0.5 cursor-pointer hover:bg-gray-50">
+                        <input type="checkbox" class="w-3 h-3 rounded border-gray-300" value="${opt}" ${currentFilters.includes(opt) ? 'checked' : ''}>
+                        <span class="text-xs text-gray-600 ml-1.5">${opt}</span>
+                      </label>
+                    `).join('')}
+                  </div>
+                  <div class="flex justify-end mt-1 pt-1 border-t">
+                    <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
                   </div>
                 </div>
               `;
+              
+              const clearButton = dropdown.querySelector('#clearAll');
+              const applyButton = dropdown.querySelector('#applyFilter');
+              
+              clearButton?.addEventListener('click', () => {
+                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((cb: HTMLInputElement) => cb.checked = false);
+              });
+
+              applyButton?.addEventListener('click', () => {
+                const selectedValues = Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked'))
+                  .map((cb: HTMLInputElement) => cb.value)
+                  .join(',');
+                setFilters(prev => ({ ...prev, [field]: selectedValues }));
+                dropdown.remove();
+              });
 
               const clearButton = dropdown.querySelector('button');
               clearButton?.addEventListener('click', () => {
