@@ -48,9 +48,11 @@ export function useSamples() {
 
   async function deleteSamples(sampleIds: string[]) {
     try {
-      setSamples(prevSamples => 
-        prevSamples.filter(sample => !sampleIds.includes(sample.id))
-      );
+      setSamples(prevSamples => {
+        const updatedSamples = prevSamples.filter(sample => !sampleIds.includes(sample.id));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSamples));
+        return updatedSamples;
+      });
     } catch (error) {
       console.error('Error deleting samples:', error);
       throw error;
