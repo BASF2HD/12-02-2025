@@ -28,6 +28,17 @@ export interface Sample {
   comments?: string;
 }
 
+export enum SampleType {
+  Blood = 'Blood',
+  Tissue = 'Tissue',
+  FFPE = 'FFPE',
+  HE = 'H&E',
+  Buffy = 'Buffy',
+  Plasma = 'Plasma',
+  DNA = 'DNA',
+  RNA = 'RNA'
+}
+
 export type Permission = 
   | 'manage_users'
   | 'view_users'
