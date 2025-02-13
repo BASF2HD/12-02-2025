@@ -350,8 +350,14 @@ function App() {
             const samplesToDelete = samples
               .filter(sample => selectedSamples.has(sample.barcode))
               .map(sample => sample.id);
-            await deleteSamples(samplesToDelete);
-            setSelectedSamples(new Set());
+            if (samplesToDelete.length > 0) {
+              await deleteSamples(samplesToDelete);
+              setSelectedSamples(new Set());
+              // Refresh the samples list
+              setSamples(prevSamples => 
+                prevSamples.filter(sample => !samplesToDelete.includes(sample.id))
+              );
+            }
           }
           break;
         default:
