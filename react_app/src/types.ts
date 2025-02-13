@@ -13,8 +13,7 @@ export interface Sample {
   specimen: string;
   specNumber: string;
   material: string;
-  sampleDate: string;
-  sampleTime: string;
+  sampleDateTime: string;
   freezer?: string;
   shelf?: string;
   box?: string;

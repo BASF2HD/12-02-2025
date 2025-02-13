@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS samples (
   specimen text,
   spec_number text,
   material text,
-  sample_date date,
+  sample_date_time timestamptz,
   site text,
   freezer text,
   shelf text,

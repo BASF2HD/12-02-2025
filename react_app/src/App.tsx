@@ -1498,19 +1498,14 @@ function App() {
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.sampleLevel}</td>
                           <td className="w-48 px-2 py-1">
-                            <div className="flex space-x-2">
+                            <div>
                               <input
-                                type="date"
-                                value={sample.sampleDate}
-                                onChange={(e) => updateDerivedSample(index, 'sampleDate', e.target.value)}
-                                className="w-32 text-xs border-gray-300 rounded-md"
+                                type="datetime-local"
+                                value={sample.sampleDateTime}
+                                onChange={(e) => updateDerivedSample(index, 'sampleDateTime', e.target.value)}
+                                className="w-full text-xs border-gray-300 rounded-md"
                                 required
-                              />
-                              <input
-                                type="time"
-                                value={sample.sampleTime}
-                                onChange={(e) => updateDerivedSample(index, 'sampleTime', e.target.value)}
-                                className="w-24 text-xs border-gray-300 rounded-md"
+                              />d"
                                 required
                               />
                             </div>
