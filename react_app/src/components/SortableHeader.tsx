@@ -1,53 +1,38 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 import { ArrowUpDown, Filter } from 'lucide-react';
-import type { Sample } from '../types';
 
-interface SortableHeaderProps {
-  field: keyof Sample;
-  index: number;
-  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+interface Props {
+  children: React.ReactNode;
   onSort: () => void;
   onFilter: () => void;
-  children: React.ReactNode;
+  hasActiveFilter?: boolean;
+  index: number;
+  moveColumn: (dragIndex: number, hoverIndex: number) => void;
+  field: keyof any; //Added this line to address type error
 }
 
-export function SortableHeader({ 
-  field, 
-  index, 
-  moveColumn, 
-  onSort, 
-  onFilter, 
-  children 
-}: SortableHeaderProps) {
-  const ref = useRef<HTMLTableCellElement>(null);
+export function SortableHeader({ children, onSort, onFilter, hasActiveFilter, index, moveColumn, field }: Props) {
+  const ref = React.useRef<HTMLTableCellElement>(null);
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'COLUMN',
-    item: { index, field },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
+    type: 'column',
+    item: { index, field }, //Added field back to item
+    collect: monitor => ({
+      isDragging: monitor.isDragging()
+    })
   });
 
-  const [{ handlerId }, drop] = useDrop({
-    accept: 'COLUMN',
-    collect(monitor) {
-      return {
-        handlerId: monitor.getHandlerId(),
-      };
-    },
+  const [, drop] = useDrop({
+    accept: 'column',
     hover(item: { index: number }, monitor) {
       if (!ref.current) return;
-
       const dragIndex = item.index;
       const hoverIndex = index;
-
       if (dragIndex === hoverIndex) return;
-
       moveColumn(dragIndex, hoverIndex);
       item.index = hoverIndex;
-    },
+    }
   });
 
   drag(drop(ref));
@@ -59,7 +44,6 @@ export function SortableHeader({
       className={`px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100 ${
         isDragging ? 'opacity-50 cursor-move' : 'cursor-grab'
       }`}
-      data-handler-id={handlerId}
     >
       <div className="flex items-center space-x-1">
         <button
@@ -71,7 +55,7 @@ export function SortableHeader({
         </button>
         <button
           onClick={onFilter}
-          className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
+          className={`${hasActiveFilter ? 'text-blue-600' : 'opacity-0 group-hover:opacity-100'} hover:text-blue-600`}
         >
           <Filter className="h-3 w-3" />
         </button>
