@@ -338,7 +338,7 @@ function App() {
     });
   };
 
-  const handleBulkAction = (action: typeof SAMPLE_ACTIONS[number]) => {
+  const handleBulkAction = async (action: typeof SAMPLE_ACTIONS[number]) => {
     switch (action) {
       case 'Derive':
         handleDeriveAction();
