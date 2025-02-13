@@ -25,7 +25,9 @@
 
 /* Popup styles */
 .popup-menu {
-  z-index: 100;
+  z-index: 9999;
+  position: absolute;
+  right: 0;
 }
 
 /* Table styles */
