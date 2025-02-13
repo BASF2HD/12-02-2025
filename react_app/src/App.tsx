@@ -202,7 +202,13 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    
     try {
+      if (!newSamples || newSamples.length === 0) {
+        throw new Error('No samples to save');
+      }
+      
       // Check if all required fields are filled
       const missingFields = newSamples.reduce((acc, sample, index) => {
         const requiredFields = {
