@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send } from 'lucide-react';
 import { CRUKLogo } from './components/CRUKLogo';
-import { AdminPanel } from './components/AdminPanel';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
@@ -26,7 +25,6 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
@@ -614,7 +612,7 @@ function App() {
                 <span className="text-sm text-gray-600">John Smith</span>
                 <button 
                   className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-                  onClick={() => setShowAdminPanel(!showAdminPanel)}
+                  onClick={() => {}}
                 >
                   <Settings className="h-4 w-4" />
                 </button>
@@ -1548,12 +1546,6 @@ function App() {
             </form>
           </div>
         </div>
-      )}
-      {showAdminPanel && (
-        <AdminPanel 
-          onClose={() => setShowAdminPanel(false)}
-          currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
-        />
       )}
     </div>
   );
