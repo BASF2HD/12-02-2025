@@ -202,9 +202,10 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
     
     try {
+      setError(null);
+
       if (!newSamples || newSamples.length === 0) {
         throw new Error('No samples to save');
       }
