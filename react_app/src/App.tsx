@@ -182,7 +182,9 @@ function App() {
     filtered = filtered.filter(sample => {
       return Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
-        return sample[key as keyof Sample]?.toString().toLowerCase().includes(value.toLowerCase());
+        const filterValues = value.split(',').filter(Boolean);
+        if (filterValues.length === 0) return true;
+        return filterValues.includes(sample[key as keyof Sample]?.toString());
       });
     });
 
@@ -449,18 +451,46 @@ function App() {
             };
 
             if (filterOptions[field]) {
-              const select = document.createElement('select');
-              select.className = 'absolute mt-1 w-32 text-xs border rounded-md bg-white z-50';
-              select.style.top = '100%';
-              select.innerHTML = `
-                <option value="">Clear filter</option>
-                ${filterOptions[field].map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+              const dropdown = document.createElement('div');
+              dropdown.className = 'absolute mt-1 w-48 bg-white border rounded-md shadow-lg z-50';
+              dropdown.style.top = '100%';
+              
+              const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
+              
+              dropdown.innerHTML = `
+                <div class="p-2">
+                  <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-medium">Select Options</span>
+                    <button class="text-xs text-blue-600 hover:text-blue-800">Clear All</button>
+                  </div>
+                  ${filterOptions[field].map(opt => `
+                    <label class="flex items-center space-x-2 py-1">
+                      <input type="checkbox" class="rounded border-gray-300" value="${opt}" ${currentFilters.includes(opt) ? 'checked' : ''}>
+                      <span class="text-xs">${opt}</span>
+                    </label>
+                  `).join('')}
+                  <div class="flex justify-end mt-2 pt-2 border-t">
+                    <button class="px-2 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">Apply</button>
+                  </div>
+                </div>
               `;
-              select.onchange = (e) => {
-                setFilters(prev => ({ ...prev, [field]: (e.target as HTMLSelectElement).value }));
-                select.remove();
-              };
-              e.currentTarget.appendChild(select);
+
+              const clearButton = dropdown.querySelector('button');
+              clearButton?.addEventListener('click', () => {
+                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+                checkboxes.forEach((cb: HTMLInputElement) => cb.checked = false);
+              });
+
+              const applyButton = dropdown.querySelector('button:last-child');
+              applyButton?.addEventListener('click', () => {
+                const selectedValues = Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked'))
+                  .map((cb: HTMLInputElement) => cb.value)
+                  .join(',');
+                setFilters(prev => ({ ...prev, [field]: selectedValues }));
+                dropdown.remove();
+              });
+
+              e.currentTarget.appendChild(dropdown);
             } else {
               const value = prompt(`Filter ${children}`);
               setFilters(prev => ({ ...prev, [field]: value || '' }));
