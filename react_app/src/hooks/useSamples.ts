@@ -52,11 +52,14 @@ export function useSamples() {
         throw new Error('No samples selected for deletion');
       }
       
-      setSamples(prevSamples => {
-        const updatedSamples = prevSamples.filter(sample => !sampleIds.includes(sample.id));
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSamples));
-        return updatedSamples;
-      });
+      const storedSamples = localStorage.getItem(STORAGE_KEY);
+      const currentSamples = storedSamples ? JSON.parse(storedSamples) : [];
+      const updatedSamples = currentSamples.filter(sample => !sampleIds.includes(sample.id));
+      
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSamples));
+      setSamples(updatedSamples);
+      
+      return updatedSamples;
     } catch (error) {
       console.error('Error deleting samples:', error);
       throw error;
