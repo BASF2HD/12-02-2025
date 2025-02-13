@@ -237,18 +237,28 @@ function App() {
 
       // Check if samples are being edited
       const isEditing = newSamples.every(sample => sample.id);
-      if (isEditing) {
-        setSamples(prev => prev.map(existing => {
-          const updated = newSamples.find(s => s.id === existing.id);
-          return updated || existing;
-        }));
-        setSelectedSamples(new Set());
-      } else {
-        await addSamples(newSamples);
-      }
+      try {
+        if (isEditing) {
+          // Update existing samples
+          const updatedSamples = newSamples.map(sample => ({
+            ...sample,
+            // Ensure all required fields are present
+            type: sample.type || 'blood',
+            status: sample.status || 'Collected',
+            specimen: sample.specimen || 'Plasma'
+          }));
+          
+          setSamples(prev => prev.map(existing => {
+            const updated = updatedSamples.find(s => s.id === existing.id);
+            return updated || existing;
+          }));
+          setSelectedSamples(new Set());
+        } else {
+          await addSamples(newSamples);
+        }
 
-      setIsNewSampleModalOpen(false);
-      setNewSamples([{
+        setIsNewSampleModalOpen(false);
+        setNewSamples([{
         id: '',
         barcode: getNextBarcode(samples.map(s => s.barcode)),
         patientId: '',
