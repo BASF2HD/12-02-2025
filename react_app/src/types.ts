@@ -31,10 +31,10 @@ export interface Sample {
 export enum SampleType {
   Blood = 'Blood',
   Tissue = 'Tissue',
-  FFPE = 'FFPE',
-  HE = 'H&E',
   Buffy = 'Buffy',
   Plasma = 'Plasma',
+  FFPE = 'FFPE',
+  HE = 'H&E',
   DNA = 'DNA',
   RNA = 'RNA'
 }

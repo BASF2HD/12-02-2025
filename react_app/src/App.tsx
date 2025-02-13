@@ -29,7 +29,7 @@ function App() {
   const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
-  const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
+  const [activeTab, setActiveTab] = useState<'Blood' | 'Tissue' | 'Buffy' | 'Plasma' | 'FFPE' | 'H&E' | 'DNA' | 'RNA' | 'all'>('Blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{ field: keyof Sample; order: 'asc' | 'desc' }>({
