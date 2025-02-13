@@ -480,6 +480,10 @@ function App() {
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
                 
+                checkbox.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                });
+                
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
