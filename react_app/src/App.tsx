@@ -343,6 +343,13 @@ function App() {
       case 'Derive':
         handleDeriveAction();
         break;
+      case 'Delete':
+        if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
+          const remainingSamples = samples.filter(sample => !selectedSamples.has(sample.barcode));
+          setSamples(remainingSamples);
+          setSelectedSamples(new Set());
+        }
+        break;
       default:
         console.log(`Performing ${action} on samples:`, selectedSamples);
     }
