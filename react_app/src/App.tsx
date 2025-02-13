@@ -203,8 +203,48 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // Check if all required fields are filled
-      const missingFields = newSamples.reduce((acc, sample, index) => {
+      // Check if samples are being edited
+      const isEditing = newSamples.every(sample => sample.id);
+      if (isEditing) {
+        setSamples(prev => prev.map(existing => {
+          const updated = newSamples.find(s => s.id === existing.id);
+          return updated || existing;
+        }));
+        setSelectedSamples(new Set());
+      } else {
+        await addSamples(newSamples);
+      }
+      setIsNewSampleModalOpen(false);
+      setNewSamples([{
+        id: '',
+        barcode: getNextBarcode(samples.map(s => s.barcode)),
+        patientId: '',
+        type: 'blood',
+        investigationType: 'Sequencing',
+        status: 'Collected',
+        site: 'UCLH',
+        timepoint: 'Surgery',
+        specimen: 'Plasma',
+        specNumber: 'N01',
+        material: 'Fresh',
+        sampleDate: new Date().toISOString().split('T')[0],
+        sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        freezer: '',
+        shelf: '',
+        box: '',
+        position: '',
+        sampleLevel: 'Original sample',
+        comments: ''
+      }]);
+      return;
+    } catch (error) {
+      alert('Failed to save samples. Please try again.');
+      console.error('Error:', error);
+      return;
+    }
+
+    // Check if all required fields are filled
+    const missingFields = newSamples.reduce((acc, sample, index) => {
         const requiredFields = {
           barcode: 'Barcode',
           patientId: 'Patient ID',
@@ -428,8 +468,9 @@ function App() {
   };
 
   const handleEdit = () => {
-    // Placeholder: Implement edit functionality here
-    alert('Edit functionality not yet implemented.');
+    const selectedSamplesList = samples.filter(s => selectedSamples.has(s.barcode));
+    setNewSamples(selectedSamplesList.map(sample => ({...sample})));
+    setIsNewSampleModalOpen(true);
   };
 
   const handleDelete = () => {
