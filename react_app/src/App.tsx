@@ -831,21 +831,21 @@ function App() {
                     >
                       Study
                     </SortableHeader>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
-                      <select
-                        className="form-select text-xs border-gray-300 rounded-md"
-                        onChange={(e) => {
-                          // Handle eligibility filter
-                          const value = e.target.value as Eligibility;
-                          setFilters(prev => ({ ...prev, eligibility: value }));
-                        }}
-                      >
-                        <option value="">Eligibility</option>
-                        <option value="eligible">Eligible</option>
-                        <option value="ineligible">Ineligible</option>
-                        <option value="withdrawn">Withdrawn</option>
-                      </select>
-                    </th>
+                    <SortableHeader
+                      field="eligibility"
+                      index={5}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'eligibility') {
+                          setSortConfig(prev => ({ field: 'eligibility', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'eligibility', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      Eligibility
+                    </SortableHeader>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Registration Date</th>
                     <th scope="col" className="px-2 py-1 text-left textxs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Samples</th>
                   </tr>
