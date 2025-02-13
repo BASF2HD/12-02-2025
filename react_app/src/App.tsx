@@ -752,7 +752,7 @@ function App() {
                         className="block w-full text-left px-2 py-1 text-sm flex items-center gap-2 hover:bg-gray-100"
                       >
                         {icon}
-                        <span>{action}</span>
+                        <<span>{action}</span>
                       </button>
                     );
                   })}
@@ -1381,7 +1381,7 @@ function App() {
                           <td className="min-w-[40px] px-2 py-1 text-xs text-gray-500">{index + 1}</td>
                           <td className="w-24 px-2 py-1 text-xs text-gray-500">{sample.parentBarcode}</td>
                           <td className="w-24 px-2 py-1">
-                            <input
+                            <<input
                               type="text"
                               value={sample.barcode}
                               onChange={(e) => updateDerivedSample(index, 'barcode', e.target.value)}
