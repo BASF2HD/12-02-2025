@@ -13,15 +13,28 @@ externalPort = 5173
 
 [[ports]]
 localPort = 5174
-externalPort = 80
 
 [[ports]]
 localPort = 5175
-externalPort = 3000
 
 [[ports]]
 localPort = 5176
-externalPort = 3001
+
+[[ports]]
+localPort = 5177
+
+[[ports]]
+localPort = 5178
+
+[[ports]]
+localPort = 5179
+
+[[ports]]
+localPort = 5180
+
+[[ports]]
+localPort = 5181
+externalPort = 80
 
 [workflows]
 runButton = "Run"
