@@ -1038,24 +1038,24 @@ function App() {
                         <SortableHeader field="barcode">Barcode</SortableHeader>
                         <SortableHeader field="ltxId">LTX ID</SortableHeader>
                         <SortableHeader field="patientId">Patient</SortableHeader>
-                        <SortableHeader field="type">Type</SortableHeader>
-                        <SortableHeader field="investigationType">Investigation Type</SortableHeader>
-                        <SortableHeader field="timepoint">Timepoint</SortableHeader>
-                        <SortableHeader field="specimen">Specimen</SortableHeader>
-                        <SortableHeader field="specNumber">Spec#</SortableHeader>
-                        <SortableHeader field="material">Material</SortableHeader>
-                        <SortableHeader field="status">Status</SortableHeader>
-                        <SortableHeader field="freezer">Freezer</SortableHeader>
-                        <SortableHeader field="shelf">Shelf</SortableHeader>
-                        <SortableHeader field="box">Box</SortableHeader>
-                        <SortableHeader field="position">Position</SortableHeader>
-                        <SortableHeader field="sampleDate">Sample Date</SortableHeader>
-                        <SortableHeader field="dateSent">Date Sent</SortableHeader>
-                        <SortableHeader field="dateReceived">Date Received</SortableHeader>
-                        <SortableHeader field="site">Site</SortableHeader>
-                        <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
-                        <SortableHeader field="volume">Volume (ml)</SortableHeader>
-                        <SortableHeader field="amount">Amount (mg)</SortableHeader>
+                        <SortableHeader field="type" hasActiveFilter={!!filters.type}>Type</SortableHeader>
+                        <SortableHeader field="investigationType" hasActiveFilter={!!filters.investigationType}>Investigation Type</SortableHeader>
+                        <SortableHeader field="timepoint" hasActiveFilter={!!filters.timepoint}>Timepoint</SortableHeader>
+                        <SortableHeader field="specimen" hasActiveFilter={!!filters.specimen}>Specimen</SortableHeader>
+                        <SortableHeader field="specNumber" hasActiveFilter={!!filters.specNumber}>Spec#</SortableHeader>
+                        <SortableHeader field="material" hasActiveFilter={!!filters.material}>Material</SortableHeader>
+                        <SortableHeader field="status" hasActiveFilter={!!filters.status}>Status</SortableHeader>
+                        <SortableHeader field="freezer" hasActiveFilter={!!filters.freezer}>Freezer</SortableHeader>
+                        <SortableHeader field="shelf" hasActiveFilter={!!filters.shelf}>Shelf</SortableHeader>
+                        <SortableHeader field="box" hasActiveFilter={!!filters.box}>Box</SortableHeader>
+                        <SortableHeader field="position" hasActiveFilter={!!filters.position}>Position</SortableHeader>
+                        <SortableHeader field="sampleDate" hasActiveFilter={!!filters.sampleDate}>Sample Date</SortableHeader>
+                        <SortableHeader field="dateSent" hasActiveFilter={!!filters.dateSent}>Date Sent</SortableHeader>
+                        <SortableHeader field="dateReceived" hasActiveFilter={!!filters.dateReceived}>Date Received</SortableHeader>
+                        <SortableHeader field="site" hasActiveFilter={!!filters.site}>Site</SortableHeader>
+                        <SortableHeader field="sampleLevel" hasActiveFilter={!!filters.sampleLevel}>Sample Level</SortableHeader>
+                        <SortableHeader field="volume" hasActiveFilter={!!filters.volume}>Volume (ml)</SortableHeader>
+                        <SortableHeader field="amount" hasActiveFilter={!!filters.amount}>Amount (mg)</SortableHeader>
                         <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
                         <SortableHeader field="mass">Mass (ng)</SortableHeader>
                         <SortableHeader field="surplus">Surplus</SortableHeader>
