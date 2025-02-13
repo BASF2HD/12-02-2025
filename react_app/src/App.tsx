@@ -351,9 +351,9 @@ function App() {
               const samplesToDelete = samples.filter(sample => selectedSamples.has(sample.barcode));
               if (samplesToDelete.length > 0) {
                 const sampleIds = samplesToDelete.map(sample => sample.id);
-                await deleteSamples(sampleIds);
+                const updatedSamples = await deleteSamples(sampleIds);
                 setSelectedSamples(new Set());
-                setSamples(prevSamples => prevSamples.filter(sample => !sampleIds.includes(sample.id)));
+                setSamples(updatedSamples);
               }
             } catch (error) {
               console.error('Error deleting samples:', error);
