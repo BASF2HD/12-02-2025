@@ -1037,6 +1037,7 @@ function App() {
                         <SortableHeader field="specimen">Specimen</SortableHeader>
                         <SortableHeader field="specNumber">Spec#</SortableHeader>
                         <SortableHeader field="material">Material</SortableHeader>
+                        <SortableHeader field="sampleDate">Sample Date & Time</SortableHeader>
                         <SortableHeader field="status">Status</SortableHeader>
                         <SortableHeader field="freezer">Freezer</SortableHeader>
                         <SortableHeader field="shelf">Shelf</SortableHeader>
