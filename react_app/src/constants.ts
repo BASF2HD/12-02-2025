@@ -9,7 +9,8 @@ import {
   Freezer,
   Shelf,
   Box,
-  Position
+  Position,
+  SampleType
 } from './types';
 
 export const INVESTIGATION_TYPES: InvestigationType[] = [
@@ -175,6 +176,17 @@ export const POSITIONS: Position[] = [
   '1,7',
   '1,8',
   '1,9'
+];
+
+export const SAMPLE_TYPES: SampleType[] = [
+  'Blood',
+  'Tissue',
+  'Buffy',
+  'Plasma',
+  'FFPE',
+  'H&E',
+  'DNA',
+  'RNA'
 ];
 
 export const getNextBarcode = (existingBarcodes: string[]): string => {
