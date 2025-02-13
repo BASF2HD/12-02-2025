@@ -783,7 +783,7 @@ function App() {
               setActiveTab('rna');
             }}
           >
-            <<Dna className="h-4 w-4 mr-1 text-indigo-600" />
+            <Dna className="h-4 w-4 mr-1 text-indigo-600" />
             <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
           </button>
           <div className="flex-grow flex justify-end space-x-3">
