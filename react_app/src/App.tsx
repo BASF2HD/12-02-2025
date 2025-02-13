@@ -887,7 +887,7 @@ function App() {
           </div>
         </div>
 
-        {showPatients ? (
+        {showPatients && (
           <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
             <div className="overflow-x-auto scrollbar-thin">
               <table className="min-w-full divide-y divide-gray-200 table-fixed">
@@ -1457,7 +1457,7 @@ function App() {
       )}
       {isDeriveModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bgwhite rounded-lg shadow-xl w[98%] max-h-[90vh] flex flex-col"><div className="flex justify-between items-center px-3py-2 border-b">
+          <div className="bgwhite rounded-lg shadow-xl w[98%] max-h-[90vh] flex flex-col"><div className="flex justify-between items-center px-3 py-2 border-b">
               <h2 className="text-lg font-medium">Derive Samples</h2>
               <div className="flex items-center space-x-4">
                 <button
