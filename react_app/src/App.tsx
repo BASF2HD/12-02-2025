@@ -347,16 +347,17 @@ function App() {
           break;
         case 'Delete':
           if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
-            const samplesToDelete = samples
-              .filter(sample => selectedSamples.has(sample.barcode))
-              .map(sample => sample.id);
-            if (samplesToDelete.length > 0) {
-              await deleteSamples(samplesToDelete);
-              setSelectedSamples(new Set());
-              // Refresh the samples list
-              setSamples(prevSamples => 
-                prevSamples.filter(sample => !samplesToDelete.includes(sample.id))
-              );
+            try {
+              const samplesToDelete = samples
+                .filter(sample => selectedSamples.has(sample.barcode))
+                .map(sample => sample.id);
+              if (samplesToDelete.length > 0) {
+                await deleteSamples(samplesToDelete);
+                setSelectedSamples(new Set());
+              }
+            } catch (error) {
+              console.error('Error deleting samples:', error);
+              throw error;
             }
           }
           break;

@@ -48,6 +48,10 @@ export function useSamples() {
 
   async function deleteSamples(sampleIds: string[]) {
     try {
+      if (!Array.isArray(sampleIds) || sampleIds.length === 0) {
+        throw new Error('No samples selected for deletion');
+      }
+      
       setSamples(prevSamples => {
         const updatedSamples = prevSamples.filter(sample => !sampleIds.includes(sample.id));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSamples));
