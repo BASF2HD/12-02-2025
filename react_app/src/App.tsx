@@ -466,59 +466,59 @@ function App() {
               const rect = e.currentTarget.getBoundingClientRect();
               dropdown.style.top = `${rect.bottom + window.scrollY}px`;
               dropdown.style.left = `${rect.left + window.scrollX}px`;
-              
+
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
-              
+
               const container = document.createElement('div');
               container.className = 'p-1.5';
-              
+
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
                 <span class="text-xs text-gray-500">Filter by ${field}</span>
                 <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
-              
+
               const content = document.createElement('div');
               content.className = 'max-h-48 overflow-y-auto';
-              
+
               filterOptions[field].forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'w-3 h-3 rounded border-gray-300';
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
-                
+
                 checkbox.addEventListener('click', (e) => {
                   e.stopPropagation();
                 });
-                
+
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
-                
+
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 content.appendChild(label);
               });
-              
+
               const footer = document.createElement('div');
               footer.className = 'flex justify-end mt-1 pt-1 border-t';
               footer.innerHTML = `
                 <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
               `;
-              
+
               container.appendChild(header);
               container.appendChild(content);
               container.appendChild(footer);
               dropdown.appendChild(container);
-              
+
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
-              
+
               clearButton?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
@@ -599,7 +599,7 @@ function App() {
                 <Paperclip className="h-5 w-5 mb-1" />
                 <span className="text-xs">ATTACHMENTS</span>
               </button>
-              
+
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
                 onClick={() => {
@@ -1165,7 +1165,7 @@ function App() {
                         <th className="w-20 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Spec#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Material</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Level</th>
-                        <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Date & Time</th>
+                        <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Date &amp; Time</th>
                         <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Comments</th>
                         <th className="px-2 py-1"></th>
                       </tr>
@@ -1401,8 +1401,8 @@ function App() {
                         <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Specimen</th>
                         <th className="w-20 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Spec#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Material</th>
-                        <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Level</th>
-                        <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Date & Time</th>
+                        <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray100">Sample Level</th>
+                        <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Date &amp; Time</th>
                         <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Comments</th>
                       </tr>
                     </thead>
