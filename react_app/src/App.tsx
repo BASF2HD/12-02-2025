@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send } from 'lucide-react';
 import { CRUKLogo } from './components/CRUKLogo';
+import { AdminPanel } from './components/AdminPanel';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
 import { SampleIcon } from './components/SampleIcon';
