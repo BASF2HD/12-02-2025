@@ -88,7 +88,6 @@ function App() {
     }
   };
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-const [sortConfig, setSortConfig] = useState<{ field: keyof Patient; direction: 'asc' | 'desc' }>({ field: 'id', direction: 'asc' });
 
 
   const [newSamples, setNewSamples] = useState<Sample[]>([{
