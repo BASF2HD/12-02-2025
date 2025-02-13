@@ -14,7 +14,7 @@ const DEFAULT_COLUMNS: ColumnConfig[] = [
   { id: 'specimen', label: 'Specimen', visible: true, order: 9 },
   { id: 'specNumber', label: 'Spec#', visible: true, order: 10 },
   { id: 'material', label: 'Material', visible: true, order: 11 },
-  { id: 'sampleDate', label: 'Sample Date', visible: true, order: 12 },
+  { id: 'sampleDate', label: 'Sample Date & Time', visible: true, order: 12 },
   { id: 'site', label: 'Site', visible: true, order: 13 },
   { id: 'freezer', label: 'Freezer', visible: true, order: 14 },
   { id: 'shelf', label: 'Shelf', visible: true, order: 15 },
