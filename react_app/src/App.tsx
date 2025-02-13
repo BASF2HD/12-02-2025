@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send } from 'lucide-react';
 import { CRUKLogo } from './components/CRUKLogo';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
@@ -447,7 +447,7 @@ function App() {
               sampleLevel: SAMPLE_LEVELS,
               status: ['Collected', 'Shipped', 'Received', 'In Storage', 'In Process', 'Completed']
             };
-            
+
             if (filterOptions[field]) {
               const select = document.createElement('select');
               select.className = 'absolute mt-1 w-32 text-xs border rounded-md bg-white z-50';
@@ -723,16 +723,22 @@ function App() {
               <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
                 <div className="py-1">
                   {SAMPLE_ACTIONS.map((action) => {
-                    const icon = {
+                    const iconMapping = {
                       'Derive': <Droplets className="h-4 w-4" />,
                       'Print Label': <Printer className="h-4 w-4" />,
                       'Print Barcode': <BarcodeIcon className="h-4 w-4" />,
                       'View History': <FileStack className="h-4 w-4" />,
-                      'Add Note': <Paperclip className="h-4 w-4" />,
+                      'Add Note': <Pencil className="h-4 w-4" />,
                       'Process Sample': <Flask className="h-4 w-4" />,
                       'Run Analysis': <TestTube className="h-4 w-4" />,
-                      'Extract DNA': <Dna className="h-4 w-4" />
-                    }[action];
+                      'Extract DNA': <Dna className="h-4 w-4" />,
+                      'Download': <Download className="h-4 w-4" />,
+                      'Upload': <Upload className="h-4 w-4" />,
+                      'Delete': <Trash2 className="h-4 w-4" />,
+                      'Send': <Send className="h-4 w-4" />
+                    };
+                    const icon = iconMapping[action] || null; // Handle missing icons gracefully
+
                     return (
                       <button
                         key={action}
@@ -868,7 +874,7 @@ function App() {
                   {[...uniquePatients].sort((a, b) => {
     const aValue = a[sortConfig.field];
     const bValue = b[sortConfig.field];
-    
+
     if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
     if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
     return 0;
@@ -1380,8 +1386,7 @@ function App() {
                           <td className="w-48 px-2 py-1">
                             <input
                               type="text"
-                              value={sample.patientId}
-                              onChange={(e) => {
+                              value={sample.patientId}                              onChange={(e) => {
                                 const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '');
                                 updateDerivedSample(index, 'patientId', value);
                                 if (value.length >= 9) {
