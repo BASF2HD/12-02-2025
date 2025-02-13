@@ -1,4 +1,3 @@
-
 import { useTableColumns, type ColumnConfig } from './useTableColumns';
 import type { Sample } from '../types';
 
