@@ -457,25 +457,48 @@ function App() {
               
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
               
-              dropdown.innerHTML = `
-                <div class="p-1.5">
-                  <div class="flex justify-between items-center mb-1">
-                    <span class="text-xs text-gray-500">Filter by ${field}</span>
-                    <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
-                  </div>
-                  <div class="max-h-48 overflow-y-auto">
-                    ${filterOptions[field].map(opt => `
-                      <label class="flex items-center py-0.5 cursor-pointer hover:bg-gray-50">
-                        <input type="checkbox" class="w-3 h-3 rounded border-gray-300" value="${opt}" ${currentFilters.includes(opt) ? 'checked' : ''}>
-                        <span class="text-xs text-gray-600 ml-1.5">${opt}</span>
-                      </label>
-                    `).join('')}
-                  </div>
-                  <div class="flex justify-end mt-1 pt-1 border-t">
-                    <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
-                  </div>
-                </div>
+              const container = document.createElement('div');
+              container.className = 'p-1.5';
+              
+              const header = document.createElement('div');
+              header.className = 'flex justify-between items-center mb-1';
+              header.innerHTML = `
+                <span class="text-xs text-gray-500">Filter by ${field}</span>
+                <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
+              
+              const content = document.createElement('div');
+              content.className = 'max-h-48 overflow-y-auto';
+              
+              filterOptions[field].forEach(opt => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'w-3 h-3 rounded border-gray-300';
+                checkbox.value = opt;
+                checkbox.checked = currentFilters.includes(opt);
+                
+                const span = document.createElement('span');
+                span.className = 'text-xs text-gray-600 ml-1.5';
+                span.textContent = opt;
+                
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                content.appendChild(label);
+              });
+              
+              const footer = document.createElement('div');
+              footer.className = 'flex justify-end mt-1 pt-1 border-t';
+              footer.innerHTML = `
+                <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
+              `;
+              
+              container.appendChild(header);
+              container.appendChild(content);
+              container.appendChild(footer);
+              dropdown.appendChild(container);
               
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
