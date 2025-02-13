@@ -493,21 +493,6 @@ function App() {
                 dropdown.remove();
               });
 
-              const clearButton = dropdown.querySelector('button');
-              clearButton?.addEventListener('click', () => {
-                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
-                checkboxes.forEach((cb: HTMLInputElement) => cb.checked = false);
-              });
-
-              const applyButton = dropdown.querySelector('button:last-child');
-              applyButton?.addEventListener('click', () => {
-                const selectedValues = Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked'))
-                  .map((cb: HTMLInputElement) => cb.value)
-                  .join(',');
-                setFilters(prev => ({ ...prev, [field]: selectedValues }));
-                dropdown.remove();
-              });
-
               e.currentTarget.appendChild(dropdown);
             } else {
               const value = prompt(`Filter ${children}`);
