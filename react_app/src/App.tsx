@@ -711,16 +711,17 @@ function App() {
                 <span>Add Sample</span>
               </button>
             )}
-            <button
-              onClick={() => setShowActionMenu(!showActionMenu)}
-              className="flex items-center px-3 py-1.5 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 whitespace-nowrap"
-              disabled={selectedSamples.size === 0}
-            >
-              <span className="mr-2">Actions</span>
-              <MoreVertical className="h-3.5 w-3.5" />
-            </button>
-            {showActionMenu && (
-              <div className="absolute right-0 mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
+            <div className="relative">
+              <button
+                onClick={() => setShowActionMenu(!showActionMenu)}
+                className="flex items-center px-3 py-1.5 text-xs bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 whitespace-nowrap"
+                disabled={selectedSamples.size === 0}
+              >
+                <span className="mr-2">Actions</span>
+                <MoreVertical className="h-3.5 w-3.5" />
+              </button>
+              {showActionMenu && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                 <div className="py-1">
                   {SAMPLE_ACTIONS.map((action) => {
                     const iconMapping = {
