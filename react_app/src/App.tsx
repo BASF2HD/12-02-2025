@@ -752,7 +752,7 @@ function App() {
                         className="block w-full text-left px-2 py-1 text-sm flex items-center gap-2 hover:bg-gray-100"
                       >
                         {icon}
-                        <<span>{action}</span>
+                        <span>{action}</span>
                       </button>
                     );
                   })}
