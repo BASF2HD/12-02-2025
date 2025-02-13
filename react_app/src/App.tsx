@@ -88,6 +88,7 @@ function App() {
     }
   };
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+const [sortConfig, setSortConfig] = useState<{ field: keyof Patient; direction: 'asc' | 'desc' }>({ field: 'id', direction: 'asc' });
 
 
   const [newSamples, setNewSamples] = useState<Sample[]>([{
@@ -756,11 +757,81 @@ function App() {
               <table className="min-w-full divide-y divide-gray-200 table-fixed">
                 <thead className="bg-gray-50 sticky top-0 z-10">
                   <tr>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">ID</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">LTX ID</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Site</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Cohort</th>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Study</th>
+                    <SortableHeader
+                      field="id"
+                      index={0}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'id') {
+                          setSortConfig(prev => ({ field: 'id', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'id', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      ID
+                    </SortableHeader>
+                    <SortableHeader
+                      field="ltxId"
+                      index={1}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'ltxId') {
+                          setSortConfig(prev => ({ field: 'ltxId', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'ltxId', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      LTX ID
+                    </SortableHeader>
+                    <SortableHeader
+                      field="site"
+                      index={2}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'site') {
+                          setSortConfig(prev => ({ field: 'site', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'site', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      Site
+                    </SortableHeader>
+                    <SortableHeader
+                      field="cohort"
+                      index={3}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'cohort') {
+                          setSortConfig(prev => ({ field: 'cohort', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'cohort', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      Cohort
+                    </SortableHeader>
+                    <SortableHeader
+                      field="study"
+                      index={4}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'study') {
+                          setSortConfig(prev => ({ field: 'study', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'study', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      Study
+                    </SortableHeader>
                     <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">
                       <select
                         className="form-select text-xs border-gray-300 rounded-md"
@@ -781,7 +852,14 @@ function App() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {uniquePatients.map((patient) => (
+                  {[...uniquePatients].sort((a, b) => {
+    const aValue = a[sortConfig.field];
+    const bValue = b[sortConfig.field];
+    
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  }).map((patient) => (
                     <tr 
                       key={patient.id} 
                       className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
