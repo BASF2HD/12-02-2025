@@ -56,3 +56,10 @@ export interface Log {
 export interface UserWithPermissions extends User {
   permissions: Permission[];
 }
+
+export type User = {
+  id: string;
+  email: string;
+  fullName: string;
+  role: 'admin' | 'read_only' | 'full_access';
+};
