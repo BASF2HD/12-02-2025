@@ -843,7 +843,7 @@ function App() {
                       }}
                       onFilter={() => {}}
                     >
-                      ID
+                      Patient ID
                     </SortableHeader>
                     <SortableHeader
                       field="ltxId"
