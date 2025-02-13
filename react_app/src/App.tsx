@@ -88,7 +88,33 @@ function App() {
     }
   };
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [newSample, setNewSample] = useState<Sample>({
+    id: '',
+    barcode: getNextBarcode(samples.map(s => s.barcode)),
+    patientId: '',
+    type: 'blood',
+    investigationType: 'Sequencing',
+    status: 'Collected',
+    site: 'UCLH',
+    timepoint: 'Surgery',
+    specimen: 'Plasma',
+    specNumber: 'N01',
+    material: 'Fresh',
+    sampleDate: new Date().toISOString().split('T')[0],
+    sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    freezer: '',
+    shelf: '',
+    box: '',
+    position: '',
+    sampleLevel: 'Original sample',
+    comments: ''
+  });
 
+  const updateNewSample = (index: number, field: keyof Sample, value: any) => {
+    const updatedSamples = [...newSamples];
+    updatedSamples[index] = { ...updatedSamples[index], [field]: value };
+    setNewSamples(updatedSamples);
+  };
 
   const [newSamples, setNewSamples] = useState<Sample[]>([{
     id: '',
