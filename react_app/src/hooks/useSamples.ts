@@ -7,7 +7,16 @@ export function useSamples() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    setLoading(false);
+    try {
+      setLoading(true);
+      // Initialize samples
+      setSamples([]);
+      setError(null);
+    } catch (err) {
+      setError(err as Error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   async function addSamples(newSamples: Sample[]) {

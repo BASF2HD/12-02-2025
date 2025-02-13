@@ -674,6 +674,15 @@ function App() {
       </header>
 
       <main className="max-w-[99%] mx-auto px-2 py-6">
+        {loading ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-gray-500">Loading samples...</div>
+          </div>
+        ) : error ? (
+          <div className="flex items-center justify-center h-64">
+            <div className="text-red-500">Error loading samples. Please try again.</div>
+          </div>
+        ) : (
 
         <div className="flex gap-1 mb-4 flex-nowrap overflow-x-auto min-w-max">
           <button
@@ -1178,6 +1187,7 @@ function App() {
             </DndProvider>
           </>
         )}
+      )}
       </main>
       {isNewSampleModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
