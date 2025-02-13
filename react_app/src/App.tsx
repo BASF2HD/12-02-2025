@@ -1505,8 +1505,6 @@ function App() {
                                 onChange={(e) => updateDerivedSample(index, 'sampleDateTime', e.target.value)}
                                 className="w-full text-xs border-gray-300 rounded-md"
                                 required
-                              />d"
-                                required
                               />
                             </div>
                           </td>
