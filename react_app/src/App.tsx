@@ -203,6 +203,38 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Check if all required fields are filled
+      const missingFields = newSamples.reduce((acc, sample, index) => {
+        const requiredFields = {
+          barcode: 'Barcode',
+          patientId: 'Patient ID',
+          type: 'Type',
+          investigationType: 'Investigation Type',
+          site: 'Site',
+          timepoint: 'Timepoint',
+          specimen: 'Specimen',
+          specNumber: 'Spec Number',
+          material: 'Material',
+          sampleDate: 'Sample Date',
+          sampleTime: 'Sample Time',
+          sampleLevel: 'Sample Level'
+        };
+
+        const missing = Object.entries(requiredFields)
+          .filter(([key]) => !sample[key as keyof Sample])
+          .map(([_, label]) => label);
+
+        if (missing.length > 0) {
+          acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
+        }
+        return acc;
+      }, [] as string[]);
+
+      if (missingFields.length > 0) {
+        alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
+        return;
+      }
+
       // Check if samples are being edited
       const isEditing = newSamples.every(sample => sample.id);
       if (isEditing) {
@@ -214,6 +246,7 @@ function App() {
       } else {
         await addSamples(newSamples);
       }
+
       setIsNewSampleModalOpen(false);
       setNewSamples([{
         id: '',
@@ -236,18 +269,11 @@ function App() {
         sampleLevel: 'Original sample',
         comments: ''
       }]);
-      return;
     } catch (error) {
       alert('Failed to save samples. Please try again.');
       console.error('Error:', error);
-      return;
     }
-
-    // Check if all required fields are filled
-    const missingFields = newSamples.reduce((acc, sample, index) => {
-        const requiredFields = {
-          barcode: 'Barcode',
-          patientId: 'Patient ID',
+  };
           type: 'Type',
           investigationType: 'Investigation Type',
           site: 'Site',
