@@ -876,13 +876,8 @@ function App() {
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.site}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.cohort}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.study}</td>
-                      <td className="px-2py-1 whitespace-nowrap text-xs">
-                        <span className={`px-1.5 inline-flex text-xs leading-4 font-semibold rounded-full
-                          ${patient.eligibility === 'eligible' ? 'bg-green-100 text-green-800' :
-                            patient.eligibility === 'ineligible' ? 'bg-red-100 text-red-800' :
-                            'bg-yellow-100 text-yellow-800'}`}>
-                          {patient.eligibility}
-                        </span>
+                      <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">
+                        {patient.eligibility}
                       </td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">
                         {formatDate(patient.registrationDate)}
