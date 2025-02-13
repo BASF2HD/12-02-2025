@@ -231,93 +231,92 @@ function App() {
 
     try {
       setError(null);
-
       if (!newSamples || newSamples.length === 0) {
         throw new Error('No samples to save');
       }
+    } catch (err) {
+      console.error('Error:', err);
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    }
 
-      // Check if all required fields are filled
-      const missingFields = newSamples.reduce((acc, sample, index) => {
-        const requiredFields = {
-          barcode: 'Barcode',
-          patientId: 'Patient ID',
-          type: 'Type',
-          investigationType: 'Investigation Type',
-          site: 'Site',
-          timepoint: 'Timepoint',
-          specimen: 'Specimen',
-          specNumber: 'Spec Number',
-          material: 'Material',
-          sampleDate: 'Sample Date',
-          sampleTime: 'Sample Time',
-          sampleLevel: 'Sample Level'
-        };
+    // Check if all required fields are filled
+    const missingFields = newSamples.reduce((acc, sample, index) => {
+      const requiredFields = {
+        barcode: 'Barcode',
+        patientId: 'Patient ID',
+        type: 'Type',
+        investigationType: 'Investigation Type',
+        site: 'Site',
+        timepoint: 'Timepoint',
+        specimen: 'Specimen',
+        specNumber: 'Spec Number',
+        material: 'Material',
+        sampleDate: 'Sample Date',
+        sampleTime: 'Sample Time',
+        sampleLevel: 'Sample Level'
+      };
 
-        const missing = Object.entries(requiredFields)
-          .filter(([key]) => !sample[key as keyof Sample])
-          .map(([_, label]) => label);
+      const missing = Object.entries(requiredFields)
+        .filter(([key]) => !sample[key as keyof Sample])
+        .map(([_, label]) => label);
 
-        if (missing.length > 0) {
-          acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
-        }
-        return acc;
-      }, [] as string[]);
+      if (missing.length > 0) {
+        acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
+      }
+      return acc;
+    }, [] as string[]);
 
-      if (missingFields.length > 0) {
-        alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
-        return;
+    if (missingFields.length > 0) {
+      alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
+      return;
+    }
+
+    // Check if samples are being edited
+    const isEditing = newSamples.every(sample => sample.id);
+    try {
+      if (isEditing) {
+        // Update existing samples
+        const updatedSamples = newSamples.map(sample => ({
+          ...sample,
+          // Ensure all required fields are present
+          type: sample.type || 'blood',
+          status: sample.status || 'Collected',
+          specimen: sample.specimen || 'Plasma'
+        }));
+
+        setSamples(prev => prev.map(existing => {
+          const updated = updatedSamples.find(s => s.id === existing.id);
+          return updated || existing;
+        }));
+        setSelectedSamples(new Set());
+      } else {
+        await addSamples(newSamples);
       }
 
-      // Check if samples are being edited
-      const isEditing = newSamples.every(sample => sample.id);
-      try {
-        if (isEditing) {
-          // Update existing samples
-          const updatedSamples = newSamples.map(sample => ({
-            ...sample,
-            // Ensure all required fields are present
-            type: sample.type || 'blood',
-            status: sample.status || 'Collected',
-            specimen: sample.specimen || 'Plasma'
-          }));
-
-          setSamples(prev => prev.map(existing => {
-            const updated = updatedSamples.find(s => s.id === existing.id);
-            return updated || existing;
-          }));
-          setSelectedSamples(new Set());
-        } else {
-          await addSamples(newSamples);
-        }
-
-        setIsNewSampleModalOpen(false);
-        setNewSamples([{
-          id: '',
-          barcode: getNextBarcode(samples.map(s => s.barcode)),
-          patientId: '',
-          type: 'blood',
-          investigationType: 'Sequencing',
-          status: 'Collected',
-          site: 'UCLH',
-          timepoint: 'Surgery',
-          specimen: 'Plasma',
-          specNumber: 'N01',
-          material: 'Fresh',
-          sampleDate: new Date().toISOString().split('T')[0],
-          sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
-          freezer: '',
-          shelf: '',
-          box: '',
-          position: '',
-          sampleLevel: 'Original sample',
-          comments: ''
-        }]);
-      } catch (error) {
-        alert('Failed to save samples. Please try again.');
-        console.error('Error:', error);
-      }
+      setIsNewSampleModalOpen(false);
+      setNewSamples([{
+        id: '',
+        barcode: getNextBarcode(samples.map(s => s.barcode)),
+        patientId: '',
+        type: 'blood',
+        investigationType: 'Sequencing',
+        status: 'Collected',
+        site: 'UCLH',
+        timepoint: 'Surgery',
+        specimen: 'Plasma',
+        specNumber: 'N01',
+        material: 'Fresh',
+        sampleDate: new Date().toISOString().split('T')[0],
+        sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        freezer: '',
+        shelf: '',
+        box: '',
+        position: '',
+        sampleLevel: 'Original sample',
+        comments: ''
+      }]);
     } catch (error) {
-      alert('An error occurred while saving samples.');
+      alert('Failed to save samples. Please try again.');
       console.error('Error:', error);
     } finally {
       // Optional cleanup actions here
@@ -1458,8 +1457,7 @@ function App() {
       )}
       {isDeriveModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bgwhite rounded-lg shadow-xl w[98%] max-h-[90vh] flex flex-col">
-            <div className="flex justify-between items-center px-3 py-2 border-b">
+          <div className="bgwhite rounded-lg shadow-xl w[98%] max-h-[90vh] flex flex-col"><div className="flex justify-between items-center px-3 py-2 border-b">
               <h2 className="text-lg font-medium">Derive Samples</h2>
               <div className="flex items-center space-x-4">
                 <button
