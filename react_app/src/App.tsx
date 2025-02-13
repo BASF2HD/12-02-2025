@@ -25,7 +25,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [showPatients, setShowPatients] = useState(false);
+  const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
   const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
