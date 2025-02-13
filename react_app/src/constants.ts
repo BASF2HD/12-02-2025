@@ -139,7 +139,7 @@ export const SAMPLE_ACTIONS = [
   'Delete',
   'Derive',
   'Aliquot',
-  'Send',
+  'New Shipment',
   'Receive'
 ] as const;
 
