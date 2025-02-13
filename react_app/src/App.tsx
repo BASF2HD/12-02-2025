@@ -27,7 +27,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const { samples, loading, error, addSamples, deriveSamples, setSamples } = useSamples();
+  const { samples, loading, error, addSamples } = useSamples();
   const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -88,33 +88,7 @@ function App() {
     }
   };
   const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
-  const [newSample, setNewSample] = useState<Sample>({
-    id: '',
-    barcode: getNextBarcode(samples.map(s => s.barcode)),
-    patientId: '',
-    type: 'blood',
-    investigationType: 'Sequencing',
-    status: 'Collected',
-    site: 'UCLH',
-    timepoint: 'Surgery',
-    specimen: 'Plasma',
-    specNumber: 'N01',
-    material: 'Fresh',
-    sampleDate: new Date().toISOString().split('T')[0],
-    sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
-    freezer: '',
-    shelf: '',
-    box: '',
-    position: '',
-    sampleLevel: 'Original sample',
-    comments: ''
-  });
 
-  const updateNewSample = (index: number, field: keyof Sample, value: any) => {
-    const updatedSamples = [...newSamples];
-    updatedSamples[index] = { ...updatedSamples[index], [field]: value };
-    setNewSamples(updatedSamples);
-  };
 
   const [newSamples, setNewSamples] = useState<Sample[]>([{
     id: '',
@@ -228,75 +202,44 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      setError(null);
-      if (!newSamples || newSamples.length === 0) {
-        throw new Error('No samples to save');
-      }
-    } catch (err) {
-      console.error('Error:', err);
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    }
+      // Check if all required fields are filled
+      const missingFields = newSamples.reduce((acc, sample, index) => {
+        const requiredFields = {
+          barcode: 'Barcode',
+          patientId: 'Patient ID',
+          type: 'Type',
+          investigationType: 'Investigation Type',
+          site: 'Site',
+          timepoint: 'Timepoint',
+          specimen: 'Specimen',
+          specNumber: 'Spec Number',
+          material: 'Material',
+          sampleDate: 'Sample Date',
+          sampleTime: 'Sample Time',
+          sampleLevel: 'Sample Level'
+        };
 
-    // Check if all required fields are filled
-    const missingFields = newSamples.reduce((acc, sample, index) => {
-      const requiredFields = {
-        barcode: 'Barcode',
-        patientId: 'Patient ID',
-        type: 'Type',
-        investigationType: 'Investigation Type',
-        site: 'Site',
-        timepoint: 'Timepoint',
-        specimen: 'Specimen',
-        specNumber: 'Spec Number',
-        material: 'Material',
-        sampleDate: 'Sample Date',
-        sampleTime: 'Sample Time',
-        sampleLevel: 'Sample Level'
-      };
+        const missing = Object.entries(requiredFields)
+          .filter(([key]) => !sample[key as keyof Sample])
+          .map(([_, label]) => label);
 
-      const missing = Object.entries(requiredFields)
-        .filter(([key]) => !sample[key as keyof Sample])
-        .map(([_, label]) => label);
+        if (missing.length > 0) {
+          acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
+        }
+        return acc;
+      }, [] as string[]);
 
-      if (missing.length > 0) {
-        acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
-      }
-      return acc;
-    }, [] as string[]);
-
-    if (missingFields.length > 0) {
-      alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
-      return;
-    }
-
-    // Check if samples are being edited
-    const isEditing = newSamples.every(sample => sample.id);
-    try {
-      if (isEditing) {
-        // Update existing samples
-        const updatedSamples = newSamples.map(sample => ({
-          ...sample,
-          // Ensure all required fields are present
-          type: sample.type || 'blood',
-          status: sample.status || 'Collected',
-          specimen: sample.specimen || 'Plasma'
-        }));
-
-        setSamples(prev => prev.map(existing => {
-          const updated = updatedSamples.find(s => s.id === existing.id);
-          return updated || existing;
-        }));
-        setSelectedSamples(new Set());
-      } else {
-        await addSamples(newSamples);
+      if (missingFields.length > 0) {
+        alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
+        return;
       }
 
+      await addSamples(newSamples);
       setIsNewSampleModalOpen(false);
       setNewSamples([{
         id: '',
-        barcode: getNextBarcode(samples.map(s => s.barcode)),
+        barcode: getNextBarcode([...samples].map(s => s.barcode)),
         patientId: '',
         type: 'blood',
         investigationType: 'Sequencing',
@@ -316,10 +259,9 @@ function App() {
         comments: ''
       }]);
     } catch (error) {
-      alert('Failed to save samples. Please try again.');
+      alert('Failed to add samples. Please try again.');
       console.error('Error:', error);
-    } finally {
-      // Optional cleanup actions here
+      return;
     }
   };
 
@@ -355,7 +297,34 @@ function App() {
     setNewSamples(newSamples.filter((_, i) => i !== index));
   };
 
-  // Function was moved up to line 207
+  const updateNewSample = (index: number, field: keyof Sample, value: string) => {
+    const updatedSamples = [...newSamples];
+    if (field === 'sampleDate') {
+      // When date is selected, automatically set the current time
+      const now = new Date();
+      const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        sampleDate: value,
+        sampleTime: currentTime
+      };
+    } else if (field === 'patientId') {
+      // When patientId is entered, automatically set the LTX ID
+      const ltxId = value.length >= 7 ? value.slice(-7) : '';
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        patientId: value,
+        ltxId: ltxId
+      };
+    } else {
+      updatedSamples[index] = { 
+        ...updatedSamples[index], 
+        [field]: field === 'barcode' ? value : field === 'surplus' ? Boolean(value) : value,
+        barcode: field === 'barcode' ? value : updatedSamples[index].barcode
+      };
+    }
+    setNewSamples(updatedSamples);
+  };
 
   const handleSampleSelection = (barcode: string) => {
     setSelectedSamples(prev => {
@@ -373,15 +342,6 @@ function App() {
     switch (action) {
       case 'Derive':
         handleDeriveAction();
-        break;
-      case 'Edit':
-        handleEdit();
-        break;
-      case 'Delete':
-        handleDelete();
-        break;
-      case 'Export as CSV':
-        handleExport();
         break;
       default:
         console.log(`Performing ${action} on samples:`, selectedSamples);
@@ -458,23 +418,6 @@ function App() {
     setDerivedSamples(updatedSamples);
   };
 
-  const handleEdit = () => {
-    const selectedSamplesList = samples.filter(s => selectedSamples.has(s.barcode));
-    setNewSamples(selectedSamplesList.map(sample => ({...sample})));
-    setIsNewSampleModalOpen(true);
-  };
-
-  const handleDelete = () => {
-    // Placeholder: Implement delete functionality here
-    alert('Delete functionality not yet implemented.');
-  };
-
-  const handleExport = () => {
-    // Placeholder: Implement export functionality here
-    alert('Export functionality not yet implemented.');
-  };
-
-
   if (!isAuthenticated) {
     return <LoginPage onLogin={handleLogin} />;
   }
@@ -513,59 +456,59 @@ function App() {
               const rect = e.currentTarget.getBoundingClientRect();
               dropdown.style.top = `${rect.bottom + window.scrollY}px`;
               dropdown.style.left = `${rect.left + window.scrollX}px`;
-
+              
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
-
+              
               const container = document.createElement('div');
               container.className = 'p-1.5';
-
+              
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
                 <span class="text-xs text-gray-500">Filter by ${field}</span>
                 <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
-
+              
               const content = document.createElement('div');
               content.className = 'max-h-48 overflow-y-auto';
-
+              
               filterOptions[field].forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
-
+                
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'w-3 h-3 rounded border-gray-300';
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
-
+                
                 checkbox.addEventListener('click', (e) => {
                   e.stopPropagation();
                 });
-
+                
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
-
+                
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 content.appendChild(label);
               });
-
+              
               const footer = document.createElement('div');
               footer.className = 'flex justify-end mt-1 pt-1 border-t';
               footer.innerHTML = `
                 <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
               `;
-
+              
               container.appendChild(header);
               container.appendChild(content);
               container.appendChild(footer);
               dropdown.appendChild(container);
-
+              
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
-
+              
               clearButton?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
@@ -679,15 +622,6 @@ function App() {
       </header>
 
       <main className="max-w-[99%] mx-auto px-2 py-6">
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-gray-500">Loading samples...</div>
-          </div>
-        ) : error ? (
-          <div className="flex items-center justify-center h-64">
-            <div className="text-red-500">Error loading samples. Please try again.</div>
-          </div>
-        ) : (
 
         <div className="flex gap-1 mb-4 flex-nowrap overflow-x-auto min-w-max">
           <button
@@ -815,7 +749,8 @@ function App() {
           </button>
           <button
             className={`flex items-center px-3 py-1.5 rounded-md ${
-              activeTab === 'rna' && !showPatients                ? 'bg-indigo-100 text-indigo-700' 
+              activeTab === 'rna' && !showPatients
+                ? 'bg-indigo-100 text-indigo-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             } text-xs whitespace-nowrap`}
             onClick={() => {
@@ -887,7 +822,7 @@ function App() {
           </div>
         </div>
 
-        {showPatients && (
+        {showPatients ? (
           <div className="bg-white rounded-lg shadow overflow-hidden max-h-[calc(100vh-12rem)] overflow-y-auto">
             <div className="overflow-x-auto scrollbar-thin">
               <table className="min-w-full divide-y divide-gray-200 table-fixed">
@@ -1003,13 +938,13 @@ function App() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...uniquePatients].sort((a, b) => {
-                    const aValue = a[sortConfig.field];
-                    const bValue = b[sortConfig.field];
+    const aValue = a[sortConfig.field];
+    const bValue = b[sortConfig.field];
 
-                    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-                    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-                    return 0;
-                  }).map((patient) => (
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  }).map((patient) => (
                     <tr 
                       key={patient.id} 
                       className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
@@ -1192,7 +1127,6 @@ function App() {
             </DndProvider>
           </>
         )}
-      )}
       </main>
       {isNewSampleModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
@@ -1457,7 +1391,8 @@ function App() {
       )}
       {isDeriveModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-          <div className="bgwhite rounded-lg shadow-xl w[98%] max-h-[90vh] flex flex-col"><div className="flex justify-between items-center px-3 py-2 border-b">
+          <div className="bg-white rounded-lg shadow-xl w-[98%] max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center px-3 py-2 border-b">
               <h2 className="text-lg font-medium">Derive Samples</h2>
               <div className="flex items-center space-x-4">
                 <button
@@ -1482,7 +1417,8 @@ function App() {
               <div className="space-y-4">
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-white sticky top-0 z-10">                    <tr>
+                    <thead className="bg-white sticky top-0 z-10">
+                      <tr>
                         <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Parent Barcode</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Barcode</th>

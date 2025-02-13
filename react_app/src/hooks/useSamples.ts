@@ -7,36 +7,22 @@ export function useSamples() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    try {
-      setLoading(true);
-      // Initialize samples
-      setSamples([]);
-      setError(null);
-    } catch (err) {
-      setError(err as Error);
-    } finally {
-      setLoading(false);
-    }
+    setLoading(false);
   }, []);
 
   async function addSamples(newSamples: Sample[]) {
     try {
-      if (!Array.isArray(newSamples)) {
-        throw new Error('Invalid samples data');
-      }
-      
       // Add IDs to new samples
       const samplesWithIds = newSamples.map(sample => ({
         ...sample,
-        id: crypto.randomUUID(),
-        status: sample.status || 'Collected'
+        id: crypto.randomUUID()
       }));
       
       setSamples(prevSamples => [...prevSamples, ...samplesWithIds]);
       return samplesWithIds;
     } catch (error) {
       console.error('Error adding samples:', error);
-      throw new Error('Failed to add samples: ' + (error as Error).message);
+      throw error;
     }
   }
 
