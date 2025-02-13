@@ -452,8 +452,10 @@ function App() {
 
             if (filterOptions[field]) {
               const dropdown = document.createElement('div');
-              dropdown.className = 'absolute mt-1 w-48 bg-white border rounded-md shadow-lg z-50';
-              dropdown.style.top = '100%';
+              dropdown.className = 'fixed mt-1 w-48 bg-white border rounded-md shadow-lg z-[100]';
+              const rect = e.currentTarget.getBoundingClientRect();
+              dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+              dropdown.style.left = `${rect.left + window.scrollX}px`;
               
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
               
