@@ -13,7 +13,8 @@ export interface Sample {
   specimen: string;
   specNumber: string;
   material: string;
-  sampleDateTime: string;
+  sampleDate: string;
+  sampleTime: string;
   freezer?: string;
   shelf?: string;
   box?: string;
@@ -25,17 +26,6 @@ export interface Sample {
   surplus: boolean;
   sampleLevel: string;
   comments?: string;
-}
-
-export enum SampleType {
-  Blood = 'Blood',
-  Tissue = 'Tissue',
-  Buffy = 'Buffy',
-  Plasma = 'Plasma',
-  FFPE = 'FFPE',
-  HAndE = 'H&E',
-  DNA = 'DNA',
-  RNA = 'RNA'
 }
 
 export type Permission = 

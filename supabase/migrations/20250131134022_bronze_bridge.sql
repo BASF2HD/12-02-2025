@@ -1,50 +1,87 @@
--- Drop existing types if they exist
-DROP TYPE IF EXISTS sample_type CASCADE;
-DROP TYPE IF EXISTS sample_status CASCADE;
+/*
+  # Update samples table schema
 
--- Create updated enum types
+  1. Changes
+    - Add missing columns to match application data model
+    - Update sample_type enum to include all types
+    - Add appropriate constraints and defaults
+    - Enable RLS policies for proper access control
+
+  2. New Columns
+    - barcode (text, unique)
+    - patient_id (text)
+    - type (sample_type)
+    - investigation_type (text)
+    - status (text)
+    - site (text)
+    - timepoint (text)
+    - specimen (text)
+    - spec_number (text)
+    - material (text)
+    - sample_date (timestamptz)
+    - sample_time (text)
+    - date_sent (timestamptz)
+    - date_received (timestamptz)
+    - freezer (text)
+    - shelf (text)
+    - box (text)
+    - position (text)
+    - sample_level (text)
+    - volume (numeric)
+    - amount (numeric)
+    - concentration (numeric)
+    - mass (numeric)
+    - surplus (boolean)
+    - comments (text)
+
+  3. Security
+    - Enable RLS
+    - Add policies for authenticated users
+*/
+
+-- Drop existing sample_type enum and recreate with all types
 DROP TYPE IF EXISTS sample_type CASCADE;
 CREATE TYPE sample_type AS ENUM (
-  'Blood',
-  'Tissue',
-  'Buffy',
-  'Plasma',
-  'FFPE',
-  'H&E',
-  'DNA',
-  'RNA'
+  'blood',
+  'tissue',
+  'ffpe',
+  'he',
+  'buffy',
+  'plasma',
+  'dna',
+  'rna'
 );
 
-CREATE TYPE sample_status AS ENUM ('Available', 'In Use', 'Depleted');
-
--- Create samples table with correct column order
-CREATE TABLE IF NOT EXISTS samples (
+-- Drop and recreate samples table with updated schema
+DROP TABLE IF EXISTS samples CASCADE;
+CREATE TABLE samples (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   barcode text UNIQUE NOT NULL,
-  ltx_id text,
-  patient_id text,
+  patient_id text NOT NULL,
   type sample_type NOT NULL,
-  investigation_type text,
-  timepoint text,
-  sample_level text,
-  specimen text,
-  spec_number text,
-  material text,
-  sample_date_time timestamptz,
-  site text,
+  investigation_type text NOT NULL,
+  status text NOT NULL DEFAULT 'Collected',
+  site text NOT NULL,
+  timepoint text NOT NULL,
+  specimen text NOT NULL,
+  spec_number text NOT NULL,
+  material text NOT NULL,
+  sample_date timestamptz NOT NULL,
+  sample_time text NOT NULL,
+  date_sent timestamptz,
+  date_received timestamptz,
   freezer text,
   shelf text,
   box text,
   position text,
-  volume_ml decimal,
-  amount_mg decimal,
-  concentration_ng_ul decimal,
-  mass_ng decimal,
-  surplus boolean,
-  status sample_status DEFAULT 'Available',
-  date_sent date,
-  date_received date,
+  sample_level text NOT NULL,
+  volume numeric,
+  amount numeric,
+  concentration numeric,
+  mass numeric,
+  surplus boolean DEFAULT false,
   comments text,
+  created_by uuid REFERENCES auth.users(id),
   created_at timestamptz DEFAULT now(),
   updated_at timestamptz DEFAULT now()
 );

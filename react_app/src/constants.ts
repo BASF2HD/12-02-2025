@@ -178,7 +178,16 @@ export const POSITIONS: Position[] = [
   '1,9'
 ];
 
-export const SAMPLE_TYPES: SampleType[] = Object.values(SampleType);
+export const SAMPLE_TYPES: SampleType[] = [
+  'Blood',
+  'Tissue',
+  'Buffy',
+  'Plasma',
+  'FFPE',
+  'H&E',
+  'DNA',
+  'RNA'
+];
 
 export const getNextBarcode = (existingBarcodes: string[]): string => {
   const numbers = existingBarcodes.map(code => parseInt(code, 10));
