@@ -139,8 +139,7 @@ export const SAMPLE_ACTIONS = [
   'Delete',
   'Derive',
   'Aliquot',
-  'New Shipment',
-  'Receive'
+  'New Shipment'
 ] as const;
 
 export const FREEZERS: Freezer[] = [
