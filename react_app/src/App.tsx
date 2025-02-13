@@ -613,7 +613,7 @@ function App() {
                 <span className="text-sm text-gray-600">John Smith</span>
                 <button 
                   className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-                  onClick={() => setShowAdminPanel(true)}
+                  onClick={() => setShowAdminPanel(!showAdminPanel)}
                 >
                   <Settings className="h-4 w-4" />
                 </button>
