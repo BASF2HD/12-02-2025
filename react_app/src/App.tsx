@@ -345,8 +345,10 @@ function App() {
         break;
       case 'Delete':
         if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
-          const remainingSamples = samples.filter(sample => !selectedSamples.has(sample.barcode));
-          setSamples(remainingSamples);
+          const samplesToDelete = samples
+            .filter(sample => selectedSamples.has(sample.barcode))
+            .map(sample => sample.id);
+          await deleteSamples(samplesToDelete);
           setSelectedSamples(new Set());
         }
         break;
