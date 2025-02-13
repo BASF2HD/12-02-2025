@@ -55,7 +55,7 @@ export function SortableHeader({ children, onSort, onFilter, hasActiveFilter, in
         </button>
         <button
           onClick={onFilter}
-          className={`${hasActiveFilter ? 'text-blue-600' : 'opacity-0 group-hover:opacity-100'} hover:text-blue-600 transition-opacity`}
+          className={`${hasActiveFilter ? 'text-blue-600' : 'opacity-0 group-hover:opacity-100'} hover:text-blue-600`}
         >
           <Filter className="h-3 w-3" />
         </button>

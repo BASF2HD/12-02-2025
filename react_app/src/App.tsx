@@ -431,10 +431,10 @@ function App() {
     return <LoginPage onLogin={handleLogin} />;
   }
 
-  const SortableHeader = ({ field, children, hasActiveFilter }: { field: keyof Sample; children: React.ReactNode; hasActiveFilter: boolean }) => (
+  const SortableHeader = ({ field, children }: { field: keyof Sample; children: React.ReactNode }) => (
     <th 
       scope="col" 
-      className={`px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100 ${hasActiveFilter ? 'text-blue-600' : ''}`}
+      className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100"
     >
       <div className="flex items-center space-x-1">
         <button
@@ -456,22 +456,7 @@ function App() {
               specNumber: SPEC_NUMBERS,
               material: MATERIALS,
               sampleLevel: SAMPLE_LEVELS,
-              status: ['Collected', 'Shipped', 'Received', 'In Storage', 'In Process', 'Completed'],
-              barcode: [],
-              ltxId: [],
-              patientId: [],
-              dateSent: [],
-              dateReceived: [],
-              freezer: [],
-              shelf: [],
-              box: [],
-              position: [],
-              volume: [],
-              amount: [],
-              concentration: [],
-              mass: [],
-              surplus: [],
-              comments: []
+              status: ['Collected', 'Shipped', 'Received', 'In Storage', 'In Process', 'Completed']
             };
 
             if (filterOptions[field]) {
@@ -480,59 +465,59 @@ function App() {
               const rect = e.currentTarget.getBoundingClientRect();
               dropdown.style.top = `${rect.bottom + window.scrollY}px`;
               dropdown.style.left = `${rect.left + window.scrollX}px`;
-
+              
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
-
+              
               const container = document.createElement('div');
               container.className = 'p-1.5';
-
+              
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
                 <span class="text-xs text-gray-500">Filter by ${field}</span>
                 <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
-
+              
               const content = document.createElement('div');
               content.className = 'max-h-48 overflow-y-auto';
-
+              
               filterOptions[field].forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
-
+                
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'w-3 h-3 rounded border-gray-300';
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
-
+                
                 checkbox.addEventListener('click', (e) => {
                   e.stopPropagation();
                 });
-
+                
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
-
+                
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 content.appendChild(label);
               });
-
+              
               const footer = document.createElement('div');
               footer.className = 'flex justify-end mt-1 pt-1 border-t';
               footer.innerHTML = `
                 <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
               `;
-
+              
               container.appendChild(header);
               container.appendChild(content);
               container.appendChild(footer);
               dropdown.appendChild(container);
-
+              
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
-
+              
               clearButton?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
@@ -556,7 +541,7 @@ function App() {
               setFilters(prev => ({ ...prev, [field]: value || '' }));
             }
           }}
-          className={`opacity-0 group-hover:opacity-100 hover:text-blue-600 ${hasActiveFilter ? 'text-blue-600' : ''}`}
+          className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
         >
           <Filter className="h-3 w-3" />
         </button>
@@ -775,7 +760,7 @@ function App() {
             className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'rna' && !showPatients
                 ? 'bg-indigo-100 text-indigo-700' 
-                :`bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             } text-xs whitespace-nowrap`}
             onClick={() => {
               setShowPatients(false);
@@ -1050,31 +1035,31 @@ function App() {
                           />
                         </th>
                         <th scope="col" className="px-2 py-1"></th>
-                        <SortableHeader field="barcode" hasActiveFilter={!!filters.barcode}>Barcode</SortableHeader>
-                        <SortableHeader field="ltxId" hasActiveFilter={!!filters.ltxId}>LTX ID</SortableHeader>
-                        <SortableHeader field="patientId" hasActiveFilter={!!filters.patientId}>Patient</SortableHeader>
-                        <SortableHeader field="type" hasActiveFilter={!!filters.type}>Type</SortableHeader>
-                        <SortableHeader field="investigationType" hasActiveFilter={!!filters.investigationType}>Investigation Type</SortableHeader>
-                        <SortableHeader field="timepoint" hasActiveFilter={!!filters.timepoint}>Timepoint</SortableHeader>
-                        <SortableHeader field="specimen" hasActiveFilter={!!filters.specimen}>Specimen</SortableHeader>
-                        <SortableHeader field="specNumber" hasActiveFilter={!!filters.specNumber}>Spec#</SortableHeader>
-                        <SortableHeader field="material" hasActiveFilter={!!filters.material}>Material</SortableHeader>
-                        <SortableHeader field="status" hasActiveFilter={!!filters.status}>Status</SortableHeader>
-                        <SortableHeader field="freezer" hasActiveFilter={!!filters.freezer}>Freezer</SortableHeader>
-                        <SortableHeader field="shelf" hasActiveFilter={!!filters.shelf}>Shelf</SortableHeader>
-                        <SortableHeader field="box" hasActiveFilter={!!filters.box}>Box</SortableHeader>
-                        <SortableHeader field="position" hasActiveFilter={!!filters.position}>Position</SortableHeader>
-                        <SortableHeader field="sampleDate" hasActiveFilter={!!filters.sampleDate}>Sample Date</SortableHeader>
-                        <SortableHeader field="dateSent" hasActiveFilter={!!filters.dateSent}>Date Sent</SortableHeader>
-                        <SortableHeader field="dateReceived" hasActiveFilter={!!filters.dateReceived}>Date Received</SortableHeader>
-                        <SortableHeader field="site" hasActiveFilter={!!filters.site}>Site</SortableHeader>
-                        <SortableHeader field="sampleLevel" hasActiveFilter={!!filters.sampleLevel}>Sample Level</SortableHeader>
-                        <SortableHeader field="volume" hasActiveFilter={!!filters.volume}>Volume (ml)</SortableHeader>
-                        <SortableHeader field="amount" hasActiveFilter={!!filters.amount}>Amount (mg)</SortableHeader>
-                        <SortableHeader field="concentration" hasActiveFilter={!!filters.concentration}>Conc. (ng/µL)</SortableHeader>
-                        <SortableHeader field="mass" hasActiveFilter={!!filters.mass}>Mass (ng)</SortableHeader>
-                        <SortableHeader field="surplus" hasActiveFilter={!!filters.surplus}>Surplus</SortableHeader>
-                        <SortableHeader field="comments" hasActiveFilter={!!filters.comments}>Comments</SortableHeader>
+                        <SortableHeader field="barcode">Barcode</SortableHeader>
+                        <SortableHeader field="ltxId">LTX ID</SortableHeader>
+                        <SortableHeader field="patientId">Patient</SortableHeader>
+                        <SortableHeader field="type">Type</SortableHeader>
+                        <SortableHeader field="investigationType">Investigation Type</SortableHeader>
+                        <SortableHeader field="timepoint">Timepoint</SortableHeader>
+                        <SortableHeader field="specimen">Specimen</SortableHeader>
+                        <SortableHeader field="specNumber">Spec#</SortableHeader>
+                        <SortableHeader field="material">Material</SortableHeader>
+                        <SortableHeader field="status">Status</SortableHeader>
+                        <SortableHeader field="freezer">Freezer</SortableHeader>
+                        <SortableHeader field="shelf">Shelf</SortableHeader>
+                        <SortableHeader field="box">Box</SortableHeader>
+                        <SortableHeader field="position">Position</SortableHeader>
+                        <SortableHeader field="sampleDate">Sample Date</SortableHeader>
+                        <SortableHeader field="dateSent">Date Sent</SortableHeader>
+                        <SortableHeader field="dateReceived">Date Received</SortableHeader>
+                        <SortableHeader field="site">Site</SortableHeader>
+                        <SortableHeader field="sampleLevel">Sample Level</SortableHeader>
+                        <SortableHeader field="volume">Volume (ml)</SortableHeader>
+                        <SortableHeader field="amount">Amount (mg)</SortableHeader>
+                        <SortableHeader field="concentration">Conc. (ng/µL)</SortableHeader>
+                        <SortableHeader field="mass">Mass (ng)</SortableHeader>
+                        <SortableHeader field="surplus">Surplus</SortableHeader>
+                        <SortableHeader field="comments">Comments</SortableHeader>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
