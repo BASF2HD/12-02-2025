@@ -722,43 +722,44 @@ function App() {
               </button>
               {showActionMenu && (
                 <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
-                <div className="py-1">
-                  {SAMPLE_ACTIONS.map((action) => {
-                    const iconMapping = {
-                      'Derive': <Droplets className="h-4 w-4" />,
-                      'Print Label': <Printer className="h-4 w-4" />,
-                      'Print Barcode': <BarcodeIcon className="h-4 w-4" />,
-                      'View History': <FileStack className="h-4 w-4" />,
-                      'Edit': <Pencil className="h-4 w-4" />,
-                      'Import': <DownloadCloud className="h-4 w-4" />,
-                      'Export': <UploadCloud className="h-4 w-4" />,
-                      'Aliquot': <Layers className="h-4 w-4" />,
-                      'Receive': <InboxIcon className="h-4 w-4" />,
-                      'Add Note': <Pencil className="h-4 w-4" />,
-                      'Process Sample': <Flask className="h-4 w-4" />,
-                      'Run Analysis': <TestTube className="h-4 w-4" />,
-                      'Extract DNA': <Dna className="h-4 w-4" />,
-                      'Download': <Download className="h-4 w-4" />,
-                      'Upload': <Upload className="h-4 w-4" />,
-                      'Delete': <Trash2 className="h-4 w-4" />,
-                      'Send': <Send className="h-4 w-4" />
-                    };
-                    const icon = iconMapping[action] || null; // Handle missing icons gracefully
+                  <div className="py-1">
+                    {SAMPLE_ACTIONS.map((action) => {
+                      const iconMapping = {
+                        'Derive': <Droplets className="h-4 w-4" />,
+                        'Print Label': <Printer className="h-4 w-4" />,
+                        'Print Barcode': <BarcodeIcon className="h-4 w-4" />,
+                        'View History': <FileStack className="h-4 w-4" />,
+                        'Edit': <Pencil className="h-4 w-4" />,
+                        'Import': <DownloadCloud className="h-4 w-4" />,
+                        'Export': <UploadCloud className="h-4 w-4" />,
+                        'Aliquot': <Layers className="h-4 w-4" />,
+                        'Receive': <InboxIcon className="h-4 w-4" />,
+                        'Add Note': <Pencil className="h-4 w-4" />,
+                        'Process Sample': <Flask className="h-4 w-4" />,
+                        'Run Analysis': <TestTube className="h-4 w-4" />,
+                        'Extract DNA': <Dna className="h-4 w-4" />,
+                        'Download': <Download className="h-4 w-4" />,
+                        'Upload': <Upload className="h-4 w-4" />,
+                        'Delete': <Trash2 className="h-4 w-4" />,
+                        'Send': <Send className="h-4 w-4" />
+                      };
+                      const icon = iconMapping[action] || null; // Handle missing icons gracefully
 
-                    return (
-                      <button
-                        key={action}
-                        onClick={() => handleBulkAction(action)}
-                        className="block w-full text-left px-2 py-1 text-sm flex items-center gap-2 hover:bg-gray-100"
-                      >
-                        {icon}
-                        <span>{action}</span>
-                      </button>
-                    );
-                  })}
+                      return (
+                        <button
+                          key={action}
+                          onClick={() => handleBulkAction(action)}
+                          className="block w-full text-left px-2 py-1 text-sm flex items-center gap-2 hover:bg-gray-100"
+                        >
+                          {icon}
+                          <span>{action}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
 
@@ -878,13 +879,13 @@ function App() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...uniquePatients].sort((a, b) => {
-    const aValue = a[sortConfig.field];
-    const bValue = b[sortConfig.field];
+                    const aValue = a[sortConfig.field];
+                    const bValue = b[sortConfig.field];
 
-    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-    return 0;
-  }).map((patient) => (
+                    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                    return 0;
+                  }).map((patient) => (
                     <tr 
                       key={patient.id} 
                       className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
@@ -1380,15 +1381,7 @@ function App() {
                         <tr key={index}>
                           <td className="min-w-[40px] px-2 py-1 text-xs text-gray-500">{index + 1}</td>
                           <td className="w-24 px-2 py-1 text-xs text-gray-500">{sample.parentBarcode}</td>
-                          <td className="w-24 px-2 py-1">
-                            <<input
-                              type="text"
-                              value={sample.barcode}
-                              onChange={(e) => updateDerivedSample(index, 'barcode', e.target.value)}
-                              className="w-full text-xs border-gray-300 rounded-md"
-                              required
-                            />
-                          </td>
+                          <td className="w-24 px-2 py-1 text-xs text-gray-500">{sample.barcode}</td>
                           <td className="w-48 px-2 py-1">
                             <input
                               type="text"
