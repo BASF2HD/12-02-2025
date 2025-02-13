@@ -1,11 +1,11 @@
 modules = ["nodejs-20", "web"]
-run = "npm run dev"
+run = "node index.js"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-run = ["sh", "-c", "npm run dev"]
+run = ["sh", "-c", "node index.js"]
 
 [[ports]]
 localPort = 5173
