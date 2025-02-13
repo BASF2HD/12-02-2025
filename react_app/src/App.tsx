@@ -509,8 +509,12 @@ function App() {
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
               
-              clearButton?.addEventListener('click', () => {
-                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]');
+              clearButton?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+                checkboxes.forEach(checkbox => {
+                  checkbox.checked = false;
+                });
                 checkboxes.forEach((cb: HTMLInputElement) => cb.checked = false);
               });
 
