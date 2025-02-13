@@ -846,7 +846,21 @@ function App() {
                     >
                       Eligibility
                     </SortableHeader>
-                    <th scope="col" className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Registration Date</th>
+                    <SortableHeader
+                      field="registrationDate"
+                      index={6}
+                      moveColumn={(dragIndex, hoverIndex) => {}}
+                      onSort={() => {
+                        if (sortConfig.field === 'registrationDate') {
+                          setSortConfig(prev => ({ field: 'registrationDate', direction: prev.direction === 'asc' ? 'desc' : 'asc' }));
+                        } else {
+                          setSortConfig({ field: 'registrationDate', direction: 'asc' });
+                        }
+                      }}
+                      onFilter={() => {}}
+                    >
+                      Registration Date
+                    </SortableHeader>
                     <th scope="col" className="px-2 py-1 text-left textxs font-medium text-gray-700 uppercase tracking-wider truncate bg-gray-100">Samples</th>
                   </tr>
                 </thead>
