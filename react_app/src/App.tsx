@@ -25,6 +25,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples } = useSamples();
@@ -612,7 +613,7 @@ function App() {
                 <span className="text-sm text-gray-600">John Smith</span>
                 <button 
                   className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
-                  onClick={() => {}}
+                  onClick={() => setShowAdminPanel(true)}
                 >
                   <Settings className="h-4 w-4" />
                 </button>
@@ -1546,6 +1547,12 @@ function App() {
             </form>
           </div>
         </div>
+      )}
+      {showAdminPanel && (
+        <AdminPanel 
+          onClose={() => setShowAdminPanel(false)}
+          currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
+        />
       )}
     </div>
   );

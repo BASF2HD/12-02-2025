@@ -179,11 +179,12 @@ export function UserManagement({ currentUser }: UserManagementProps) {
                   </label>
                   <select
                     value={newUser.role}
-                    onChange={e => setNewUser({ ...newUser, role: e.target.value as 'admin' | 'user' })}
+                    onChange={e => setNewUser({ ...newUser, role: e.target.value as 'admin' | 'read_only' | 'full_access' })}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   >
-                    <option value="user">User</option>
                     <option value="admin">Admin</option>
+                    <option value="read_only">Read Only</option>
+                    <option value="full_access">Full Access</option>
                   </select>
                 </div>
               </div>
