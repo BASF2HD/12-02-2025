@@ -1042,7 +1042,7 @@ function App() {
                         <SortableHeader field="shelf">Shelf</SortableHeader>
                         <SortableHeader field="box">Box</SortableHeader>
                         <SortableHeader field="position">Position</SortableHeader>
-                        <SortableHeader field="sampleDate">Sample Date</SortableHeader>
+                        <SortableHeader field="sampleDate">Sample Date & Time</SortableHeader>
                         <SortableHeader field="dateSent">Date Sent</SortableHeader>
                         <SortableHeader field="dateReceived">Date Received</SortableHeader>
                         <SortableHeader field="site">Site</SortableHeader>
