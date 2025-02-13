@@ -27,7 +27,7 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showPatients, setShowPatients] = useState(false);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const { samples, loading, error, addSamples } = useSamples();
+  const { samples, loading, error, addSamples, deriveSamples, setSamples } = useSamples();
   const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -202,14 +202,14 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       setError(null);
-      
+
       if (!newSamples || newSamples.length === 0) {
         throw new Error('No samples to save');
       }
-      
+
       // Check if all required fields are filled
       const missingFields = newSamples.reduce((acc, sample, index) => {
         const requiredFields = {
@@ -254,7 +254,7 @@ function App() {
             status: sample.status || 'Collected',
             specimen: sample.specimen || 'Plasma'
           }));
-          
+
           setSamples(prev => prev.map(existing => {
             const updated = updatedSamples.find(s => s.id === existing.id);
             return updated || existing;
@@ -266,29 +266,35 @@ function App() {
 
         setIsNewSampleModalOpen(false);
         setNewSamples([{
-        id: '',
-        barcode: getNextBarcode(samples.map(s => s.barcode)),
-        patientId: '',
-        type: 'blood',
-        investigationType: 'Sequencing',
-        status: 'Collected',
-        site: 'UCLH',
-        timepoint: 'Surgery',
-        specimen: 'Plasma',
-        specNumber: 'N01',
-        material: 'Fresh',
-        sampleDate: new Date().toISOString().split('T')[0],
-        sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
-        freezer: '',
-        shelf: '',
-        box: '',
-        position: '',
-        sampleLevel: 'Original sample',
-        comments: ''
-      }]);
+          id: '',
+          barcode: getNextBarcode(samples.map(s => s.barcode)),
+          patientId: '',
+          type: 'blood',
+          investigationType: 'Sequencing',
+          status: 'Collected',
+          site: 'UCLH',
+          timepoint: 'Surgery',
+          specimen: 'Plasma',
+          specNumber: 'N01',
+          material: 'Fresh',
+          sampleDate: new Date().toISOString().split('T')[0],
+          sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+          freezer: '',
+          shelf: '',
+          box: '',
+          position: '',
+          sampleLevel: 'Original sample',
+          comments: ''
+        }]);
+      } catch (error) {
+        alert('Failed to save samples. Please try again.');
+        console.error('Error:', error);
+      }
     } catch (error) {
-      alert('Failed to save samples. Please try again.');
+      alert('An error occurred while saving samples.');
       console.error('Error:', error);
+    } finally {
+      // Optional cleanup actions here
     }
   };
 
@@ -999,13 +1005,13 @@ function App() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...uniquePatients].sort((a, b) => {
-    const aValue = a[sortConfig.field];
-    const bValue = b[sortConfig.field];
+                    const aValue = a[sortConfig.field];
+                    const bValue = b[sortConfig.field];
 
-    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-    return 0;
-  }).map((patient) => (
+                    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                    return 0;
+                  }).map((patient) => (
                     <tr 
                       key={patient.id} 
                       className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
