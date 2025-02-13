@@ -24,7 +24,7 @@ export function TableColumnManager({ columns, onToggleVisibility, onReset }: Tab
       {isOpen && (
         <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg z-50 border border-gray-200">
           <div className="p-2 border-b flex justify-between items-center">
-            <h3 className="text-sm font-medium text-gray-700">Manage Columns</h3>
+            <h3 className="text-xs font-medium text-gray-700">Manage Columns</h3>
             <button
               onClick={onReset}
               className="text-gray-500 hover:text-gray-700"
@@ -41,11 +41,11 @@ export function TableColumnManager({ columns, onToggleVisibility, onReset }: Tab
                   id={`col-${column.id}`}
                   checked={column.visible}
                   onChange={() => onToggleVisibility(column.id)}
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
                 />
                 <label
                   htmlFor={`col-${column.id}`}
-                  className="ml-2 text-sm text-gray-700 cursor-pointer"
+                  className="ml-2 text-xs text-gray-700 cursor-pointer select-text hover:text-gray-900"
                 >
                   {column.label}
                 </label>
