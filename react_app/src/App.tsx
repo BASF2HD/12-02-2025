@@ -343,6 +343,15 @@ function App() {
       case 'Derive':
         handleDeriveAction();
         break;
+      case 'Edit':
+        handleEdit();
+        break;
+      case 'Delete':
+        handleDelete();
+        break;
+      case 'Export as CSV':
+        handleExport();
+        break;
       default:
         console.log(`Performing ${action} on samples:`, selectedSamples);
     }
@@ -418,6 +427,22 @@ function App() {
     setDerivedSamples(updatedSamples);
   };
 
+  const handleEdit = () => {
+    // Placeholder: Implement edit functionality here
+    alert('Edit functionality not yet implemented.');
+  };
+
+  const handleDelete = () => {
+    // Placeholder: Implement delete functionality here
+    alert('Delete functionality not yet implemented.');
+  };
+
+  const handleExport = () => {
+    // Placeholder: Implement export functionality here
+    alert('Export functionality not yet implemented.');
+  };
+
+
   if (!isAuthenticated) {
     return <LoginPage onLogin={handleLogin} />;
   }
@@ -456,59 +481,59 @@ function App() {
               const rect = e.currentTarget.getBoundingClientRect();
               dropdown.style.top = `${rect.bottom + window.scrollY}px`;
               dropdown.style.left = `${rect.left + window.scrollX}px`;
-              
+
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
-              
+
               const container = document.createElement('div');
               container.className = 'p-1.5';
-              
+
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
                 <span class="text-xs text-gray-500">Filter by ${field}</span>
                 <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
-              
+
               const content = document.createElement('div');
               content.className = 'max-h-48 overflow-y-auto';
-              
+
               filterOptions[field].forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'w-3 h-3 rounded border-gray-300';
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
-                
+
                 checkbox.addEventListener('click', (e) => {
                   e.stopPropagation();
                 });
-                
+
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
-                
+
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 content.appendChild(label);
               });
-              
+
               const footer = document.createElement('div');
               footer.className = 'flex justify-end mt-1 pt-1 border-t';
               footer.innerHTML = `
                 <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
               `;
-              
+
               container.appendChild(header);
               container.appendChild(content);
               container.appendChild(footer);
               dropdown.appendChild(container);
-              
+
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
-              
+
               clearButton?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
@@ -758,7 +783,7 @@ function App() {
               setActiveTab('rna');
             }}
           >
-            <Dna className="h-4 w-4 mr-1 text-indigo-600" />
+            <<Dna className="h-4 w-4 mr-1 text-indigo-600" />
             <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
           </button>
           <div className="flex-grow flex justify-end space-x-3">
@@ -1417,8 +1442,7 @@ function App() {
               <div className="space-y-4">
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-white sticky top-0 z-10">
-                      <tr>
+                    <thead className="bg-white sticky top-0 z-10">                    <tr>
                         <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Parent Barcode</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Barcode</th>
