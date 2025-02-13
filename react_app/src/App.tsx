@@ -42,6 +42,8 @@ function App() {
   const [isDeriveModalOpen, setIsDeriveModalOpen] = useState(false);
   const [parentSamples, setParentSamples] = useState<Sample[]>([]);
   const [derivedSamples, setDerivedSamples] = useState<Sample[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingSample, setEditingSample] = useState<Sample | null>(null);
 
   const getSpecimensByType = (type: SampleType): Specimen[] => {
     switch (type) {
@@ -345,6 +347,9 @@ function App() {
         case 'Derive':
           handleDeriveAction();
           break;
+        case 'Edit':
+          handleEditAction();
+          break;
         case 'Delete':
           if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
             try {
@@ -440,6 +445,32 @@ function App() {
     setDerivedSamples(updatedSamples);
   };
 
+  const handleEditAction = () => {
+    if (selectedSamples.size === 1) {
+      const [sampleBarcode] = selectedSamples;
+      const sampleToEdit = filteredAndSortedSamples.find(sample => sample.barcode === sampleBarcode);
+      if (sampleToEdit) {
+        setEditingSample(sampleToEdit);
+        setIsEditModalOpen(true);
+      }
+    } else {
+      alert('Please select only one sample to edit.');
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (editingSample){
+          //Implement your logic here to update the sample
+      }
+      setIsEditModalOpen(false);
+      setEditingSample(null);
+  };
+  const handleEditClose = () => {
+    setIsEditModalOpen(false);
+    setEditingSample(null);
+  };
+
   if (!isAuthenticated) {
     return <LoginPage onLogin={handleLogin} />;
   }
@@ -478,59 +509,59 @@ function App() {
               const rect = e.currentTarget.getBoundingClientRect();
               dropdown.style.top = `${rect.bottom + window.scrollY}px`;
               dropdown.style.left = `${rect.left + window.scrollX}px`;
-              
+
               const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
-              
+
               const container = document.createElement('div');
               container.className = 'p-1.5';
-              
+
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
                 <span class="text-xs text-gray-500">Filter by ${field}</span>
                 <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
-              
+
               const content = document.createElement('div');
               content.className = 'max-h-48 overflow-y-auto';
-              
+
               filterOptions[field].forEach(opt => {
                 const label = document.createElement('label');
                 label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.className = 'w-3 h-3 rounded border-gray-300';
                 checkbox.value = opt;
                 checkbox.checked = currentFilters.includes(opt);
-                
+
                 checkbox.addEventListener('click', (e) => {
                   e.stopPropagation();
                 });
-                
+
                 const span = document.createElement('span');
                 span.className = 'text-xs text-gray-600 ml-1.5';
                 span.textContent = opt;
-                
+
                 label.appendChild(checkbox);
                 label.appendChild(span);
                 content.appendChild(label);
               });
-              
+
               const footer = document.createElement('div');
               footer.className = 'flex justify-end mt-1 pt-1 border-t';
               footer.innerHTML = `
                 <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
               `;
-              
+
               container.appendChild(header);
               container.appendChild(content);
               container.appendChild(footer);
               dropdown.appendChild(container);
-              
+
               const clearButton = dropdown.querySelector('#clearAll');
               const applyButton = dropdown.querySelector('#applyFilter');
-              
+
               clearButton?.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
@@ -611,7 +642,7 @@ function App() {
                 <Paperclip className="h-5 w-5 mb-1" />
                 <span className="text-xs">ATTACHMENTS</span>
               </button>
-              
+
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
                 onClick={() => {
@@ -752,7 +783,7 @@ function App() {
               activeTab === 'dna' && !showPatients
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            } text-xs whitespace-nowrap`}
+            } text-xs whitespace-nowrap`}}
             onClick={() => {
               setShowPatients(false);
               setActiveTab('dna');
@@ -815,7 +846,8 @@ function App() {
                       'Download': <Download className="h-4 w-4" />,
                       'Upload': <Upload className="h-4 w-4" />,
                       'Delete': <Trash2 className="h-4 w-4" />,
-                      'Send': <Send className="h-4 w-4" />
+                      'Send': <Send className="h-4 w-4" />,
+                      'Edit': <Pencil className="h-4 w-4" />
                     };
                     const icon = iconMapping[action] || null; // Handle missing icons gracefully
 
@@ -1545,6 +1577,36 @@ function App() {
                 <button
                   type="button"
                   onClick={() => setIsDeriveModalOpen(false)}
+                  className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {isEditModalOpen && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl w-[98%] max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center px-3 py-2 border-b">
+              <h2 className="text-lg font-medium">Edit Sample</h2>
+              <button onClick={handleEditClose}>
+                <X className="h-5 w-5 text-gray-400 hover:text-gray-500" />
+              </button>
+            </div>
+            <form onSubmit={handleEditSubmit} className="p-3 overflow-y-auto">
+              {/* Add your form fields here */}
+              <div className="mt-3 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={handleEditClose}
                   className="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                 >
                   Cancel

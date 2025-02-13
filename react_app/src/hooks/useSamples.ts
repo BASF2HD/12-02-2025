@@ -66,12 +66,27 @@ export function useSamples() {
     }
   }
 
+  async function updateSample(updatedSample: Sample) {
+    try {
+      setSamples(prevSamples => 
+        prevSamples.map(sample => 
+          sample.id === updatedSample.id ? updatedSample : sample
+        )
+      );
+      return updatedSample;
+    } catch (error) {
+      console.error('Error updating sample:', error);
+      throw error;
+    }
+  }
+
   return {
     samples,
     loading,
     error,
     addSamples,
     deriveSamples,
-    deleteSamples
+    deleteSamples,
+    updateSample
   };
 }

@@ -135,12 +135,18 @@ export const SAMPLE_LEVELS: SampleLevel[] = [
 
 export const SAMPLE_ACTIONS = [
   'Edit',
-  'Import',
-  'Export',
-  'Delete',
   'Derive',
-  'Aliquot',
-  'New Shipment'
+  'Print Label',
+  'Print Barcode',
+  'View History',
+  'Add Note',
+  'Process Sample',
+  'Run Analysis',
+  'Extract DNA',
+  'Download',
+  'Upload',
+  'Delete',
+  'Send'
 ] as const;
 
 export const FREEZERS: Freezer[] = [
