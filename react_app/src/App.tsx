@@ -475,12 +475,17 @@ function App() {
   };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (editingSample){
-          //Implement your logic here to update the sample
+    e.preventDefault();
+    if (editingSample) {
+      try {
+        await updateSample(editingSample);
+        setIsEditModalOpen(false);
+        setEditingSample(null);
+      } catch (error) {
+        console.error('Error updating sample:', error);
+        alert('Failed to update sample');
       }
-      setIsEditModalOpen(false);
-      setEditingSample(null);
+    }
   };
   const handleEditClose = () => {
     setIsEditModalOpen(false);
