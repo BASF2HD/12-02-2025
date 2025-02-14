@@ -1789,7 +1789,16 @@ function App() {
           currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
         />
       )}
-      {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
+      {activeTab === 'dashboard' && (
+        <div 
+          className="fixed inset-0 bg-gray-500 bg-opacity-10" 
+          onClick={() => setActiveTab('all')}
+        >
+          <div onClick={e => e.stopPropagation()}>
+            <DashboardGraphs samples={samples} />
+          </div>
+        </div>
+      )}
       {showLocationManager && <LocationManager onClose={() => setShowLocationManager(false)} />}
       {showPrinterManager && <PrinterManager onClose={() => setShowPrinterManager(false)} />}
       {showBarcodeManager && (
