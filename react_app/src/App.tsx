@@ -23,7 +23,7 @@ import { TableColumnManager } from './components/TableColumnManager';
 import { TreeView } from './components/TreeView';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import AdminPanel from './AdminPanel';
+import AdminPanel from './components/AdminPanel';
 import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
 
 function App() {
