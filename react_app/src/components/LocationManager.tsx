@@ -247,16 +247,27 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                       className="w-full text-xs border-gray-300 rounded-md mb-2"
                                     />
                                     <div>
-                                      {/* Position Labels */}
-                                      <div className={`grid grid-cols-${box.positions[0].col} gap-[1px] mb-2`}>
-                                        {[...Array(box.positions[0].col)].map((_, i) => (
-                                          <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
-                                            {i + 1}
-                                          </div>
-                                        ))}
+                                      {/* Column Labels */}
+                                      <div className="flex justify-end mb-1">
+                                        <div className="w-4"></div>
+                                        <div className={`flex-1 grid grid-cols-${box.positions[0].col} gap-[1px]`}>
+                                          {[...Array(box.positions[0].col)].map((_, i) => (
+                                            <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
+                                              Column {i + 1}
+                                            </div>
+                                          ))}
+                                        </div>
                                       </div>
-                                      {/* Grid */}
-                                      <div className={`grid grid-cols-${box.positions[0].col} gap-[1px]`}>
+                                      {/* Row Labels and Grid */}
+                                      <div className="flex">
+                                        <div className="flex flex-col justify-between mr-1 py-[1px]">
+                                          {[...Array(box.positions.length / box.positions[0].col)].map((_, i) => (
+                                            <div key={i} className="text-[10px] text-right font-semibold text-gray-700">
+                                              Row {i + 1}
+                                            </div>
+                                          ))}
+                                        </div>
+                                        <div className={`flex-1 grid grid-cols-${box.positions[0].col} gap-[1px]`}>
                                         {box.positions.map((pos, i) => (
                                           <div
                                             key={i}
@@ -272,6 +283,7 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                             )}
                                           </div>
                                         ))}
+                                      </div>
                                       </div>
                                     </div>
                                   </>
