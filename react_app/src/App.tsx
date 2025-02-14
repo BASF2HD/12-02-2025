@@ -1168,12 +1168,7 @@ function App() {
                             {sample.mass ? `${sample.mass} ng` : ''}
                           </td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-center">
-                            <input
-                              type="checkbox"
-                              checked={sample.surplus}
-                              disabled
-                              className="rounded border-gray-300 text-blue-600"
-                            />
+                            {sample.surplus ? 'Yes' : 'No'}
                           </td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.comments}</td>
                         </tr>
