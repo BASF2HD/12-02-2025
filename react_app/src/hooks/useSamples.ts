@@ -39,7 +39,7 @@ export function useSamples() {
       }
 
       const samplesWithIds = derivedSamples.map(sample => {
-        const parentSample = parentSamples.find(p => p.barcode === sample.parentBarcode);
+        const parentSample = parentSamples[0];  // Use first parent since we're deriving from selected samples
         if (!parentSample) {
           throw new Error('Parent sample not found');
         }
@@ -47,7 +47,9 @@ export function useSamples() {
         return {
           ...sample,
           id: crypto.randomUUID(),
+          ltxId: parentSample.ltxId,
           patientId: parentSample.patientId,
+          parentBarcode: parentSample.barcode,
           site: parentSample.site,
           timepoint: parentSample.timepoint
         };

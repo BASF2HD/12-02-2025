@@ -399,6 +399,7 @@ function App() {
     const initialDerived = selectedSamplesList.map(parent => ({
       id: '',
       barcode: getNextBarcode([...samples, ...derivedSamples].map(s => s.barcode)),
+      ltxId: parent.ltxId,
       patientId: parent.patientId,
       parentBarcode: parent.barcode,
       type: parent.type,
