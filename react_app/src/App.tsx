@@ -1,4 +1,801 @@
-onClick={() => {
+import React, { useState, useMemo, useEffect } from 'react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send, BarChart } from 'lucide-react';
+import { CRUKLogo } from './components/CRUKLogo';
+import { FreezerIcon } from './components/FreezerIcon';
+import { LoginPage } from './components/LoginPage';
+import { SampleIcon } from './components/SampleIcon';
+import { useSamples } from './hooks/useSamples';
+import { 
+  INVESTIGATION_TYPES, 
+  SITES, 
+  TIMEPOINTS, 
+  SPECIMENS, 
+  SPEC_NUMBERS, 
+  MATERIALS,
+  SAMPLE_LEVELS,
+  SAMPLE_ACTIONS,
+  getNextBarcode,
+  formatDate,
+  formatTime
+} from './constants';
+import type { Sample, Patient, SampleType } from './types';
+import { TableColumnManager } from './components/TableColumnManager';
+import { TreeView } from './components/TreeView';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showPatients, setShowPatients] = useState(true);
+  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
+  const { samples, loading, error, addSamples, updateSample } = useSamples();
+  const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
+  const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortConfig, setSortConfig] = useState<{ field: keyof Sample; order: 'asc' | 'desc' }>({
+    field: 'barcode',
+    order: 'asc'
+  });
+  const [filters, setFilters] = useState<Partial<Record<keyof Sample, string>>>({});
+  const [selectedSamples, setSelectedSamples] = useState<Set<string>>(new Set());
+  const [showActionMenu, setShowActionMenu] = useState(false);
+  const actionMenuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(event.target as Node)) {
+        setShowActionMenu(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  const [isDeriveModalOpen, setIsDeriveModalOpen] = useState(false);
+  const [parentSamples, setParentSamples] = useState<Sample[]>([]);
+  const [derivedSamples, setDerivedSamples] = useState<Sample[]>([]);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingSample, setEditingSample] = useState<Sample | null>(null);
+
+  const getSpecimensByType = (type: SampleType): Specimen[] => {
+    switch (type) {
+      case 'blood':
+        return SPECIMENS.filter(specimen => [
+          'Immunology LH',
+          'Organoids LH',
+          'cfDNA Streck',
+          'Germline EDTA',
+          'CTC_Peripheral Streck',
+          'Methylation Streck',
+          'Metabolomics LH',
+          'TCR/BCR Tempus'
+        ].includes(specimen));
+      case 'tissue':
+        return SPECIMENS.filter(specimen => [
+          'Frozen Normal Lung',
+          'Frozen Tumour Lung',
+          'Frozen Tumour Lymph node',
+          'Frozen Normal Lymph node',
+          'Imm Fresh Tumour',
+          'Imm Fresh Tumour Lymph node',
+          'Imm Fresh Normal',
+          'Imm Fresh Normal Lymph node',
+          'Organoids Tumour',
+          'Organoids Normal',
+          'Cell of Origin',
+          'Slice',
+          'Frozen Biopsy'
+        ].includes(specimen));
+      case 'ffpe':
+        return SPECIMENS.filter(specimen => specimen === 'FFPE Block');
+      case 'he':
+        return SPECIMENS.filter(specimen => specimen === 'H&E Slide');
+      case 'buffy':
+        return SPECIMENS.filter(specimen => specimen === 'Buffy');
+      case 'plasma':
+        return SPECIMENS.filter(specimen => specimen === 'Plasma');
+      case 'dna':
+        return SPECIMENS.filter(specimen => specimen === 'DNA');
+      case 'rna':
+        return SPECIMENS.filter(specimen => specimen === 'RNA');
+      default:
+        return SPECIMENS;
+    }
+  };
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+
+
+  const [newSamples, setNewSamples] = useState<Sample[]>([{
+    id: '',
+    barcode: getNextBarcode(samples.map(s => s.barcode)),
+    patientId: '',
+    type: 'blood',
+    investigationType: 'Sequencing',
+    status: 'Collected',
+    site: 'UCLH',
+    timepoint: 'Surgery',
+    specimen: 'Plasma',
+    specNumber: 'N01',
+    material: 'Fresh',
+    sampleDate: new Date().toISOString().split('T')[0],
+    sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    freezer: '',
+    shelf: '',
+    box: '',
+    position: '',
+    volume: undefined,
+    amount: undefined,
+    concentration: undefined,
+    mass: undefined,
+    surplus: false,
+    sampleLevel: 'Original sample',
+    comments: ''
+  }]);
+
+  const uniquePatients = useMemo(() => {
+    const patientIds = [...new Set(samples.map(sample => sample.patientId))];
+    return patientIds.map(id => ({
+      id,
+      ltxId: id.slice(-7),
+      site: 'UCLH',
+      cohort: 'A',
+      study: 'TRACERx',
+      eligibility: 'eligible' as const,
+      registrationDate: '2024-01-01',
+      samples: samples.filter(s => s.patientId === id)
+    }));
+  }, [samples]);
+
+  const handleLogin = (email: string, password: string) => {
+    // TODO: Implement actual authentication
+    setIsAuthenticated(true);
+  };
+
+  const handleSort = (field: keyof Sample) => {
+    setSortConfig({
+      field,
+      order: sortConfig.field === field && sortConfig.order === 'asc' ? 'desc' : 'asc'
+    });
+  };
+
+  const filteredAndSortedSamples = useMemo(() => {
+    let filtered = samples;
+
+    // Filter by selected patient
+    if (selectedPatientId) {
+      filtered = filtered.filter(sample => sample.patientId === selectedPatientId);
+    }
+
+    // Fix type filtering
+    if (activeTab !== 'all') {
+      filtered = filtered.filter(sample => {
+        switch (activeTab) {
+          case 'ffpe':
+            return sample.specimen === 'FFPE Block';
+          case 'he':
+            return sample.specimen === 'H&E Slide';
+          case 'buffy':
+            return sample.specimen === 'Buffy';
+          case 'plasma':
+            return sample.specimen === 'Plasma';
+          case 'dna':
+            return sample.specimen === 'DNA';
+          case 'rna':
+            return sample.specimen === 'RNA';
+          default:
+            return sample.type === activeTab;
+        }
+      });
+    }
+
+    filtered = filtered.filter(sample => {
+      const searchLower = searchTerm.toLowerCase();
+      return Object.entries(sample).some(([key, value]) => {
+        if (value === null || value === undefined) return false;
+        const stringValue = value.toString().toLowerCase();
+        // Skip searching in certain fields
+        if (['id', 'surplus'].includes(key)) return false;
+        return stringValue.includes(searchLower);
+      });
+    });
+
+    filtered = filtered.filter(sample => {
+      return Object.entries(filters).every(([key, value]) => {
+        if (!value) return true;
+        const filterValues = value.split(',').filter(Boolean);
+        if (filterValues.length === 0) return true;
+        return filterValues.includes(sample[key as keyof Sample]?.toString());
+      });
+    });
+
+    return filtered.sort((a, b) => {
+      const aValue = a[sortConfig.field];
+      const bValue = b[sortConfig.field];
+
+      if (sortConfig.order === 'asc') {
+        return aValue > bValue ? 1 : -1;
+      } else {
+        return aValue < bValue ? 1 : -1;
+      }
+    });
+  }, [samples, activeTab, searchTerm, sortConfig, filters, selectedPatientId]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Check if all required fields are filled
+      const missingFields = newSamples.reduce((acc, sample, index) => {
+        const requiredFields = {
+          barcode: 'Barcode',
+          patientId: 'Patient ID',
+          type: 'Type',
+          investigationType: 'Investigation Type',
+          site: 'Site',
+          timepoint: 'Timepoint',
+          specimen: 'Specimen',
+          specNumber: 'Spec Number',
+          material: 'Material',
+          sampleDate: 'Sample Date',
+          sampleTime: 'Sample Time',
+          sampleLevel: 'Sample Level'
+        };
+
+        const missing = Object.entries(requiredFields)
+          .filter(([key]) => !sample[key as keyof Sample])
+          .map(([_, label]) => label);
+
+        if (missing.length > 0) {
+          acc.push(`Row ${index + 1}: ${missing.join(', ')}`);
+        }
+        return acc;
+      }, [] as string[]);
+
+      if (missingFields.length > 0) {
+        alert(`Please fill in all required fields:\n\n${missingFields.join('\n')}`);
+        return;
+      }
+
+      await addSamples(newSamples);
+      setIsNewSampleModalOpen(false);
+      setNewSamples([{
+        id: '',
+        barcode: getNextBarcode([...samples].map(s => s.barcode)),
+        patientId: '',
+        type: 'blood',
+        investigationType: 'Sequencing',
+        status: 'Collected',
+        site: 'UCLH',
+        timepoint: 'Surgery',
+        specimen: 'Plasma',
+        specNumber: 'N01',
+        material: 'Fresh',
+        sampleDate: new Date().toISOString().split('T')[0],
+        sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        freezer: '',
+        shelf: '',
+        box: '',
+        position: '',
+        sampleLevel: 'Original sample',
+        comments: ''
+      }]);
+    } catch (error) {
+      alert('Failed to add samples. Please try again.');
+      console.error('Error:', error);
+      return;
+    }
+  };
+
+  const addNewSampleRow = () => {
+    const now = new Date();
+    const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+    const lastSample = newSamples[newSamples.length - 1];
+
+    setNewSamples([...newSamples, {
+      id: '',
+      barcode: getNextBarcode([...samples, ...newSamples].map(s => s.barcode)),
+      patientId: lastSample?.patientId || '',
+      type: 'blood',
+      investigationType: 'Sequencing',
+      status: 'Collected',
+      site: 'UCLH',
+      timepoint: 'Surgery',
+      specimen: 'Plasma',
+      specNumber: 'N01',
+      material: 'Fresh',
+      sampleDate: now.toISOString().split('T')[0],
+      sampleTime: currentTime,
+      freezer: '',
+      shelf: '',
+      box: '',
+      position: '',
+      sampleLevel: 'Original sample',
+      comments: ''
+    }]);
+  };
+
+  const deleteNewSampleRow = (index: number) => {
+    setNewSamples(newSamples.filter((_, i) => i !== index));
+  };
+
+  const updateNewSample = (index: number, field: keyof Sample, value: string) => {
+    const updatedSamples = [...newSamples];
+    if (field === 'sampleDate') {
+      // When date is selected, automatically set the current time
+      const now = new Date();
+      const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        sampleDate: value,
+        sampleTime: currentTime
+      };
+    } else if (field === 'patientId') {
+      // When patientId is entered, automatically set the LTX ID
+      const ltxId = value.length >= 7 ? value.slice(-7) : '';
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        patientId: value,
+        ltxId: ltxId
+      };
+    } else {
+      updatedSamples[index] = { 
+        ...updatedSamples[index], 
+        [field]: field === 'barcode' ? value : field === 'surplus' ? Boolean(value) : value,
+        barcode: field === 'barcode' ? value : updatedSamples[index].barcode
+      };
+    }
+    setNewSamples(updatedSamples);
+  };
+
+  const handleSampleSelection = (barcode: string) => {
+    setSelectedSamples(prev => {
+      const next = new Set(prev);
+      if (next.has(barcode)) {
+        next.delete(barcode);
+      } else {
+        next.add(barcode);
+      }
+      return next;
+    });
+  };
+
+  const handleBulkAction = async (action: typeof SAMPLE_ACTIONS[number]) => {
+    try {
+      switch (action) {
+        case 'Derive':
+          handleDeriveAction();
+          break;
+        case 'Edit':
+          handleEditAction();
+          break;
+        case 'Delete':
+          if (window.confirm('Are you sure you want to delete the selected samples? This action cannot be undone.')) {
+            try {
+              const samplesToDelete = samples.filter(sample => selectedSamples.has(sample.barcode));
+              if (samplesToDelete.length > 0) {
+                const sampleIds = samplesToDelete.map(sample => sample.id);
+                const updatedSamples = await deleteSamples(sampleIds);
+                setSelectedSamples(new Set());
+                setSamples(updatedSamples);
+              }
+            } catch (error) {
+              console.error('Error deleting samples:', error);
+            }
+          }
+          break;
+        default:
+          console.log(`Performing ${action} on samples:`, selectedSamples);
+      }
+    } catch (error) {
+      console.error('Error performing bulk action:', error);
+      alert('Failed to perform action. Please try again.');
+    } finally {
+      setShowActionMenu(false);
+    }
+  };
+
+  const handleDeriveAction = () => {
+    const selectedSamplesList = filteredAndSortedSamples.filter(s => selectedSamples.has(s.barcode));
+    setParentSamples(selectedSamplesList);
+
+    const initialDerived = selectedSamplesList.map(parent => ({
+      id: '',
+      barcode: getNextBarcode([...samples, ...derivedSamples].map(s => s.barcode)),
+      ltxId: parent.ltxId,
+      patientId: parent.patientId,
+      parentBarcode: parent.barcode,
+      type: parent.type,
+      investigationType: parent.investigationType,
+      status: 'Collected',
+      site: parent.site,
+      timepoint: parent.timepoint,
+      specimen: parent.specimen,
+      specNumber: parent.specNumber,
+      material: parent.material,
+      sampleDate: new Date().toISOString().split('T')[0],
+      sampleTime: new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
+      freezer: '',
+      shelf: '',
+      box: '',
+      position: '',
+      volume: undefined,
+      amount: undefined,
+      concentration: undefined,
+      mass: undefined,
+      surplus: false,
+      sampleLevel: parent.sampleLevel === 'Original sample' ? 'Derivative' : 'Aliquot',
+      comments: `Derived from ${parent.barcode}`
+    }));
+
+    setDerivedSamples(initialDerived);
+    setIsDeriveModalOpen(true);
+  };
+
+  const handleDeriveSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const selectedSamplesArray = Array.from(selectedSamples);
+      const parentSamplesList = samples.filter(sample => 
+        selectedSamplesArray.includes(sample.barcode)
+      );
+      if (!parentSamplesList.length) {
+        throw new Error('No parent samples found');
+      }
+      const result = await deriveSamples(parentSamplesList, derivedSamples);
+      if (!result) {
+        throw new Error('Failed to derive samples');
+      }
+      setIsDeriveModalOpen(false);
+      setDerivedSamples([]);
+      setSelectedSamples(new Set());
+    } catch (error) {
+      console.error('Error deriving samples:', error);
+      alert('Failed to derive samples. Please try again.');
+    }
+  };
+
+  const updateDerivedSample = (index: number, field: keyof Sample, value: string) => {
+    const updatedSamples = [...derivedSamples];
+    if (field === 'sampleDate') {
+      const now = new Date();
+      const currentTime = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false });
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        sampleDate: value,
+        sampleTime: currentTime
+      };
+    } else {
+      updatedSamples[index] = {
+        ...updatedSamples[index],
+        [field]: field === 'barcode' ? value : field === 'surplus' ? Boolean(value) : value
+      };
+    }
+    setDerivedSamples(updatedSamples);
+  };
+
+  const handleEditAction = () => {
+    if (selectedSamples.size === 1) {
+      const [sampleBarcode] = selectedSamples;
+      const sampleToEdit = filteredAndSortedSamples.find(sample => sample.barcode === sampleBarcode);
+      if (sampleToEdit) {
+        setEditingSample(sampleToEdit);
+        setIsEditModalOpen(true);
+      }
+    } else {
+      alert('Please select only one sample to edit.');
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (editingSample) {
+      try {
+        await updateSample(editingSample);
+        setIsEditModalOpen(false);
+        setEditingSample(null);
+      } catch (error) {
+        console.error('Error updating sample:', error);
+        alert('Failed to update sample');
+      }
+    }
+  };
+  const handleEditClose = () => {
+    setIsEditModalOpen(false);
+    setEditingSample(null);
+  };
+
+  if (!isAuthenticated) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
+
+  const SortableHeader = ({ field, children }: { field: keyof Sample; children: React.ReactNode }) => (
+    <th 
+      scope="col" 
+      className="px-2 py-1 text-left text-xs font-medium text-gray-700 uppercase tracking-wider group truncate bg-gray-100"
+    >
+      <div className="flex items-center space-x-1">
+        <button
+          onClick={() => handleSort(field)}
+          className="flex items-center hover:text-gray-700"
+        >
+          <span>{children}</span>
+          <ArrowUpDown className="h-3 w-3 ml-1" />
+        </button>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            const filterOptions = {
+              type: ['blood', 'tissue', 'ffpe', 'he', 'buffy', 'plasma', 'dna', 'rna'],
+              investigationType: INVESTIGATION_TYPES,
+              site: SITES,
+              timepoint: TIMEPOINTS,
+              specimen: SPECIMENS,
+              specNumber: SPEC_NUMBERS,
+              material: MATERIALS,
+              sampleLevel: SAMPLE_LEVELS,
+              status: ['Collected', 'Shipped', 'Received', 'In Storage', 'In Process', 'Completed']
+            };
+
+            if (filterOptions[field]) {
+              const dropdown = document.createElement('div');
+              dropdown.className = 'fixed mt-1 w-48 bg-white border rounded-md shadow-lg z-[100]';
+              const rect = e.currentTarget.getBoundingClientRect();
+              dropdown.style.top = `${rect.bottom + window.scrollY}px`;
+              dropdown.style.left = `${rect.left + window.scrollX}px`;
+
+              const currentFilters = filters[field]?.split(',').filter(Boolean) || [];
+
+              const container = document.createElement('div');
+              container.className = 'p-1.5';
+
+              const header = document.createElement('div');
+              header.className = 'flex justify-between items-center mb-1';
+              header.innerHTML = `
+                <span class="text-[0.7rem] text-gray-500">Filter by ${field}</span>
+                <button class="text-[0.7rem] text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
+              `;
+
+              const content = document.createElement('div');
+              content.className = 'max-h-48 overflow-y-auto';
+
+              filterOptions[field].forEach(opt => {
+                const label = document.createElement('label');
+                label.className = 'flex items-center py-0.5 cursor-pointer hover:bg-gray-50';
+
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'w-3 h-3 rounded border-gray-300';
+                checkbox.value = opt;
+                checkbox.checked = currentFilters.includes(opt);
+
+                checkbox.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                });
+
+                const span = document.createElement('span');
+                span.className = 'text-[0.7rem] text-gray-600 ml-1.5 font-normal';
+                span.textContent = opt;
+
+                label.appendChild(checkbox);
+                label.appendChild(span);
+                content.appendChild(label);
+              });
+
+              const footer = document.createElement('div');
+              footer.className = 'flex justify-end mt-1 pt-1 border-t';
+              footer.innerHTML = `
+                <button class="px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" id="applyFilter">Apply</button>
+              `;
+
+              container.appendChild(header);
+              container.appendChild(content);
+              container.appendChild(footer);
+              dropdown.appendChild(container);
+
+              const clearButton = dropdown.querySelector('#clearAll');
+              const applyButton = dropdown.querySelector('#applyFilter');
+
+              clearButton?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const checkboxes = dropdown.querySelectorAll('input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
+                checkboxes.forEach(checkbox => {
+                  checkbox.checked = false;
+                });
+                checkboxes.forEach((cb: HTMLInputElement) => cb.checked = false);
+              });
+
+              applyButton?.addEventListener('click', () => {
+                const selectedValues = Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked'))
+                  .map((cb: HTMLInputElement) => cb.value)
+                  .join(',');
+                setFilters(prev => ({ ...prev, [field]: selectedValues }));
+                dropdown.remove();
+              });
+
+              e.currentTarget.appendChild(dropdown);
+            } else {
+              const value = prompt(`Filter ${children}`);
+              setFilters(prev => ({ ...prev, [field]: value || '' }));
+            }
+          }}
+          className="opacity-0 group-hover:opacity-100 hover:text-blue-600"
+        >
+          <Filter className="h-3 w-3" />
+        </button>
+      </div>
+    </th>
+  );
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-[99%] mx-auto px-2">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex flex-col items-center flex-shrink-0">
+              <CRUKLogo className="h-12" />
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="relative flex-1 max-w-lg mr-4">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4 text-gray-400" />
+                </div>
+                <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="block w-full pl-9 pr-3 py-1.5 text-xs border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Global search..."
+                />
+              </div>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <FreezerIcon className="h-5 w-5 mb-1" />
+                <span className="text-xs">LOCATIONS</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <Printer className="h-5 w-5 mb-1" />
+                <span className="text-xs">PRINTERS</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <BarcodeIcon className="h-5 w-5 mb-1" />
+                <span className="text-xs">1D BARCODE</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
+                onClick={() => {}}
+              >
+                <Paperclip className="h-5 w-5 mb-1" />
+                <span className="text-xs">ATTACHMENTS</span>
+              </button>
+
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
+                onClick={() => {}}
+              >
+                <BarChart className="h-5 w-5 mb-1" />
+                <span className="text-xs">DASHBOARD</span>
+              </button>
+              <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
+                onClick={() => {
+                  setFilters(prev => ({ ...prev, dateReceived: '' }));
+                }}
+              >
+                <ArrowDownCircle className="h-5 w-5 mb-1" />
+                <span className="text-xs">RECEIVE</span>
+              </button>
+              <div className="flex items-center space-x-2 ml-2 border-l pl-2">
+                <span className="text-sm text-gray-600">John Smith</span>
+                <button 
+                  className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+                  onClick={() => setShowAdminPanel(true)}
+                >
+                  <Settings className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-[99%] mx-auto px-2 py-6">
+
+        <div className="flex gap-1 mb-4 flex-nowrap overflow-x-auto min-w-max">
+          <button
+            className={`flex items-center px-4 py-2 rounded-md ${
+              showPatients 
+                ? 'bg-blue-100 text-blue-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => setShowPatients(!showPatients)}
+          >
+            <Users className="h-4 w-4 mr-1" />
+            <span className="font-medium">PATIENTS</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'tree' 
+                ? 'bg-emerald-100 text-emerald-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap mr-2`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('tree');
+            }}
+          >
+            <FileStack className="h-4 w-4 mr-1" />
+            <span className="font-medium">TREE VIEW</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'all' && !showPatients
+                ? 'bg-amber-100 text-amber-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('all');
+            }}
+          >
+            <TestTube className="h-4 w-4 mr-1" />
+            <span className="font-medium">ALL SAMPLES ({samples.length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'blood' && !showPatients
+                ? 'bg-red-100 text-red-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('blood');
+            }}
+          >
+            <Flask className="h-4 w-4 mr-1 text-blue-600" />
+            <span className="font-medium">BLOOD ({samples.filter(s => s.type === 'blood').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'tissue' && !showPatients
+                ? 'bg-purple-100 text-purple-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('tissue');
+            }}
+          >
+            <TestTube className="h-4 w-4 mr-1 text-purple-600" />
+            <span className="font-medium">TISSUE ({samples.filter(s => s.type === 'tissue').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'ffpe' && !showPatients
+                ? 'bg-orange-100 text-orange-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('ffpe');
+            }}
+          >
+            <FileStack className="h-4 w-4 mr-1 text-orange-600" />
+            <span className="font-medium">FFPE BLOCK ({samples.filter(s => s.specimen === 'FFPE Block').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'he' && !showPatients
+                ? 'bg-pink-100 text-pink-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
               setShowPatients(false);
               setActiveTab('he');
             }}
