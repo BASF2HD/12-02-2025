@@ -164,9 +164,35 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                             <h5 className="text-xs font-medium mb-1">{drawer.name}</h5>
                             <div className="grid grid-cols-3 gap-1">
                               {drawer.boxes.map(box => (
-                                <div key={box.id} className="bg-white border rounded p-1">
-                                  <span className="text-xs">{box.name}</span>
-                                  <div className="mt-1 grid grid-cols-9 gap-[1px]">
+                                <div key={box.id} className="bg-white border rounded p-2">
+                                  <input
+                                    type="text"
+                                    value={box.name}
+                                    onChange={(e) => {
+                                      const newName = e.target.value;
+                                      const updatedFreezers = freezers.map(f => 
+                                        f.id === freezer.id ? {
+                                          ...f,
+                                          shelves: f.shelves.map(s =>
+                                            s.id === shelf.id ? {
+                                              ...s,
+                                              drawers: s.drawers.map(d =>
+                                                d.id === drawer.id ? {
+                                                  ...d,
+                                                  boxes: d.boxes.map(b =>
+                                                    b.id === box.id ? { ...b, name: newName } : b
+                                                  )
+                                                } : d
+                                              )
+                                            } : s
+                                          )
+                                        } : f
+                                      );
+                                      setFreezers(updatedFreezers);
+                                    }}
+                                    className="w-full text-xs border-gray-300 rounded-md mb-2"
+                                  />
+                                  <div className="grid grid-cols-9 gap-[1px]">
                                     {box.positions.map((pos, i) => (
                                       <div
                                         key={i}
