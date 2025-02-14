@@ -20,6 +20,7 @@ import {
 } from './constants';
 import type { Sample, Patient, SampleType } from './types';
 import { TableColumnManager } from './components/TableColumnManager';
+import { TreeView } from './components/TreeView';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -720,6 +721,20 @@ function App() {
           </button>
           <button
             className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'tree' 
+                ? 'bg-emerald-100 text-emerald-700'
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap mr-2`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('tree');
+            }}
+          >
+            <FileStack className="h-4 w-4 mr-1" />
+            <span className="font-medium">TREE VIEW</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'all' && !showPatients
                 ? 'bg-amber-100 text-amber-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -1074,6 +1089,10 @@ function App() {
                   ))}
                 </tbody>              </table>
             </div>
+          </div>
+        ) : activeTab === 'tree' ? (
+          <div className="bg-white shadow-sm rounded-lg overflow-hidden">
+            <TreeView samples={samples} />
           </div>
         ) : (
           <>
