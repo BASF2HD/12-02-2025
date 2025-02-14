@@ -772,7 +772,7 @@ function App() {
               setActiveTab('tissue');
             }}
           >
-            <TestTube className="h-4 w-4 mr-1 text-purple-600" />
+            <span className="mr-1 text-purple-600">🫁</span>
             <span className="font-medium">TISSUE ({samples.filter(s => s.type === 'tissue').length})</span>
           </button>
           <button
