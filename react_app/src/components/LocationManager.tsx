@@ -248,15 +248,12 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                     />
                                     <div>
                                       {/* Column Labels */}
-                                      <div className="flex justify-end mb-1">
-                                        <div className="w-4"></div>
-                                        <div className={`flex-1 grid grid-cols-${box.positions[0].col} gap-[1px]`}>
-                                          {[...Array(box.positions[0].col)].map((_, i) => (
-                                            <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
-                                              Column {i + 1}
-                                            </div>
-                                          ))}
-                                        </div>
+                                      <div className="grid grid-cols-9 gap-[1px] mb-1">
+                                        {[...Array(9)].map((_, i) => (
+                                          <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
+                                            {i + 1}
+                                          </div>
+                                        ))}
                                       </div>
                                       {/* Row Labels and Grid */}
                                       <div className="flex">
@@ -267,23 +264,17 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                             </div>
                                           ))}
                                         </div>
-                                        <div className={`flex-1 grid grid-cols-${box.positions[0].col} gap-[1px]`}>
-                                        {box.positions.map((pos, i) => (
-                                          <div
-                                            key={i}
-                                            className={`w-2 h-2 ${
-                                              pos.isOccupied ? 'bg-red-500' : 'bg-green-500'
-                                            } rounded-sm relative`}
-                                            title={`Position ${pos.row},${pos.col}`}
-                                          >
-                                            {pos.col === 1 && (
-                                              <span className="absolute right-full mr-1 text-[8px]">
-                                                {pos.row}
-                                              </span>
-                                            )}
-                                          </div>
-                                        ))}
-                                      </div>
+                                        <div className="grid grid-cols-9 gap-[1px]">
+                                          {box.positions.map((pos, i) => (
+                                            <div
+                                              key={i}
+                                              className={`w-4 h-4 ${
+                                                pos.isOccupied ? 'bg-red-500' : 'bg-green-500'
+                                              } rounded-sm`}
+                                              title={`Position ${pos.row},${pos.col}`}
+                                            />
+                                          ))}
+                                        </div>
                                       </div>
                                     </div>
                                   </>
