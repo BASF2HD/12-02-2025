@@ -84,20 +84,20 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
         <div className="p-4 flex-1 overflow-auto">
           <div className="mb-6 bg-gray-50 p-4 rounded-lg">
             <h3 className="text-sm font-medium mb-3">Add New Freezer</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <input
                 type="text"
                 placeholder="Freezer Name"
                 value={newFreezer.name}
                 onChange={e => setNewFreezer({ ...newFreezer, name: e.target.value })}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-2 py-1 text-sm w-full"
               />
               <input
                 type="text"
                 placeholder="Freezer Type"
                 value={newFreezer.type}
                 onChange={e => setNewFreezer({ ...newFreezer, type: e.target.value })}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-2 py-1 text-sm w-full"
               />
               <input
                 type="number"
@@ -105,7 +105,7 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                 placeholder="Number of Shelves"
                 value={newFreezer.shelfCount}
                 onChange={e => setNewFreezer({ ...newFreezer, shelfCount: Number(e.target.value) })}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-2 py-1 text-sm w-full"
               />
               <input
                 type="number"
@@ -113,7 +113,7 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                 placeholder="Drawers per Shelf"
                 value={newFreezer.drawerCount}
                 onChange={e => setNewFreezer({ ...newFreezer, drawerCount: Number(e.target.value) })}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-2 py-1 text-sm w-full"
               />
               <input
                 type="number"
@@ -121,7 +121,7 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                 placeholder="Boxes per Drawer"
                 value={newFreezer.boxCount}
                 onChange={e => setNewFreezer({ ...newFreezer, boxCount: Number(e.target.value) })}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-2 py-1 text-sm w-full"
               />
             </div>
             <button
