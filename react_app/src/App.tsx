@@ -1518,8 +1518,8 @@ function App() {
                           <td className="w-20 px-2 py-1">
                             <select
                               value={sample.specNumber}
-                              onChange={(e) => updateDerivedSample(index, 'specNumber', e.target.value)}
-                              className="w-full text-xs border-gray-300 rounded-md"
+                              disabled
+                              className="w-full text-xs border-gray-300 rounded-md bg-gray-50"
                             >
                               {SPEC_NUMBERS.map(number => (
                                 <option key={number} value={number}>{number}</option>
