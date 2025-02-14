@@ -783,7 +783,7 @@ function App() {
               activeTab === 'dna' && !showPatients
                 ? 'bg-green-100 text-green-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            } text-xs whitespace-nowrap`}}
+            } text-xs whitespace-nowrap`}
             onClick={() => {
               setShowPatients(false);
               setActiveTab('dna');
