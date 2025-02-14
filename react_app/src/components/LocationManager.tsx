@@ -35,7 +35,15 @@ interface Freezer {
 
 export function LocationManager({ onClose }: { onClose: () => void }) {
   const [freezers, setFreezers] = useState<Freezer[]>([]);
-  const [newFreezer, setNewFreezer] = useState({ name: '', type: '', shelfCount: 1, drawerCount: 1, boxCount: 1 });
+  const [newFreezer, setNewFreezer] = useState({ 
+    name: '', 
+    type: '', 
+    shelfCount: 1, 
+    drawerCount: 1, 
+    boxCount: 1,
+    boxRows: 9,
+    boxColumns: 9
+  });
 
   const addFreezer = () => {
     const shelves = Array.from({ length: Number(newFreezer.shelfCount) }, (_, shelfIndex) => ({
@@ -47,9 +55,9 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
         boxes: Array.from({ length: Number(newFreezer.boxCount) }, (_, boxIndex) => ({
           id: `box-${boxIndex}`,
           name: `Box ${String(boxIndex + 1).padStart(3, '0')}`,
-          positions: Array.from({ length: 81 }, (_, i) => ({
-            row: Math.floor(i / 9) + 1,
-            col: (i % 9) + 1,
+          positions: Array.from({ length: newFreezer.boxRows * newFreezer.boxColumns }, (_, i) => ({
+            row: Math.floor(i / newFreezer.boxColumns) + 1,
+            col: (i % newFreezer.boxColumns) + 1,
             isOccupied: false
           }))
         }))
@@ -121,6 +129,24 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                 placeholder="Boxes per Drawer"
                 value={newFreezer.boxCount}
                 onChange={e => setNewFreezer({ ...newFreezer, boxCount: Number(e.target.value) })}
+                className="border rounded px-2 py-1 text-sm w-full"
+              />
+              <input
+                type="number"
+                min="1"
+                max="20"
+                placeholder="Box Rows"
+                value={newFreezer.boxRows}
+                onChange={e => setNewFreezer({ ...newFreezer, boxRows: Number(e.target.value) })}
+                className="border rounded px-2 py-1 text-sm w-full"
+              />
+              <input
+                type="number"
+                min="1"
+                max="20"
+                placeholder="Box Columns"
+                value={newFreezer.boxColumns}
+                onChange={e => setNewFreezer({ ...newFreezer, boxColumns: Number(e.target.value) })}
                 className="border rounded px-2 py-1 text-sm w-full"
               />
             </div>
@@ -222,15 +248,15 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                     />
                                     <div>
                                       {/* Position Labels */}
-                                      <div className="grid grid-cols-9 gap-[1px] mb-2">
-                                        {[...Array(9)].map((_, i) => (
+                                      <div className={`grid grid-cols-${box.positions[0].col} gap-[1px] mb-2`}>
+                                        {[...Array(box.positions[0].col)].map((_, i) => (
                                           <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
                                             {i + 1}
                                           </div>
                                         ))}
                                       </div>
                                       {/* Grid */}
-                                      <div className="grid grid-cols-9 gap-[1px]">
+                                      <div className={`grid grid-cols-${box.positions[0].col} gap-[1px]`}>
                                         {box.positions.map((pos, i) => (
                                           <div
                                             key={i}
