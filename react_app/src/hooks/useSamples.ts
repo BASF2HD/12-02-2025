@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import type { Sample } from '../types';
 
@@ -74,7 +73,9 @@ export function useSamples() {
         return newSample;
       });
 
-      setSamples(prevSamples => [...prevSamples, ...samplesWithIds]);
+      const existingSamples = [...samples]; // Get a copy of the current samples
+      const newSamples = [...existingSamples, ...samplesWithIds];
+      setSamples(newSamples);
       return samplesWithIds;
     } catch (error) {
       console.error('Error deriving samples:', error);
@@ -87,14 +88,14 @@ export function useSamples() {
       if (!Array.isArray(sampleIds) || sampleIds.length === 0) {
         throw new Error('No samples selected for deletion');
       }
-      
+
       const storedSamples = localStorage.getItem(STORAGE_KEY);
       const currentSamples = storedSamples ? JSON.parse(storedSamples) : [];
       const updatedSamples = currentSamples.filter(sample => !sampleIds.includes(sample.id));
-      
+
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedSamples));
       setSamples(updatedSamples);
-      
+
       return updatedSamples;
     } catch (error) {
       console.error('Error deleting samples:', error);

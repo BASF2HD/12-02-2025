@@ -436,7 +436,13 @@ function App() {
       const parentSamplesList = samples.filter(sample => 
         selectedSamplesArray.includes(sample.barcode)
       );
-      await deriveSamples(parentSamplesList, derivedSamples);
+      if (!parentSamplesList.length) {
+        throw new Error('No parent samples found');
+      }
+      const result = await deriveSamples(parentSamplesList, derivedSamples);
+      if (!result) {
+        throw new Error('Failed to derive samples');
+      }
       setIsDeriveModalOpen(false);
       setDerivedSamples([]);
       setSelectedSamples(new Set());
