@@ -33,11 +33,26 @@ export function useSamples() {
 
   async function deriveSamples(parentSamples: Sample[], derivedSamples: Sample[]) {
     try {
-      const samplesWithIds = derivedSamples.map((sample, index) => ({
-        ...sample,
-        id: crypto.randomUUID(),
-        parentBarcode: parentSamples[index].barcode
-      }));
+      // Ensure both arrays have values
+      if (!parentSamples?.length || !derivedSamples?.length) {
+        throw new Error('Parent samples and derived samples are required');
+      }
+
+      const samplesWithIds = derivedSamples.map(sample => {
+        const parentSample = parentSamples.find(p => p.barcode === sample.parentBarcode);
+        if (!parentSample) {
+          throw new Error('Parent sample not found');
+        }
+
+        return {
+          ...sample,
+          id: crypto.randomUUID(),
+          patientId: parentSample.patientId,
+          site: parentSample.site,
+          timepoint: parentSample.timepoint
+        };
+      });
+
       setSamples(prevSamples => [...prevSamples, ...samplesWithIds]);
       return samplesWithIds;
     } catch (error) {
