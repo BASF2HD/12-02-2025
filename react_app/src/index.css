@@ -34,15 +34,7 @@
   overflow: auto;
 }
 
-/* Status text styles */
-.status-text {
-  font-size: 0.7rem !important;
-  font-weight: normal !important;
-  color: inherit !important;
-  background: none !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-}
+
 
 /* Compact table styles */
 table td {
