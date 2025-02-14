@@ -86,21 +86,7 @@ export const SPECIMENS: Specimen[] = [
   'Organoids Normal',
   'Cell of Origin',
   'Slice',
-  'Frozen Biopsy',
-
-  // FFPE specimens
-  'FFPE Block',
-
-  // H&E specimens
-  'H&E Slide',
-
-  // Blood derivatives
-  'Buffy',
-  'Plasma',
-
-  // Nucleic acids
-  'DNA',
-  'RNA'
+  'Frozen Biopsy'
 ];
 
 export const SPEC_NUMBERS: SpecNumber[] = [
