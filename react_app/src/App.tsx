@@ -1781,7 +1781,7 @@ function App() {
           currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
         />
       )}
-      {activeTab === 'dashboard' && <DashboardGraphs />} {/* Added DashboardGraphs component */}
+      {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
     </div>
   );
 }
