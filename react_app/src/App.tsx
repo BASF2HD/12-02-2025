@@ -28,6 +28,7 @@ import AdminPanel from './components/AdminPanel';
 import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
 import { PrinterManager } from './components/PrinterManager';
 import { BarcodeManager } from './components/BarcodeManager';
+import FileAttachmentManager from './components/FileAttachmentManager'; // Added import
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
   const actionMenuRef = React.useRef<HTMLDivElement>(null);
   const [showPrinterManager, setShowPrinterManager] = useState(false);
   const [showBarcodeManager, setShowBarcodeManager] = useState(false);
+  const [showFileAttachmentManager, setShowFileAttachmentManager] = useState(false); // Added state
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -678,7 +680,7 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {}}
+                onClick={() => setShowFileAttachmentManager(true)} // Added onClick handler to open FileAttachmentManager
               >
                 <Paperclip className="h-5 w-5 mb-1" />
                 <span className="text-xs">ATTACHMENTS</span>
@@ -787,7 +789,7 @@ function App() {
           <button
             className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'ffpe' && !showPatients
-                ? 'bg-orange-100 text-orange-700' 
+                ? 'bg-orange-100 text-orange700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             } text-xs whitespace-nowrap`}
             onClick={() => {
@@ -1431,7 +1433,7 @@ function App() {
                                 type="time"
                                 value={sample.sampleTime}
                                 onChange={(e) => updateNewSample(index, 'sampleTime', e.target.value)}
-                                className="w-24 text-xs border-gray-300 rounded-md"
+                                className="w-24text-xs border-gray-300 rounded-md"
                                 required
                               />
                             </div>
@@ -1791,7 +1793,12 @@ function App() {
       {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
       {showLocationManager && <LocationManager onClose={() => setShowLocationManager(false)} />}
       {showPrinterManager && <PrinterManager onClose={() => setShowPrinterManager(false)} />}
-      {showBarcodeManager && <BarcodeManager onClose={() => setShowBarcodeManager(false)} />}
+      {showBarcodeManager && (
+        <BarcodeManager onClose={() => setShowBarcodeManager(false)} />
+      )}
+      {showFileAttachmentManager && (
+        <FileAttachmentManager onClose={() => setShowFileAttachmentManager(false)} />
+      )}
     </div>
   );
 }
