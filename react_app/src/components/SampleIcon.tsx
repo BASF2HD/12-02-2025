@@ -8,7 +8,7 @@ interface SampleIconProps {
 }
 
 const iconMap: Record<string, typeof LucideIcon> = {
-  'blood': BloodTube,
+  'blood': Droplets,
   'plasma': Droplets,
   'dna': Dna,
   'rna': Dna,
