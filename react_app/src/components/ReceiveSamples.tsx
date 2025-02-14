@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { X, Save, Search } from 'lucide-react';
 import type { Sample } from '../types';
@@ -15,7 +14,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   const [barcodeFilter, setBarcodeFilter] = useState<string>('');
   const [scannedBarcodes, setScannedBarcodes] = useState<string[]>([]);
   const [receiveDate, setReceiveDate] = useState<string>('');
-  
+
   const unreceivedSamples = samples.filter(sample => !sample.dateReceived);
   const filteredSamples = scannedBarcodes.length > 0 
     ? unreceivedSamples.filter(sample => scannedBarcodes.includes(sample.barcode))
@@ -25,7 +24,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
     if (e.key === 'Enter') {
       const newBarcode = (e.target as HTMLInputElement).value.trim();
       const matchingSample = unreceivedSamples.find(s => s.barcode === newBarcode);
-      
+
       if (matchingSample && !scannedBarcodes.includes(newBarcode)) {
         setScannedBarcodes(prev => [...prev, newBarcode]);
         setSelectedSamples(prev => {
@@ -138,17 +137,15 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
                           type="checkbox"
                           checked={selectedSamples.has(sample.barcode)}
                           onChange={() => {
-                            setSelectedSamples(prev => {
-                              const next = new Set(prev);
-                              if (next.has(sample.barcode)) {
-                                next.delete(sample.barcode);
-                              } else {
-                                next.add(sample.barcode);
-                              }
-                              return next;
-                            });
+                            const next = new Set(selectedSamples);
+                            if (next.has(sample.barcode)) {
+                              next.delete(sample.barcode);
+                            } else {
+                              next.add(sample.barcode);
+                            }
+                            setSelectedSamples(next);
                           }}
-                          className="rounded border-gray-300"
+                          className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                         />
                       </td>
                       <td className="px-2 py-1 text-xs">{sample.barcode}</td>
