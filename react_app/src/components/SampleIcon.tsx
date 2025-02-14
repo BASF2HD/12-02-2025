@@ -28,6 +28,11 @@ export function SampleIcon({ specimen, className = 'h-4 w-4' }: SampleIconProps)
     return <span className="text-xs">🩸</span>;
   }
   
+  // Check for tissue specimens
+  if (specimen.toLowerCase().includes('tissue')) {
+    return <span className="text-xs">🫁</span>;
+  }
+  
   const key = Object.keys(iconMap).find(k => specimen.toLowerCase().includes(k)) || 'default';
   const Icon = iconMap[key];
   return <Icon className={className} />;
