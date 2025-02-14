@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, Plus, Save, Printer } from 'lucide-react';
+import { X, Plus, Save, Printer, Trash2 } from 'lucide-react';
 
 interface LabelTemplate {
   id: string;
@@ -15,25 +15,6 @@ interface LabelTemplate {
   printerId: string;
 }
 
-interface Props {
-  onClose: () => void;
-}
-
-export function BarcodeManager({ onClose }: Props) {
-  const [templates, setTemplates] = useState<LabelTemplate[]>([]);
-  const [currentTemplate, setCurrentTemplate] = useState<LabelTemplate>({
-    id: '',
-    name: '',
-    width: 25,
-    height: 69,
-    labelsPerRow: 1,
-    isLandscape: false,
-    hasWriteArea: true,
-    writeAreaWidth: 33,
-    writeAreaAnchor: 'Top',
-    printerId: ''
-  });
-
 interface LabelElement {
   type: 'text' | 'barcode' | 'image';
   x: number;
@@ -42,7 +23,11 @@ interface LabelElement {
   height: number;
 }
 
-export function BarcodeManager({ onClose }: { onClose: () => void }) {
+interface Props {
+  onClose: () => void;
+}
+
+export function BarcodeManager({ onClose }: Props) {
   const [templates, setTemplates] = useState<LabelTemplate[]>([]);
   const [currentTemplate, setCurrentTemplate] = useState<LabelTemplate>({
     id: '',
