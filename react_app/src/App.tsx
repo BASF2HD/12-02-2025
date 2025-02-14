@@ -790,7 +790,7 @@ function App() {
             className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'ffpe' && !showPatients
                 ? 'bg-orange-100 text-orange700' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 textgray-600 hover:bg-gray-200'
             } text-xs whitespace-nowrap`}
             onClick={() => {
               setShowPatients(false);
@@ -1433,9 +1433,9 @@ function App() {
                                 type="time"
                                 value={sample.sampleTime}
                                 onChange={(e) => updateNewSample(index, 'sampleTime', e.target.value)}
-                                className="w-24text-xs border-gray-300 rounded-md"
-                                required                              />/>
-                            </div>
+                                className="w-24 text-xs border-gray-300 rounded-md"
+                                required                            />
+                          </div>
                           </td>
                           <td className="w-32 px-2 py-1">
                             <input
