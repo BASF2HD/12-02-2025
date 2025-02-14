@@ -1,311 +1,70 @@
-import { useState, useEffect, useRef } from 'react';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { SortableHeader } from './components/SortableHeader';
-import { TreeView } from './components/TreeView';
-import { Microscope, Flask, Droplets, Dna, Plus, MoreVertical, X } from 'lucide-react';
-import { formatDate } from './constants';
-import AdminPanel from './AdminPanel';
-import { SampleType, SAMPLE_ACTIONS, INVESTIGATION_TYPES, SITES, TIMEPOINTS, SPEC_NUMBERS, MATERIALS, SAMPLE_LEVELS } from './constants';
-import SampleIcon from './SampleIcon';
-import { BarcodeIcon } from './BarcodeIcon';
-import { FileStack, Printer, Pencil, TestTube, Download, Upload, Trash2, Send } from 'lucide-react';
-
-const getSpecimensByType = (type: SampleType) => {
-  switch (type) {
-    case 'blood':
-      return ['Blood'];
-    case 'tissue':
-      return ['Tissue'];
-    case 'ffpe':
-      return ['FFPE'];
-    case 'he':
-      return ['H&E Slide'];
-    case 'buffy':
-      return ['Buffy'];
-    case 'plasma':
-      return ['Plasma'];
-    case 'dna':
-      return ['DNA'];
-    case 'rna':
-      return ['RNA'];
-    default:
-      return [];
-  }
-};
-
-const getNextBarcode = (existingBarcodes: string[]): string => {
-  const barcodes = existingBarcodes.map(barcode => parseInt(barcode, 10));
-  const maxBarcode = Math.max(...barcodes);
-  const nextBarcode = (maxBarcode + 1).toString().padStart(6, '0');
-  return nextBarcode;
-};
-
-function App() {
-  const [samples, setSamples] = useState([]);
-  const [uniquePatients, setUniquePatients] = useState([]);
-  const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
-  const [selectedPatient, setSelectedPatient] = useState({});
-  const [showPatients, setShowPatients] = useState(false);
-  const [activeTab, setActiveTab] = useState('tree');
-  const [filteredAndSortedSamples, setFilteredAndSortedSamples] = useState([]);
-  const [selectedSamples, setSelectedSamples] = useState(new Set());
-  const [sortConfig, setSortConfig] = useState({ field: 'barcode', direction: 'asc' });
-  const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
-  const [newSamples, setNewSamples] = useState([{
-    barcode: '',
-    patientId: '',
-    type: 'blood',
-    investigationType: '',
-    site: '',
-    timepoint: '',
-    specimen: '',
-    specNumber: '',
-    material: '',
-    sampleLevel: '',
-    sampleDate: '',
-    sampleTime: '',
-    comments: '',
-    status: 'Collected',
-    freezer: '',
-    shelf: '',
-    box: '',
-    position: '',
-    amount: '',
-    volume: '',
-    concentration: '',
-    mass: '',
-    surplus: false
-  }]);
-  const [isDeriveModalOpen, setIsDeriveModalOpen] = useState(false);
-  const [derivedSamples, setDerivedSamples] = useState([{
-    parentBarcode: '',
-    barcode: '',
-    patientId: '',
-    type: 'blood',
-    investigationType: '',
-    site: '',
-    timepoint: '',
-    specimen: '',
-    specNumber: '',
-    material: '',
-    sampleLevel: '',
-    sampleDate: '',
-    sampleTime: '',
-    comments: ''
-  }]);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingSample, setEditingSample] = useState<any>(null);
-  const [showActionMenu, setShowActionMenu] = useState(false);
-  const actionMenuRef = useRef(null);
-  const [showAdminPanel, setShowAdminPanel] = useState(false);
-
-  const handleSampleSelection = (barcode: string) => {
-    const newSelectedSamples = new Set(selectedSamples);
-    if (newSelectedSamples.has(barcode)) {
-      newSelectedSamples.delete(barcode);
-    } else {
-      newSelectedSamples.add(barcode);
-    }
-    setSelectedSamples(newSelectedSamples);
-  };
-
-  const handleBulkAction = (action: string) => {
-    // Perform bulk action here
-    console.log('Performing bulk action:', action, selectedSamples);
-    setShowActionMenu(false);
-  };
-
-  const updateNewSample = (index: number, field: string, value: any) => {
-    const updatedSamples = [...newSamples];
-    updatedSamples[index] = { ...updatedSamples[index], [field]: value };
-    setNewSamples(updatedSamples);
-  };
-
-  const addNewSampleRow = () => {
-    setNewSamples([...newSamples, {
-      barcode: '',
-      patientId: '',
-      type: 'blood',
-      investigationType: '',
-      site: '',
-      timepoint: '',
-      specimen: '',
-      specNumber: '',
-      material: '',
-      sampleLevel: '',
-      sampleDate: '',
-      sampleTime: '',
-      comments: '',
-      status: 'Collected',
-      freezer: '',
-      shelf: '',
-      box: '',
-      position: '',
-      amount: '',
-      volume: '',
-      concentration: '',
-      mass: '',
-      surplus: false
-    }]);
-  };
-
-  const deleteNewSampleRow = (index: number) => {
-    const updatedSamples = [...newSamples];
-    updatedSamples.splice(index, 1);
-    setNewSamples(updatedSamples);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Submitting new samples:', newSamples);
-    setIsNewSampleModalOpen(false);
-  };
-
-  const updateDerivedSample = (index: number, field: string, value: any) => {
-    const updatedSamples = [...derivedSamples];
-    updatedSamples[index] = { ...updatedSamples[index], [field]: value };
-    setDerivedSamples(updatedSamples);
-  };
-
-  const handleDeriveSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Submitting derived samples:', derivedSamples);
-    setIsDeriveModalOpen(false);
-  };
-
-  const handleEditClose = () => {
-    setIsEditModalOpen(false);
-    setEditingSample(null);
-  };
-
-  const handleEditSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Submitting edited sample:', editingSample);
-    setIsEditModalOpen(false);
-  };
-
-  useEffect(() => {
-    // Fetch samples data here
-    const fetchSamples = async () => {
-      const response = await fetch('/api/samples');
-      const data = await response.json();
-      setSamples(data);
-    };
-    fetchSamples();
-  }, []);
-
-  useEffect(() => {
-    if (samples.length > 0) {
-      const uniquePatientsSet = new Set(samples.map(sample => sample.patientId));
-      const uniquePatientsArray = [...uniquePatientsSet];
-      setUniquePatients(uniquePatientsArray);
-    }
-  }, [samples]);
-
-
-  useEffect(() => {
-    let filteredSamples = samples;
-    if (selectedPatientId) {
-      filteredSamples = samples.filter(sample => sample.patientId === selectedPatientId);
-    }
-    if (sortConfig.field) {
-      filteredSamples.sort((a, b) => {
-        const aValue = a[sortConfig.field];
-        const bValue = b[sortConfig.field];
-
-        if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-        return 0;
-      });
-    }
-    setFilteredAndSortedSamples(filteredSamples);
-  }, [samples, selectedPatientId, sortConfig]);
-
-  return (
-    <div className="flex h-screen w-screen">
-      <main className="flex-grow p-6 bg-gray-100">
-        <div className="flex items-center mb-6">
-          <div className="flex space-x-3">
-            <>
-              <button
-                className={`flex items-center px-3 py-1.5 rounded-md ${
-                  activeTab === 'he' && !showPatients
-                    ? 'bg-pink-100 text-pink-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                } text-xs whitespace-nowrap`}
-                onClick={() => {
-                  setShowPatients(false);
-                  setActiveTab('he');
-                }}
-              >
-                <Microscope className="h-4 w-4 mr-1 text-pink-600" />
-                <span className="font-medium">H&E ({samples.filter(s => s.specimen === 'H&E Slide').length})</span>
-              </button>
-              <button
-                className={`flex items-center px-3 py-1.5 rounded-md ${
-                  activeTab === 'buffy' && !showPatients
-                    ? 'bg-yellow-100 text-yellow-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                } text-xs whitespace-nowrap`}
-                onClick={() => {
-                  setShowPatients(false);
-                  setActiveTab('buffy');
-                }}
-              >
-                <Flask className="h-4 w-4 mr-1 text-yellow-600" />
-                <span className="font-medium">BUFFY ({samples.filter(s => s.specimen === 'Buffy').length})</span>
-              </button>
-              <button
-                className={`flex items-center px-3 py-1.5 rounded-md ${
-                  activeTab === 'plasma' && !showPatients
-                    ? 'bg-cyan-100 text-cyan-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                } text-xs whitespace-nowrap`}
-                onClick={() => {
-                  setShowPatients(false);
-                  setActiveTab('plasma');
-                }}
-              >
-                <Droplets className="h-4 w-4 mr-1 text-cyan-600" />
-                <span className="font-medium">PLASMA ({samples.filter(s => s.specimen === 'Plasma').length})</span>
-              </button>
-              <button
-                className={`flex items-center px-3 py-1.5 rounded-md ${
-                  activeTab === 'dna' && !showPatients
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                } text-xs whitespace-nowrap`}
-                onClick={() => {
-                  setShowPatients(false);
-                  setActiveTab('dna');
-                }}
-              >
-                <Dna className="h-4 w-4 mr-1 text-green-600" />
-                <span className="font-medium">DNA ({samples.filter(s => s.specimen === 'DNA').length})</span>
-              </button>
-              <button
-                className={`flex items-center px-3 py-1.5 rounded-md ${
-                  activeTab === 'rna' && !showPatients
-                    ? 'bg-indigo-100 text-indigo-700'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                } text-xs whitespace-nowrap`}
-                onClick={() => {
-                  setShowPatients(false);
-                  setActiveTab('rna');
-                }}
-              >
-                <Dna className="h-4 w-4 mr-1 text-indigo-600" />
-                <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
-              </button>
-            </>
-          </div>
+onClick={() => {
+              setShowPatients(false);
+              setActiveTab('he');
+            }}
+          >
+            <Microscope className="h-4 w-4 mr-1 text-pink-600" />
+            <span className="font-medium">H&E ({samples.filter(s => s.specimen === 'H&E Slide').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'buffy' && !showPatients
+                ? 'bg-yellow-100 text-yellow-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('buffy');
+            }}
+          >
+            <Flask className="h-4 w-4 mr-1 text-yellow-600" />
+            <span className="font-medium">BUFFY ({samples.filter(s => s.specimen === 'Buffy').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'plasma' && !showPatients
+                ? 'bg-cyan-100 text-cyan-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('plasma');
+            }}
+          >
+            <Droplets className="h-4 w-4 mr-1 text-cyan-600" />
+            <span className="font-medium">PLASMA ({samples.filter(s => s.specimen === 'Plasma').length})</span>
+          </button>
+<button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'dna' && !showPatients
+                ? 'bg-green-100 text-green-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('dna');
+            }}
+          >
+            <Dna className="h-4 w-4 mr-1 text-green-600" />
+            <span className="font-medium">DNA ({samples.filter(s => s.specimen === 'DNA').length})</span>
+          </button>
+          <button
+            className={`flex items-center px-3 py-1.5 rounded-md ${
+              activeTab === 'rna' && !showPatients
+                ? 'bg-indigo-100 text-indigo-700' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            } text-xs whitespace-nowrap`}
+            onClick={() => {
+              setShowPatients(false);
+              setActiveTab('rna');
+            }}
+          >
+            <Dna className="h-4 w-4 mr-1 text-indigo-600" />
+            <span className="font-medium">RNA ({samples.filter(s => s.specimen === 'RNA').length})</span>
+          </button>
           <div className="flex-grow flex justify-end space-x-3">
             {(selectedPatientId || showPatients) && (
-              <button
+              <button 
                 className="flex items-center px-3 py-1.5 text-xs bg-green-100 text-green-600 rounded-md hover:bg-green-200 whitespace-nowrap"
                 onClick={() => {
                   setNewSamples([{
@@ -481,19 +240,18 @@ function App() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {[...uniquePatients].sort((a, b) => {
-                    const aValue = a[sortConfig.field];
-                    const bValue = b[sortConfig.field];
+    const aValue = a[sortConfig.field];
+    const bValue = b[sortConfig.field];
 
-                    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
-                    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
-                    return 0;
-                  }).map((patient) => (
-                    <tr
-                      key={patient.id}
-                      className="hover:bg-gray-50 cursor-pointer"
-                      onClick={() => setSelectedPatient(patient)}
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  }).map((patient) => (
+                    <tr 
+                      key={patient.id} 
+                      className="hover:bg-gray-50 cursor-pointer" onClick={() => setSelectedPatient(patient)}
                     >
-                      <td
+                      <td 
                         className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
                         onClick={() => {
                           setSelectedPatientId(patient.id);
@@ -532,8 +290,7 @@ function App() {
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
+                </tbody>              </table>
             </div>
           </div>
         ) : activeTab === 'tree' ? (
@@ -618,7 +375,7 @@ function App() {
                           </td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.barcode}</td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{sample.ltxId}</td>
-                          <td
+                          <td 
                             className="px-2 py-1 whitespace-nowrap text-xs font-medium text-blue-600 cursor-pointer hover:underline"
                             onClick={() => setSelectedPatientId(sample.patientId)}
                           >
@@ -704,7 +461,7 @@ function App() {
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Site</th>
                         <th className="w-36 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Timepoint</th>
                         <th className="w-32 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Specimen</th>
-                        <th className="w-20 px-2 py-1 text-left textxs font-medium text-gray-700 truncate bg-gray-100">Spec#</th>
+                        <th className="w-20 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Spec#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Material</th>
                         <th className="w-28 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Level</th>
                         <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Sample Date & Time</th>
@@ -1220,7 +977,7 @@ function App() {
         </div>
       )}
       {showAdminPanel && (
-        <AdminPanel
+        <AdminPanel 
           onClose={() => setShowAdminPanel(false)}
           currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
         />
