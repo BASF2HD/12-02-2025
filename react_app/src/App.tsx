@@ -22,6 +22,7 @@ import type { Sample, Patient, SampleType } from './types';
 import { TableColumnManager } from './components/TableColumnManager';
 import { TreeView } from './components/TreeView';
 import { LocationManager } from './components/LocationManager';
+import { ReceiveSamples } from './components/ReceiveSamples';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AdminPanel from './components/AdminPanel';
@@ -51,7 +52,8 @@ function App() {
   const actionMenuRef = React.useRef<HTMLDivElement>(null);
   const [showPrinterManager, setShowPrinterManager] = useState(false);
   const [showBarcodeManager, setShowBarcodeManager] = useState(false);
-  const [showFileAttachmentManager, setShowFileAttachmentManager] = useState(false); // Added state
+  const [showFileAttachmentManager, setShowFileAttachmentManager] = useState(false);
+  const [showReceiveSamples, setShowReceiveSamples] = useState(false);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -695,9 +697,7 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
-                onClick={() => {
-                  setFilters(prev => ({ ...prev, dateReceived: '' }));
-                }}
+                onClick={() => setShowReceiveSamples(true)}
               >
                 <ArrowDownCircle className="h-5 w-5 mb-1" />
                 <span className="text-xs">RECEIVE</span>
@@ -1800,6 +1800,13 @@ function App() {
       )}
       {showFileAttachmentManager && (
         <FileAttachmentManager onClose={() => setShowFileAttachmentManager(false)} />
+      )}
+      {showReceiveSamples && (
+        <ReceiveSamples 
+          onClose={() => setShowReceiveSamples(false)}
+          samples={samples}
+          onUpdateSamples={setSamples}
+        />
       )}
     </div>
   );
