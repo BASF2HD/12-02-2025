@@ -130,7 +130,7 @@ export const TreeView: React.FC<TreeViewProps> = ({ samples }) => {
 
   const getSampleIcon = (type: string, level: string) => {
     if (type === 'tissue') return '🔬';
-    if (type === 'blood') return '💉';
+    if (type === 'blood') return '🩸';
     if (type === 'plasma') return '💉';
     if (type === 'buffy coat') return '🧪';
     return '📦';
