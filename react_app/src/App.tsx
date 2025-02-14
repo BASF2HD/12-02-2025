@@ -1,7 +1,13 @@
-onClick={() => {
-              setShowPatients(false);
-              setActiveTab('he');
-            }}
+<button
+  className={`flex items-center px-3 py-1.5 rounded-md ${
+    activeTab === 'he' && !showPatients
+      ? 'bg-pink-100 text-pink-700'
+      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+  } text-xs whitespace-nowrap`}
+  onClick={() => {
+    setShowPatients(false);
+    setActiveTab('he');
+  }}
           >
             <Microscope className="h-4 w-4 mr-1 text-pink-600" />
             <span className="font-medium">H&E ({samples.filter(s => s.specimen === 'H&E Slide').length})</span>
