@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send, BarChart } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer as PrinterIcon, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send, BarChart } from 'lucide-react';
 import { CRUKLogo } from './components/CRUKLogo';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
@@ -26,6 +26,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AdminPanel from './components/AdminPanel';
 import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
+import { PrinterManager } from './components/PrinterManager'; //Added import
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,6 +47,7 @@ function App() {
   const [selectedSamples, setSelectedSamples] = useState<Set<string>>(new Set());
   const [showActionMenu, setShowActionMenu] = useState(false);
   const actionMenuRef = React.useRef<HTMLDivElement>(null);
+  const [showPrinterManager, setShowPrinterManager] = useState(false); // Added state for printer manager
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -659,9 +662,9 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {}}
+                onClick={() => setShowPrinterManager(true)} // Added onClick handler to open PrinterManager
               >
-                <Printer className="h-5 w-5 mb-1" />
+                <PrinterIcon className="h-5 w-5 mb-1" />
                 <span className="text-xs">PRINTERS</span>
               </button>
               <button 
@@ -790,7 +793,7 @@ function App() {
               setActiveTab('ffpe');
             }}
           >
-            <FileStack className="h-4 w-4 mr-1 text-orange-600" />
+            <FileStack className="h4 w-4 mr-1 text-orange-600" />
             <span className="font-medium">FFPE BLOCK ({samples.filter(s => s.specimen === 'FFPE Block').length})</span>
           </button>
           <button
@@ -893,7 +896,7 @@ function App() {
                   {SAMPLE_ACTIONS.map((action) => {
                     const iconMapping = {
                       'Derive': <Droplets className="h-4 w-4" />,
-                      'Print Label': <Printer className="h-4 w-4" />,
+                      'Print Label': <PrinterIcon className="h-4 w-4" />,
                       'Print Barcode': <BarcodeIcon className="h-4 w-4" />,
                       'View History': <FileStack className="h-4 w-4" />,
                       'Add Note': <Pencil className="h-4 w-4" />,
@@ -1785,6 +1788,7 @@ function App() {
       )}
       {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
       {showLocationManager && <LocationManager onClose={() => setShowLocationManager(false)} />}
+      {showPrinterManager && <PrinterManager onClose={() => setShowPrinterManager(false)} />}
     </div>
   );
 }
