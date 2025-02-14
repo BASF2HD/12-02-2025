@@ -1351,10 +1351,17 @@ function App() {
                             </select>
                           </td>
                           <td className="w-32 px-2 py-1 whitespace-nowrap">
-                            <div className="flex items-center gap-1">
-                              {sample.specimen.toLowerCase().includes('blood') ? '🩸' : <SampleIcon specimen={sample.specimen} />}
-                              <span>{sample.specimen}</span>
-                            </div>
+                            <select
+                              value={sample.specimen}
+                              onChange={(e) => updateNewSample(index, 'specimen', e.target.value)}
+                              className="w-full text-xs border-gray-300 rounded-md"
+                              required
+                            >
+                              <option value="">Select specimen</option>
+                              {getSpecimensByType(sample.type).map(specimen => (
+                                <option key={specimen} value={specimen}>{specimen}</option>
+                              ))}
+                            </select>
                           </td>
                           <td className="w-32 px-2 py-1">
                             <select
