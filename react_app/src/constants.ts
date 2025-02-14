@@ -140,15 +140,6 @@ export const FREEZERS: Freezer[] = [
   'Freezer 96',
   'Freezer 82',
   'Freezer 79'
-
-export const ELIGIBILITY_OPTIONS = [
-  'Eligible',
-  'Not Eligible',
-  'Pending Review',
-  'Under Assessment',
-  'Conditionally Eligible'
-];
-
 ];
 
 export const SHELVES: Shelf[] = [
