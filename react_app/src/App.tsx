@@ -1610,7 +1610,108 @@ function App() {
               </button>
             </div>
             <form onSubmit={handleEditSubmit} className="p-3 overflow-y-auto">
-              {/* Add your form fields here */}
+              {editingSample && (
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Barcode</label>
+                    <input
+                      type="text"
+                      value={editingSample.barcode}
+                      onChange={(e) => setEditingSample({ ...editingSample, barcode: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Type</label>
+                    <select
+                      value={editingSample.type}
+                      onChange={(e) => setEditingSample({ ...editingSample, type: e.target.value as SampleType })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    >
+                      <option value="blood">Blood</option>
+                      <option value="tissue">Tissue</option>
+                      <option value="ffpe">FFPE</option>
+                      <option value="he">H&E</option>
+                      <option value="buffy">Buffy</option>
+                      <option value="plasma">Plasma</option>
+                      <option value="dna">DNA</option>
+                      <option value="rna">RNA</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Investigation Type</label>
+                    <select
+                      value={editingSample.investigationType}
+                      onChange={(e) => setEditingSample({ ...editingSample, investigationType: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    >
+                      {INVESTIGATION_TYPES.map(type => (
+                        <option key={type} value={type}>{type}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Status</label>
+                    <select
+                      value={editingSample.status}
+                      onChange={(e) => setEditingSample({ ...editingSample, status: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    >
+                      <option value="Collected">Collected</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Received">Received</option>
+                      <option value="In Storage">In Storage</option>
+                      <option value="In Process">In Process</option>
+                      <option value="Completed">Completed</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Freezer</label>
+                    <input
+                      type="text"
+                      value={editingSample.freezer || ''}
+                      onChange={(e) => setEditingSample({ ...editingSample, freezer: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Shelf</label>
+                    <input
+                      type="text"
+                      value={editingSample.shelf || ''}
+                      onChange={(e) => setEditingSample({ ...editingSample, shelf: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Box</label>
+                    <input
+                      type="text"
+                      value={editingSample.box || ''}
+                      onChange={(e) => setEditingSample({ ...editingSample, box: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Position</label>
+                    <input
+                      type="text"
+                      value={editingSample.position || ''}
+                      onChange={(e) => setEditingSample({ ...editingSample, position: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Comments</label>
+                    <input
+                      type="text"
+                      value={editingSample.comments || ''}
+                      onChange={(e) => setEditingSample({ ...editingSample, comments: e.target.value })}
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm"
+                    />
+                  </div>
+                </div>
+              )}
               <div className="mt-3 flex justify-end space-x-3">
                 <button
                   type="button"
