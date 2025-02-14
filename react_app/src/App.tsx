@@ -431,10 +431,13 @@ function App() {
   const handleDeriveSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await deriveSamples(parentSamples, derivedSamples);
+      const selectedSamplesArray = Array.from(selectedSamples);
+      const parentSamplesList = samples.filter(sample => 
+        selectedSamplesArray.includes(sample.barcode)
+      );
+      await deriveSamples(parentSamplesList, derivedSamples);
       setIsDeriveModalOpen(false);
       setDerivedSamples([]);
-      setParentSamples([]);
       setSelectedSamples(new Set());
     } catch (error) {
       console.error('Error deriving samples:', error);
