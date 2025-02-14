@@ -117,6 +117,15 @@ export const SAMPLE_LEVELS: SampleLevel[] = [
   'Original sample',
   'Derivative',
   'Aliquot'
+
+export const ELIGIBILITY_OPTIONS = [
+  'Eligible',
+  'Not Eligible',
+  'Under Review',
+  'Pending',
+  'Conditionally Eligible'
+];
+
 ];
 
 export const SAMPLE_ACTIONS = [

@@ -1021,7 +1021,7 @@ function App() {
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.cohort}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">{patient.study}</td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">
-                        {patient.eligibility}
+                        {patient.eligibility.charAt(0).toUpperCase() + patient.eligibility.slice(1)}
                       </td>
                       <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-900">
                         {formatDate(patient.registrationDate)}
