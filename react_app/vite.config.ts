@@ -8,6 +8,7 @@ export default defineConfig({
     exclude: ['lucide-react'],
   },
   server: {
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    allowedHosts: ['*.replit.dev']
   }
 });
