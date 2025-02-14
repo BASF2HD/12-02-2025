@@ -1474,14 +1474,9 @@ function App() {
                           <td className="w-48 px-2 py-1">
                             <input
                               type="text"
-                              value={sample.patientId}                              onChange={(e) => {
-                                const value = e.target.value.replace(/[^A-Za-z0-9_]/g, '');
-                                updateDerivedSample(index, 'patientId', value);
-                                if (value.length >= 9) {
-                                  updateDerivedSample(index, 'ltxId', value.slice(-7));
-                                }
-                              }}
-                              className="w-full text-xs border-gray-300 rounded-md"
+                              value={sample.patientId}
+                              disabled
+                              className="w-full text-xs border-gray-300 rounded-md bg-gray-50"
                               required
                             />
                           </td>
