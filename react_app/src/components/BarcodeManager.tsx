@@ -15,6 +15,25 @@ interface LabelTemplate {
   printerId: string;
 }
 
+interface Props {
+  onClose: () => void;
+}
+
+export function BarcodeManager({ onClose }: Props) {
+  const [templates, setTemplates] = useState<LabelTemplate[]>([]);
+  const [currentTemplate, setCurrentTemplate] = useState<LabelTemplate>({
+    id: '',
+    name: '',
+    width: 25,
+    height: 69,
+    labelsPerRow: 1,
+    isLandscape: false,
+    hasWriteArea: true,
+    writeAreaWidth: 33,
+    writeAreaAnchor: 'Top',
+    printerId: ''
+  });
+
 interface LabelElement {
   type: 'text' | 'barcode' | 'image';
   x: number;
@@ -40,12 +59,37 @@ export function BarcodeManager({ onClose }: { onClose: () => void }) {
   const [elements, setElements] = useState<LabelElement[]>([]);
 
   const handleSaveTemplate = () => {
+    if (!currentTemplate.name.trim()) {
+      alert('Please enter a template name');
+      return;
+    }
+    
     if (currentTemplate.id) {
       setTemplates(prev => 
         prev.map(t => t.id === currentTemplate.id ? currentTemplate : t)
       );
     } else {
       setTemplates(prev => [...prev, { ...currentTemplate, id: Date.now().toString() }]);
+    }
+  };
+
+  const handleDeleteTemplate = (templateId: string) => {
+    if (window.confirm('Are you sure you want to delete this template?')) {
+      setTemplates(prev => prev.filter(t => t.id !== templateId));
+      if (currentTemplate.id === templateId) {
+        setCurrentTemplate({
+          id: '',
+          name: '',
+          width: 25,
+          height: 69,
+          labelsPerRow: 1,
+          isLandscape: false,
+          hasWriteArea: true,
+          writeAreaWidth: 33,
+          writeAreaAnchor: 'Top',
+          printerId: ''
+        });
+      }
     }
   };
 
@@ -64,6 +108,17 @@ export function BarcodeManager({ onClose }: { onClose: () => void }) {
             <div className="space-y-4">
               <h3 className="text-sm font-medium">Label Configuration</h3>
               
+              <div>
+                <label className="block text-sm text-gray-700 mb-1">Template Name</label>
+                <input
+                  type="text"
+                  value={currentTemplate.name}
+                  onChange={e => setCurrentTemplate(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter template name"
+                  className="w-full text-sm border-gray-300 rounded-md mb-4"
+                  required
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm text-gray-700">Width (mm)</label>
@@ -207,7 +262,18 @@ export function BarcodeManager({ onClose }: { onClose: () => void }) {
                         {template.width}mm × {template.height}mm
                       </p>
                     </div>
-                    <Printer className="h-4 w-4 text-gray-400" />
+                    <div className="flex items-center space-x-2">
+                      <Printer className="h-4 w-4 text-gray-400" />
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteTemplate(template.id);
+                        }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
