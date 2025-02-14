@@ -221,11 +221,11 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                       className="w-full text-xs border-gray-300 rounded-md mb-2"
                                     />
                                     <div>
-                                      {/* Column Headers */}
+                                      {/* Position Labels */}
                                       <div className="grid grid-cols-9 gap-[1px] mb-1">
                                         {[...Array(9)].map((_, i) => (
-                                          <div key={i} className="text-[8px] text-center">
-                                            {i + 1}
+                                          <div key={i} className="text-[8px] text-center font-medium text-gray-600">
+                                            Position {i + 1}
                                           </div>
                                         ))}
                                       </div>
