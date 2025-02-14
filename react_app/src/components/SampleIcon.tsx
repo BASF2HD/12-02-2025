@@ -24,7 +24,12 @@ const iconMap: Record<string, typeof LucideIcon> = {
 
 export function SampleIcon({ specimen, className = 'h-4 w-4' }: SampleIconProps) {
   const key = Object.keys(iconMap).find(k => specimen.toLowerCase().includes(k)) || 'default';
-  const Icon = iconMap[key];
   
+  // Special case for blood to match TreeView
+  if (specimen.toLowerCase().includes('blood')) {
+    return <span>🩸</span>;
+  }
+  
+  const Icon = iconMap[key];
   return <Icon className={className} />;
 }
