@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Save, Search } from 'lucide-react';
 import type { Sample } from '../types';
+import { formatDate } from '../constants';
 
 interface Props {
   onClose: () => void;
@@ -13,6 +14,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   const [selectedSamples, setSelectedSamples] = useState<Set<string>>(new Set());
   const [barcodeFilter, setBarcodeFilter] = useState<string>('');
   const [scannedBarcodes, setScannedBarcodes] = useState<string[]>([]);
+  const [receiveDate, setReceiveDate] = useState<string>('');
   
   const unreceivedSamples = samples.filter(sample => !sample.dateReceived);
   const filteredSamples = unreceivedSamples.filter(sample => 
@@ -30,12 +32,16 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   };
 
   const handleReceiveSamples = () => {
-    const currentDate = new Date().toISOString().split('T')[0];
+    if (!receiveDate) {
+      alert('Please enter a receive date');
+      return;
+    }
+
     const updatedSamples = samples.map(sample => {
       if (selectedSamples.has(sample.barcode)) {
         return {
           ...sample,
-          dateReceived: currentDate,
+          dateReceived: receiveDate,
           status: 'Received'
         };
       }
@@ -113,6 +119,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
                   <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Site</th>
                   <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Status</th>
                   <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sample Date</th>
+                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sent Date</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -142,17 +149,28 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
                     <td className="px-2 py-1 text-xs">{sample.specimen}</td>
                     <td className="px-2 py-1 text-xs">{sample.site}</td>
                     <td className="px-2 py-1 text-xs">{sample.status}</td>
-                    <td className="px-2 py-1 text-xs">{sample.sampleDate}</td>
+                    <td className="px-2 py-1 text-xs">{formatDate(sample.sampleDate)}</td>
+                    <td className="px-2 py-1 text-xs">{formatDate(sample.dateSent)}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <div className="mt-4 flex justify-end">
+          <div className="mt-4 flex justify-end items-center gap-4">
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-600">Receive Date:</label>
+              <input
+                type="date"
+                value={receiveDate}
+                onChange={(e) => setReceiveDate(e.target.value)}
+                className="text-sm border border-gray-300 rounded-md px-2 py-1"
+                required
+              />
+            </div>
             <button
               onClick={handleReceiveSamples}
-              disabled={selectedSamples.size === 0}
+              disabled={selectedSamples.size === 0 || !receiveDate}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
             >
               Receive Selected Samples
