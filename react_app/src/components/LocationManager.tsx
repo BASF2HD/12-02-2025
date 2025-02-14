@@ -192,15 +192,31 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                     }}
                                     className="w-full text-xs border-gray-300 rounded-md mb-2"
                                   />
-                                  <div className="grid grid-cols-9 gap-[1px]">
-                                    {box.positions.map((pos, i) => (
-                                      <div
+                                  <div>
+                                    {/* Column Headers */}
+                                    <div className="grid grid-cols-9 gap-[1px] mb-1">
+                                      {[...Array(9)].map((_, i) => (
+                                        <div key={i} className="text-[8px] text-center">
+                                          {i + 1}
+                                        </div>
+                                      ))}
+                                    </div>
+                                    {/* Grid */}
+                                    <div className="grid grid-cols-9 gap-[1px]">
+                                      {box.positions.map((pos, i) => (
+                                        <div
                                         key={i}
                                         className={`w-2 h-2 ${
                                           pos.isOccupied ? 'bg-red-500' : 'bg-green-500'
-                                        } rounded-sm`}
+                                        } rounded-sm relative`}
                                         title={`Position ${pos.row},${pos.col}`}
-                                      />
+                                      >
+                                        {pos.col === 1 && (
+                                          <span className="absolute right-full mr-1 text-[8px]">
+                                            {pos.row}
+                                          </span>
+                                        )}
+                                      </div>
                                     ))}
                                   </div>
                                 </div>
