@@ -1514,17 +1514,7 @@ function App() {
                           </td>
                           <td className="w-28 px-2 py-1 text-xs text-gray-500">{sample.site}</td>
                           <td className="w-36 px-2 py-1 text-xs text-gray-500">{sample.timepoint}</td>
-                          <td className="w-32 px-2 py-1">
-                            <select
-                              value={sample.specimen}
-                              onChange={(e) => updateDerivedSample(index, 'specimen', e.target.value)}
-                              className="w-full text-xs border-gray-300 rounded-md"
-                            >
-                              {getSpecimensByType(sample.type).map(specimen => (
-                                <option key={specimen} value={specimen}>{specimen}</option>
-                              ))}
-                            </select>
-                          </td>
+                          <td className="w-32 px-2 py-1 text-xs text-gray-500">{sample.specimen}</td>
                           <td className="w-20 px-2 py-1">
                             <select
                               value={sample.specNumber}
