@@ -1128,8 +1128,8 @@ function App() {
                         <th scope="col" className="px-2 py-1">
                           <input
                             type="checkbox"
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                            checked={selectedSamples.size === filteredAndSortedSamples.length}
+                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                            checked={filteredAndSortedSamples.length > 0 && selectedSamples.size === filteredAndSortedSamples.length}
                             onChange={(e) => {
                               if (e.target.checked) {
                                 setSelectedSamples(new Set(filteredAndSortedSamples.map(s => s.barcode)));
@@ -1173,7 +1173,7 @@ function App() {
                           <td className="px-2 py-1">
                             <input
                               type="checkbox"
-                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                              className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                               checked={selectedSamples.has(sample.barcode)}
                               onChange={() => handleSampleSelection(sample.barcode)}
                             />
@@ -1207,8 +1207,8 @@ function App() {
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
                             {formatDate(sample.sampleDate)} {sample.sampleTime}
                           </td>
-                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateSent}</td>
-                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateReceived}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateSent ? formatDate(sample.dateSent) : ''}</td>
+                          <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.dateReceived ? formatDate(sample.dateReceived) : ''}</td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.site}</td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">{sample.sampleLevel}</td>
                           <td className="px-2 py-1 whitespace-nowrap text-xs text-gray-500">
