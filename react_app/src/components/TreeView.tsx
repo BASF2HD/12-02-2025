@@ -67,34 +67,58 @@ export const TreeView: React.FC<TreeViewProps> = ({ samples }) => {
 
   const SampleTable = ({ samples }: { samples: Sample[] }) => (
     <div className="overflow-x-auto">
-      <table className="min-w-full divide-y divide-gray-200">
+      <table className="min-w-full divide-y divide-gray-200 text-[11px]">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Barcode</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Type</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Specimen</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Spec#</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Material</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Status</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Location</th>
-            <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sample Date</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Barcode</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">LTX ID</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Patient ID</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Type</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Investigation Type</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Timepoint</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Sample Level</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Specimen</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Spec#</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Material</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Sample Date</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Site</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Location</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Volume</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Amount</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Concentration</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Mass</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Surplus</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Status</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Date Sent</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Date Received</th>
+            <th className="px-1 py-0.5 text-left font-medium text-gray-500">Comments</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {samples.map((sample) => (
             <tr key={sample.barcode} className="hover:bg-gray-50">
-              <td className="px-2 py-1 text-xs text-gray-900">{sample.barcode}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">{sample.type}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">{sample.specimen}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">{sample.specNumber}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">{sample.material}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">{sample.status}</td>
-              <td className="px-2 py-1 text-xs text-gray-500">
-                {sample.freezer && `${sample.freezer}/${sample.shelf}/${sample.box}/${sample.position}`}
-              </td>
-              <td className="px-2 py-1 text-xs text-gray-500">
-                {sample.sampleDate} {sample.sampleTime}
-              </td>
+              <td className="px-1 py-0.5 text-gray-900">{sample.barcode}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.ltxId}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.patientId}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.type}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.investigationType}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.timepoint}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.sampleLevel}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.specimen}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.specNumber}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.material}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.sampleDate} {sample.sampleTime}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.site}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.freezer && `${sample.freezer}/${sample.shelf}/${sample.box}/${sample.position}`}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.volume}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.amount}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.concentration}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.mass}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.surplus}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.status}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.dateSent}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.dateReceived}</td>
+              <td className="px-1 py-0.5 text-gray-500">{sample.comments}</td>
             </tr>
           ))}
         </tbody>
