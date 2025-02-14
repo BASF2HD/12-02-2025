@@ -222,10 +222,10 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                                     />
                                     <div>
                                       {/* Position Labels */}
-                                      <div className="grid grid-cols-9 gap-[1px] mb-1">
+                                      <div className="grid grid-cols-9 gap-[1px] mb-2">
                                         {[...Array(9)].map((_, i) => (
-                                          <div key={i} className="text-[8px] text-center font-medium text-gray-600">
-                                            Position {i + 1}
+                                          <div key={i} className="text-[10px] text-center font-semibold text-gray-700 bg-gray-100 p-0.5 rounded">
+                                            {i + 1}
                                           </div>
                                         ))}
                                       </div>
