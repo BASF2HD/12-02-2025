@@ -23,6 +23,8 @@ import { TableColumnManager } from './components/TableColumnManager';
 import { TreeView } from './components/TreeView';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import AdminPanel from './AdminPanel';
+import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -790,7 +792,7 @@ function App() {
             <span className="font-medium">FFPE BLOCK ({samples.filter(s => s.specimen === 'FFPE Block').length})</span>
           </button>
           <button
-            className={`flex items-center px-3 py-1.5 rounded-md ${
+            className={`flex itemscenter px-3 py-1.5 rounded-md ${
               activeTab === 'he' && !showPatients
                 ? 'bg-pink-100 text-pink-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -1438,7 +1440,7 @@ function App() {
                           <td className="w-8 px-2 py-1 text-right">
                             <button
                               type="button"
-                              onClick={() => deleteNewSampleRow(index)}
+                              onClick={()=> deleteNewSampleRow(index)}
                               className="text-red-600 hover:text-red-800"
                             >
                               <X className="h-4 w-4" />
