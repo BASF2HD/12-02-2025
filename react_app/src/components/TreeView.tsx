@@ -128,35 +128,45 @@ export const TreeView: React.FC<TreeViewProps> = ({ samples }) => {
 
   const tree = buildTree(samples);
 
+  const getSampleIcon = (type: string, level: string) => {
+    if (type === 'tissue') return '🔬';
+    if (type === 'blood') return '🩸';
+    if (type === 'plasma') return '💉';
+    if (type === 'buffy coat') return '🧪';
+    return '📦';
+  };
+
   return (
     <div className="p-4">
       {tree.map((node) => (
-        <div key={node.patient} className="mb-4">
+        <div key={node.patient} className="mb-2">
           <div 
-            className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded"
+            className="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded"
             onClick={() => toggleNode(node.patient)}
           >
             {expandedNodes.has(node.patient) ? (
-              <ChevronDown className="h-4 w-4 text-gray-500" />
+              <ChevronDown className="h-3 w-3 text-gray-500" />
             ) : (
-              <ChevronRight className="h-4 w-4 text-gray-500" />
+              <ChevronRight className="h-3 w-3 text-gray-500" />
             )}
-            <span className="text-sm font-medium ml-2">{node.patient}</span>
+            <span className="text-xs font-medium ml-1">
+              {node.patient} - {node.samples.original[0]?.ltxId || 'No ID'}
+            </span>
           </div>
 
           {expandedNodes.has(node.patient) && (
             <div className="ml-6">
               {node.samples.original.map(sample => (
-                <div key={sample.barcode} className="my-2">
-                  <div className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded"
+                <div key={sample.barcode} className="my-1">
+                  <div className="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded ml-4"
                        onClick={() => toggleNode(sample.barcode)}>
                     {expandedNodes.has(sample.barcode) ? (
-                      <ChevronDown className="h-4 w-4 text-gray-500" />
+                      <ChevronDown className="h-3 w-3 text-gray-500" />
                     ) : (
-                      <ChevronRight className="h-4 w-4 text-gray-500" />
+                      <ChevronRight className="h-3 w-3 text-gray-500" />
                     )}
-                    <span className="text-xs ml-2">
-                      Original Sample: {sample.barcode} ({sample.specimen})
+                    <span className="text-xs ml-1">
+                      {getSampleIcon(sample.type, sample.sampleLevel)} {sample.barcode} - {sample.specimen} ({sample.specNumber})
                     </span>
                   </div>
 
@@ -167,15 +177,15 @@ export const TreeView: React.FC<TreeViewProps> = ({ samples }) => {
                         .filter(derivative => derivative.sample.parentBarcode === sample.barcode)
                         .map(derivative => (
                           <div key={derivative.sample.barcode} className="my-2">
-                            <div className="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded"
+                            <div className="flex items-center cursor-pointer hover:bg-gray-100 p-1 rounded ml-8"
                                  onClick={() => toggleNode(derivative.sample.barcode)}>
                               {expandedNodes.has(derivative.sample.barcode) ? (
-                                <ChevronDown className="h-4 w-4 text-gray-500" />
+                                <ChevronDown className="h-3 w-3 text-gray-500" />
                               ) : (
-                                <ChevronRight className="h-4 w-4 text-gray-500" />
+                                <ChevronRight className="h-3 w-3 text-gray-500" />
                               )}
-                              <span className="text-xs ml-2">
-                                Derivative: {derivative.sample.barcode} ({derivative.sample.specimen})
+                              <span className="text-xs ml-1">
+                                {getSampleIcon(derivative.sample.type, derivative.sample.sampleLevel)} {derivative.sample.barcode} - {derivative.sample.type} ({derivative.sample.specNumber})
                               </span>
                             </div>
 
