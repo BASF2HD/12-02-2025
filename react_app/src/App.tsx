@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send } from 'lucide-react';
+import { Users, ArrowUpCircle, ArrowDownCircle, Search, X, Plus, ArrowUpDown, Filter, Settings, MoreVertical, TestTube, FileStack, Microscope, FlaskRound as Flask, Dna, Droplets, Printer, Barcode as BarcodeIcon, Paperclip, Pencil, Download, Upload, Trash2, Send, BarChart } from 'lucide-react';
 import { CRUKLogo } from './components/CRUKLogo';
 import { FreezerIcon } from './components/FreezerIcon';
 import { LoginPage } from './components/LoginPage';
@@ -644,6 +644,13 @@ function App() {
               </button>
 
               <button 
+                className="flex flex-col items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
+                onClick={() => {}}
+              >
+                <BarChart className="h-5 w-5 mb-1" />
+                <span className="text-xs">DASHBOARD</span>
+              </button>
+              <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-green-100 text-green-600 rounded-md hover:bg-green-200"
                 onClick={() => {
                   setFilters(prev => ({ ...prev, dateReceived: '' }));
@@ -778,7 +785,7 @@ function App() {
             <Droplets className="h-4 w-4 mr-1 text-cyan-600" />
             <span className="font-medium">PLASMA ({samples.filter(s => s.specimen === 'Plasma').length})</span>
           </button>
-          <button
+<button
             className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'dna' && !showPatients
                 ? 'bg-green-100 text-green-700' 
@@ -1434,7 +1441,7 @@ function App() {
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-white sticky top-0 z-10">
                       <tr>
-                        <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">#</th>
+                        <th className="min-w-[40px] px-2 py-1 text-left text-xs font-medium text-gray700 truncate bg-gray-100">#</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Parent Barcode</th>
                         <th className="w-24 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Barcode</th>
                         <th className="w-48 px-2 py-1 text-left text-xs font-medium text-gray-700 truncate bg-gray-100">Patient ID</th>
