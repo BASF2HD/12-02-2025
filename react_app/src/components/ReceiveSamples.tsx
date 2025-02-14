@@ -18,7 +18,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   
   const unreceivedSamples = samples.filter(sample => !sample.dateReceived);
   const filteredSamples = unreceivedSamples.filter(sample => 
-    scannedBarcodes.length === 0 || scannedBarcodes.includes(sample.barcode)
+    scannedBarcodes.includes(sample.barcode)
   );
 
   const handleBarcodeInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
