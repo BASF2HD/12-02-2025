@@ -11,10 +11,21 @@ export function FileAttachmentManager({ onClose }: Props) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
 
-  const storageLocations = [
+  const [storageLocations, setStorageLocations] = useState([
     { id: 'loc1', path: '/network/share1/documents' },
     { id: 'loc2', path: '/network/share2/files' },
-  ];
+  ]);
+  const [customPath, setCustomPath] = useState('');
+
+  const addCustomLocation = () => {
+    if (customPath.trim()) {
+      setStorageLocations([
+        ...storageLocations,
+        { id: `loc${Date.now()}`, path: customPath.trim() }
+      ]);
+      setCustomPath('');
+    }
+  };
 
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -61,18 +72,36 @@ export function FileAttachmentManager({ onClose }: Props) {
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700">Storage Location</label>
-              <select
-                value={selectedStorage}
-                onChange={(e) => setSelectedStorage(e.target.value)}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              >
-                <option value="">Select storage location</option>
-                {storageLocations.map((loc) => (
-                  <option key={loc.id} value={loc.path}>
-                    {loc.path}
-                  </option>
-                ))}
-              </select>
+              <div className="space-y-2">
+                <select
+                  value={selectedStorage}
+                  onChange={(e) => setSelectedStorage(e.target.value)}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <option value="">Select storage location</option>
+                  {storageLocations.map((loc) => (
+                    <option key={loc.id} value={loc.path}>
+                      {loc.path}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter custom network path"
+                    value={customPath}
+                    onChange={(e) => setCustomPath(e.target.value)}
+                    className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  />
+                  <button
+                    onClick={addCustomLocation}
+                    type="button"
+                    className="px-3 py-1 bg-blue-100 text-blue-600 rounded hover:bg-blue-200"
+                  >
+                    Add Path
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div>
