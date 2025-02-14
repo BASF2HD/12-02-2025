@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { SortableHeader } from './SortableHeader';
+import { SortableHeader } from './components/SortableHeader';
 import { TreeView } from './TreeView';
 import { Microscope, Flask, Droplets, Dna, Plus, MoreVertical, X } from 'lucide-react';
 import { formatDate } from './utils';
