@@ -42,22 +42,37 @@ export function useSamples() {
         throw new Error('Parent sample not found');
       }
 
-      const samplesWithIds = derivedSamples.map(sample => ({
-        ...sample,
-        id: crypto.randomUUID(),
-        ltxId: parentSample.ltxId,
-        patientId: parentSample.patientId,
-        parentBarcode: parentSample.barcode,
-        site: parentSample.site,
-        timepoint: parentSample.timepoint,
-        status: 'Collected',
-        specimen: sample.specimen || parentSample.specimen,
-        specNumber: sample.specNumber || parentSample.specNumber,
-        material: sample.material || parentSample.material,
-        investigationType: sample.investigationType || parentSample.investigationType,
-        type: sample.type || parentSample.type,
-        sampleLevel: 'Derivative'
-      }));
+      const samplesWithIds = derivedSamples.map(sample => {
+        const newSample: Sample = {
+          id: crypto.randomUUID(),
+          barcode: sample.barcode,
+          ltxId: parentSample.ltxId,
+          patientId: parentSample.patientId,
+          parentBarcode: parentSample.barcode,
+          type: sample.type || parentSample.type,
+          investigationType: sample.investigationType || parentSample.investigationType,
+          status: 'Collected',
+          site: parentSample.site,
+          timepoint: parentSample.timepoint,
+          specimen: sample.specimen || parentSample.specimen,
+          specNumber: sample.specNumber || parentSample.specNumber,
+          material: sample.material || parentSample.material,
+          sampleDate: sample.sampleDate,
+          sampleTime: sample.sampleTime,
+          freezer: '',
+          shelf: '',
+          box: '',
+          position: '',
+          volume: undefined,
+          amount: undefined,
+          concentration: undefined,
+          mass: undefined,
+          surplus: false,
+          sampleLevel: 'Derivative',
+          comments: sample.comments || `Derived from ${parentSample.barcode}`
+        };
+        return newSample;
+      });
 
       setSamples(prevSamples => [...prevSamples, ...samplesWithIds]);
       return samplesWithIds;
