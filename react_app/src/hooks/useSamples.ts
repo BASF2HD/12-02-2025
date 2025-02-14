@@ -33,27 +33,31 @@ export function useSamples() {
 
   async function deriveSamples(parentSamples: Sample[], derivedSamples: Sample[]) {
     try {
-      // Ensure both arrays have values
       if (!parentSamples?.length || !derivedSamples?.length) {
         throw new Error('Parent samples and derived samples are required');
       }
 
-      const samplesWithIds = derivedSamples.map(sample => {
-        const parentSample = parentSamples[0];  // Use first parent since we're deriving from selected samples
-        if (!parentSample) {
-          throw new Error('Parent sample not found');
-        }
+      const parentSample = parentSamples[0];
+      if (!parentSample) {
+        throw new Error('Parent sample not found');
+      }
 
-        return {
-          ...sample,
-          id: crypto.randomUUID(),
-          ltxId: parentSample.ltxId,
-          patientId: parentSample.patientId,
-          parentBarcode: parentSample.barcode,
-          site: parentSample.site,
-          timepoint: parentSample.timepoint
-        };
-      });
+      const samplesWithIds = derivedSamples.map(sample => ({
+        ...sample,
+        id: crypto.randomUUID(),
+        ltxId: parentSample.ltxId,
+        patientId: parentSample.patientId,
+        parentBarcode: parentSample.barcode,
+        site: parentSample.site,
+        timepoint: parentSample.timepoint,
+        status: 'Collected',
+        specimen: sample.specimen || parentSample.specimen,
+        specNumber: sample.specNumber || parentSample.specNumber,
+        material: sample.material || parentSample.material,
+        investigationType: sample.investigationType || parentSample.investigationType,
+        type: sample.type || parentSample.type,
+        sampleLevel: 'Derivative'
+      }));
 
       setSamples(prevSamples => [...prevSamples, ...samplesWithIds]);
       return samplesWithIds;
