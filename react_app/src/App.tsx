@@ -39,6 +39,17 @@ function App() {
   const [filters, setFilters] = useState<Partial<Record<keyof Sample, string>>>({});
   const [selectedSamples, setSelectedSamples] = useState<Set<string>>(new Set());
   const [showActionMenu, setShowActionMenu] = useState(false);
+  const actionMenuRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (actionMenuRef.current && !actionMenuRef.current.contains(event.target as Node)) {
+        setShowActionMenu(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const [isDeriveModalOpen, setIsDeriveModalOpen] = useState(false);
   const [parentSamples, setParentSamples] = useState<Sample[]>([]);
   const [derivedSamples, setDerivedSamples] = useState<Sample[]>([]);
@@ -843,7 +854,7 @@ function App() {
               <MoreVertical className="h-3.5 w-3.5" />
             </button>
             {showActionMenu && (
-              <div className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
+              <div ref={actionMenuRef} className="absolute mt-8 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 popup-menu">
                 <div className="py-1">
                   {SAMPLE_ACTIONS.map((action) => {
                     const iconMapping = {
