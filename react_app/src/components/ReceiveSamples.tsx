@@ -23,16 +23,13 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   const handleBarcodeInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const newBarcode = (e.target as HTMLInputElement).value.trim();
-      const matchingSample = unreceivedSamples.find(s => s.barcode === newBarcode);
+      const matchingSample = unreceivedSamples.find(s => s.barcode === newBarcode && !s.dateReceived);
 
       if (matchingSample && !scannedBarcodes.includes(newBarcode)) {
         setScannedBarcodes(prev => [...prev, newBarcode]);
-        setSelectedSamples(prev => {
-          const next = new Set(prev);
-          next.add(newBarcode);
-          return next;
-        });
+        setSelectedSamples(new Set([...Array.from(selectedSamples), newBarcode]));
         setBarcodeFilter('');
+        (e.target as HTMLInputElement).value = '';
       }
     }
   };
@@ -108,15 +105,13 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
                     <th className="px-2 py-1">
                       <input
                         type="checkbox"
-                        checked={selectedSamples.size === filteredSamples.length && filteredSamples.length > 0}
+                        checked={filteredSamples.length > 0 && selectedSamples.size === filteredSamples.length}
                         onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedSamples(new Set(filteredSamples.map(s => s.barcode)));
-                          } else {
-                            setSelectedSamples(new Set());
-                          }
+                          setSelectedSamples(new Set(
+                            e.target.checked ? filteredSamples.map(s => s.barcode) : []
+                          ));
                         }}
-                        className="rounded border-gray-300"
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                       />
                     </th>
                     <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Barcode</th>
