@@ -24,9 +24,14 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
   const handleBarcodeInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       const newBarcode = (e.target as HTMLInputElement).value.trim();
-      if (newBarcode && !scannedBarcodes.includes(newBarcode)) {
-        setScannedBarcodes(prev => [...prev, newBarcode]);
-        setBarcodeFilter('');
+      if (newBarcode) {
+        if (!scannedBarcodes.includes(newBarcode)) {
+          const matchingSample = samples.find(s => s.barcode === newBarcode && !s.dateReceived);
+          if (matchingSample) {
+            setScannedBarcodes(prev => [...prev, newBarcode]);
+            setBarcodeFilter('');
+          }
+        }
       }
     }
   };
