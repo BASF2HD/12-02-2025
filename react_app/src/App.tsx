@@ -523,8 +523,8 @@ function App() {
               const header = document.createElement('div');
               header.className = 'flex justify-between items-center mb-1';
               header.innerHTML = `
-                <span class="text-xs text-gray-500">Filter by ${field}</span>
-                <button class="text-xs text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
+                <span class="text-[0.7rem] text-gray-500">Filter by ${field}</span>
+                <button class="text-[0.7rem] text-blue-500 hover:text-blue-700" id="clearAll">Clear</button>
               `;
 
               const content = document.createElement('div');
@@ -545,7 +545,7 @@ function App() {
                 });
 
                 const span = document.createElement('span');
-                span.className = 'text-xs text-gray-600 ml-1.5';
+                span.className = 'text-[0.7rem] text-gray-600 ml-1.5 font-normal';
                 span.textContent = opt;
 
                 label.appendChild(checkbox);
