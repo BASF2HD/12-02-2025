@@ -1805,7 +1805,10 @@ function App() {
         <ReceiveSamples 
           onClose={() => setShowReceiveSamples(false)}
           samples={samples}
-          onUpdateSamples={setSamples}
+          onUpdateSamples={(updatedSamples) => {
+            // Use the useSamples hook's addSamples function to update samples
+            addSamples(updatedSamples);
+          }}
         />
       )}
     </div>
