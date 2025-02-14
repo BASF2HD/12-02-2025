@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { SortableHeader } from './components/SortableHeader';
 import { TreeView } from './components/TreeView';
 import { Microscope, Flask, Droplets, Dna, Plus, MoreVertical, X } from 'lucide-react';
-import { formatDate } from './utils';
+import { formatDate } from './constants';
 import AdminPanel from './AdminPanel';
 import { SampleType, SAMPLE_ACTIONS, INVESTIGATION_TYPES, SITES, TIMEPOINTS, SPEC_NUMBERS, MATERIALS, SAMPLE_LEVELS } from './constants';
 import SampleIcon from './SampleIcon';
