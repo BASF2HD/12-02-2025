@@ -10,7 +10,7 @@ interface AdminPanelProps {
   currentUser: User;
 }
 
-export function AdminPanel({ onClose, currentUser }: AdminPanelProps) {
+export default function AdminPanel({ onClose, currentUser }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<'users' | 'permissions' | 'logs'>('users');
 
   return (
