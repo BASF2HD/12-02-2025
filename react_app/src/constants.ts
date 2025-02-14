@@ -127,8 +127,6 @@ export const ELIGIBILITY_OPTIONS = [
   'Conditionally Eligible'
 ];
 
-];
-
 export const SAMPLE_ACTIONS = [
   'Edit',
   'Derive',
