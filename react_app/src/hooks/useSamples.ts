@@ -44,7 +44,7 @@ export function useSamples() {
       const samplesWithIds = derivedSamples.map(sample => {
         const newSample: Sample = {
           id: crypto.randomUUID(),
-          barcode: sample.barcode,
+          barcode: sample.barcode || '',
           ltxId: parentSample.ltxId,
           patientId: parentSample.patientId,
           parentBarcode: parentSample.barcode,
@@ -56,8 +56,8 @@ export function useSamples() {
           specimen: sample.specimen || parentSample.specimen,
           specNumber: sample.specNumber || parentSample.specNumber,
           material: sample.material || parentSample.material,
-          sampleDate: sample.sampleDate,
-          sampleTime: sample.sampleTime,
+          sampleDate: sample.sampleDate || new Date().toISOString().split('T')[0],
+          sampleTime: sample.sampleTime || new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: false }),
           freezer: '',
           shelf: '',
           box: '',
@@ -73,9 +73,8 @@ export function useSamples() {
         return newSample;
       });
 
-      const existingSamples = [...samples]; // Get a copy of the current samples
-      const newSamples = [...existingSamples, ...samplesWithIds];
-      setSamples(newSamples);
+      const updatedSamples = [...samples, ...samplesWithIds];
+      setSamples(updatedSamples);
       return samplesWithIds;
     } catch (error) {
       console.error('Error deriving samples:', error);
