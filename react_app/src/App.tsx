@@ -176,11 +176,16 @@ function App() {
       });
     }
 
-    filtered = filtered.filter(sample => 
-      Object.values(sample).some(value => 
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+    filtered = filtered.filter(sample => {
+      const searchLower = searchTerm.toLowerCase();
+      return Object.entries(sample).some(([key, value]) => {
+        if (value === null || value === undefined) return false;
+        const stringValue = value.toString().toLowerCase();
+        // Skip searching in certain fields
+        if (['id', 'surplus'].includes(key)) return false;
+        return stringValue.includes(searchLower);
+      });
+    });
 
     filtered = filtered.filter(sample => {
       return Object.entries(filters).every(([key, value]) => {
