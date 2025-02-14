@@ -28,7 +28,7 @@ import AdminPanel from './components/AdminPanel';
 import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
 import { PrinterManager } from './components/PrinterManager';
 import { BarcodeManager } from './components/BarcodeManager';
-import FileAttachmentManager from './components/FileAttachmentManager'; // Added import
+import { FileAttachmentManager } from './components/FileAttachmentManager';
 
 
 function App() {
