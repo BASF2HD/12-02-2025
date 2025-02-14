@@ -1434,7 +1434,7 @@ function App() {
                                 value={sample.sampleTime}
                                 onChange={(e) => updateNewSample(index, 'sampleTime', e.target.value)}
                                 className="w-24text-xs border-gray-300 rounded-md"
-                                required                              />
+                                required                              />/>
                             </div>
                           </td>
                           <td className="w-32 px-2 py-1">
