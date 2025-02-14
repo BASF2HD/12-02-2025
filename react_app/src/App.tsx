@@ -26,7 +26,8 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AdminPanel from './components/AdminPanel';
 import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
-import { PrinterManager } from './components/PrinterManager'; //Added import
+import { PrinterManager } from './components/PrinterManager';
+import { BarcodeManager } from './components/BarcodeManager';
 
 
 function App() {
@@ -47,7 +48,8 @@ function App() {
   const [selectedSamples, setSelectedSamples] = useState<Set<string>>(new Set());
   const [showActionMenu, setShowActionMenu] = useState(false);
   const actionMenuRef = React.useRef<HTMLDivElement>(null);
-  const [showPrinterManager, setShowPrinterManager] = useState(false); // Added state for printer manager
+  const [showPrinterManager, setShowPrinterManager] = useState(false);
+  const [showBarcodeManager, setShowBarcodeManager] = useState(false);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -669,7 +671,7 @@ function App() {
               </button>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {}}
+                onClick={() => setShowBarcodeManager(true)}
               >
                 <BarcodeIcon className="h-5 w-5 mb-1" />
                 <span className="text-xs">LABEL TEMPLATE</span>
@@ -1789,6 +1791,7 @@ function App() {
       {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
       {showLocationManager && <LocationManager onClose={() => setShowLocationManager(false)} />}
       {showPrinterManager && <PrinterManager onClose={() => setShowPrinterManager(false)} />}
+      {showBarcodeManager && <BarcodeManager onClose={() => setShowBarcodeManager(false)} />}
     </div>
   );
 }
