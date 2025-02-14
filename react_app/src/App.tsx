@@ -801,7 +801,7 @@ function App() {
             <span className="font-medium">FFPE BLOCK ({samples.filter(s => s.specimen === 'FFPE Block').length})</span>
           </button>
           <button
-            className={`flex itemscenter px-3 py-1.5 rounded-md ${
+            className={`flex items-center px-3 py-1.5 rounded-md ${
               activeTab === 'he' && !showPatients
                 ? 'bg-pink-100 text-pink-700' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
@@ -1434,8 +1434,7 @@ function App() {
                                 value={sample.sampleTime}
                                 onChange={(e) => updateNewSample(index, 'sampleTime', e.target.value)}
                                 className="w-24text-xs border-gray-300 rounded-md"
-                                required
-                              />
+                                required                              />
                             </div>
                           </td>
                           <td className="w-32 px-2 py-1">

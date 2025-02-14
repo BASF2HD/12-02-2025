@@ -6,7 +6,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default function FileAttachmentManager({ onClose }: Props) {
+export function FileAttachmentManager({ onClose }: Props) {
   const [selectedStorage, setSelectedStorage] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showPdfPreview, setShowPdfPreview] = useState(false);
