@@ -32,7 +32,7 @@ function App() {
   const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples, updateSample } = useSamples();
-  const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all'>('blood');
+  const [activeTab, setActiveTab] = useState<'blood' | 'tissue' | 'ffpe' | 'he' | 'buffy' | 'plasma' | 'dna' | 'rna' | 'all' | 'tree' | 'dashboard'>('blood');
   const [isNewSampleModalOpen, setIsNewSampleModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState<{ field: keyof Sample; order: 'asc' | 'desc' }>({
@@ -679,7 +679,7 @@ function App() {
 
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200"
-                onClick={() => {}}
+                onClick={() => setActiveTab('dashboard')} // Added onClick handler
               >
                 <BarChart className="h-5 w-5 mb-1" />
                 <span className="text-xs">DASHBOARD</span>
@@ -1441,7 +1441,7 @@ function App() {
                             <button
                               type="button"
                               onClick={()=> deleteNewSampleRow(index)}
-                              className="text-red-600 hover:text-red-800"
+                              className="text-red-600 hover:text-red800"
                             >
                               <X className="h-4 w-4" />
                             </button>
@@ -1781,6 +1781,7 @@ function App() {
           currentUser={{ id: '1', email: 'john.smith@example.com', fullName: 'John Smith', role: 'admin' }}
         />
       )}
+      {activeTab === 'dashboard' && <DashboardGraphs />} {/* Added DashboardGraphs component */}
     </div>
   );
 }
