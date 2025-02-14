@@ -150,6 +150,11 @@ export function LocationManager({ onClose }: { onClose: () => void }) {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="col-span-full grid grid-cols-3 gap-4 mb-2">
+                    <div className="text-xs font-medium text-gray-700">Shelf</div>
+                    <div className="text-xs font-medium text-gray-700">Drawer</div>
+                    <div className="text-xs font-medium text-gray-700">Box</div>
+                  </div>
                   {freezer.shelves.map(shelf => (
                     <div key={shelf.id} className="border rounded p-2">
                       <h4 className="text-xs font-medium mb-2">{shelf.name}</h4>
