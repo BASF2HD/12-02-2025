@@ -1,13 +1,12 @@
-modules = ["nodejs-20:v8-20230920-bd784b9"]
+modules = ["nodejs-20", "web"]
 hidden = [".config", "package-lock.json"]
-run = "cd react_app && npm run dev"
+run = "node index.js"
 
 [nix]
 channel = "stable-24_05"
 
 [deployment]
-build = ["sh", "-c", "cd react_app && npm run build"]
-run = ["sh", "-c", "cd react_app && npm run preview"]
+run = ["sh", "-c", "node index.js"]
 deploymentTarget = "cloudrun"
 
 [[ports]]
@@ -15,12 +14,21 @@ localPort = 5173
 
 [[ports]]
 localPort = 5174
-externalPort = 3000
 
 [[ports]]
 localPort = 5175
-externalPort = 80
 
 [auth]
 pageEnabled = false
 buttonEnabled = false
+
+[workflows]
+runButton = "Run"
+
+[[workflows.workflow]]
+name = "Run"
+author = 39674981
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd react_app && npm run dev"
