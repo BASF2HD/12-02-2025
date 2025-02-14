@@ -23,8 +23,8 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
 
   const handleBarcodeInput = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      const newBarcode = (e.target as HTMLInputElement).value;
-      if (newBarcode) {
+      const newBarcode = (e.target as HTMLInputElement).value.trim();
+      if (newBarcode && !scannedBarcodes.includes(newBarcode)) {
         setScannedBarcodes(prev => [...prev, newBarcode]);
         setBarcodeFilter('');
       }
@@ -53,7 +53,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-[98%] max-h-[90vh] flex flex-col">
+      <div className="bg-white rounded-lg shadow-xl w-[98%] h-[90vh] flex flex-col">
         <div className="flex justify-between items-center px-4 py-3 border-b">
           <h2 className="text-lg font-medium">Receive Samples</h2>
           <button onClick={onClose}>
@@ -61,7 +61,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
           </button>
         </div>
 
-        <div className="p-4">
+        <div className="flex flex-col h-full p-4">
           <div className="flex items-center gap-4 mb-4">
             <div className="relative flex-1">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -76,7 +76,7 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
                 className="block w-full pl-10 pr-3 py-2 text-sm border border-gray-300 rounded-md"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {scannedBarcodes.map(barcode => (
                 <span 
                   key={barcode}
@@ -94,67 +94,69 @@ export function ReceiveSamples({ onClose, samples, onUpdateSamples }: Props) {
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-2 py-1">
-                    <input
-                      type="checkbox"
-                      checked={selectedSamples.size === filteredSamples.length}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedSamples(new Set(filteredSamples.map(s => s.barcode)));
-                        } else {
-                          setSelectedSamples(new Set());
-                        }
-                      }}
-                      className="rounded border-gray-300"
-                    />
-                  </th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Barcode</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Patient ID</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Type</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Specimen</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Site</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Status</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sample Date</th>
-                  <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sent Date</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredSamples.map((sample) => (
-                  <tr key={sample.barcode} className="hover:bg-gray-50">
-                    <td className="px-2 py-1">
+          <div className="flex-1 overflow-hidden">
+            <div className="h-full overflow-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50 sticky top-0 z-10">
+                  <tr>
+                    <th className="px-2 py-1">
                       <input
                         type="checkbox"
-                        checked={selectedSamples.has(sample.barcode)}
-                        onChange={() => {
-                          setSelectedSamples(prev => {
-                            const next = new Set(prev);
-                            if (next.has(sample.barcode)) {
-                              next.delete(sample.barcode);
-                            } else {
-                              next.add(sample.barcode);
-                            }
-                            return next;
-                          });
+                        checked={selectedSamples.size === filteredSamples.length && filteredSamples.length > 0}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedSamples(new Set(filteredSamples.map(s => s.barcode)));
+                          } else {
+                            setSelectedSamples(new Set());
+                          }
                         }}
                         className="rounded border-gray-300"
                       />
-                    </td>
-                    <td className="px-2 py-1 text-xs">{sample.barcode}</td>
-                    <td className="px-2 py-1 text-xs">{sample.patientId}</td>
-                    <td className="px-2 py-1 text-xs">{sample.type}</td>
-                    <td className="px-2 py-1 text-xs">{sample.specimen}</td>
-                    <td className="px-2 py-1 text-xs">{sample.site}</td>
-                    <td className="px-2 py-1 text-xs">{sample.status}</td>
-                    <td className="px-2 py-1 text-xs">{formatDate(sample.sampleDate)}</td>
-                    <td className="px-2 py-1 text-xs">{formatDate(sample.dateSent)}</td>
+                    </th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Barcode</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Patient ID</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Type</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Specimen</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Site</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Status</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sample Date</th>
+                    <th className="px-2 py-1 text-left text-xs font-medium text-gray-500">Sent Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {filteredSamples.map((sample) => (
+                    <tr key={sample.barcode} className="hover:bg-gray-50">
+                      <td className="px-2 py-1">
+                        <input
+                          type="checkbox"
+                          checked={selectedSamples.has(sample.barcode)}
+                          onChange={() => {
+                            setSelectedSamples(prev => {
+                              const next = new Set(prev);
+                              if (next.has(sample.barcode)) {
+                                next.delete(sample.barcode);
+                              } else {
+                                next.add(sample.barcode);
+                              }
+                              return next;
+                            });
+                          }}
+                          className="rounded border-gray-300"
+                        />
+                      </td>
+                      <td className="px-2 py-1 text-xs">{sample.barcode}</td>
+                      <td className="px-2 py-1 text-xs">{sample.patientId}</td>
+                      <td className="px-2 py-1 text-xs">{sample.type}</td>
+                      <td className="px-2 py-1 text-xs">{sample.specimen}</td>
+                      <td className="px-2 py-1 text-xs">{sample.site}</td>
+                      <td className="px-2 py-1 text-xs">{sample.status}</td>
+                      <td className="px-2 py-1 text-xs">{formatDate(sample.sampleDate)}</td>
+                      <td className="px-2 py-1 text-xs">{formatDate(sample.dateSent)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div className="mt-4 flex justify-end items-center gap-4">

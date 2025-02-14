@@ -208,7 +208,7 @@ function App() {
         const stringValue = value.toString().toLowerCase();
         // Skip searching in certain fields
         if (['id', 'surplus'].includes(key)) return false;
-        return stringValue === searchLower;
+        return stringValue.includes(searchLower);
       });
     });
 
