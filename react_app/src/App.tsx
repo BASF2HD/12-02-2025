@@ -1320,12 +1320,6 @@ function App() {
                             >
                               <option value="blood">Blood</option>
                               <option value="tissue">Tissue</option>
-                              <option value="ffpe">FFPE</option>
-                              <option value="he">H&E</option>
-                              <option value="buffy">Buffy</option>
-                              <option value="plasma">Plasma</option>
-                              <option value="dna">DNA</option>
-                              <option value="rna">RNA</option>
                             </select>
                           </td>
                           <td className="w-36 px-2 py-1">
