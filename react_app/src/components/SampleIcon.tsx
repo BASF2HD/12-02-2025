@@ -25,7 +25,7 @@ const iconMap: Record<string, typeof LucideIcon> = {
 export function SampleIcon({ specimen, className = 'h-4 w-4' }: SampleIconProps) {
   // Check for blood specimens first
   if (specimen.toLowerCase().includes('blood') || specimen.toLowerCase().includes('immunology')) {
-    return <span className="text-xs">🩸</span>;
+    return <span className="text-base">🩸</span>;
   }
   
   const key = Object.keys(iconMap).find(k => specimen.toLowerCase().includes(k)) || 'default';
