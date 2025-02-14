@@ -21,6 +21,7 @@ import {
 import type { Sample, Patient, SampleType } from './types';
 import { TableColumnManager } from './components/TableColumnManager';
 import { TreeView } from './components/TreeView';
+import { LocationManager } from './components/LocationManager';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import AdminPanel from './components/AdminPanel';
@@ -29,6 +30,7 @@ import { DashboardGraphs } from './components/DashboardGraphs'; // Added import
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showAdminPanel, setShowAdminPanel] = useState(false);
+  const [showLocationManager, setShowLocationManager] = useState(false);
   const [showPatients, setShowPatients] = useState(true);
   const [selectedPatientId, setSelectedPatientId] = useState<string | null>(null);
   const { samples, loading, error, addSamples, updateSample } = useSamples();
@@ -650,7 +652,7 @@ function App() {
               </div>
               <button 
                 className="flex flex-col items-center px-4 py-2 text-sm bg-gray-100 text-gray-600 rounded-md hover:bg-gray-200"
-                onClick={() => {}}
+                onClick={() => setShowLocationManager(true)}
               >
                 <FreezerIcon className="h-5 w-5 mb-1" />
                 <span className="text-xs">LOCATIONS</span>
@@ -1782,6 +1784,7 @@ function App() {
         />
       )}
       {activeTab === 'dashboard' && <DashboardGraphs samples={samples} />}
+      {showLocationManager && <LocationManager onClose={() => setShowLocationManager(false)} />}
     </div>
   );
 }
